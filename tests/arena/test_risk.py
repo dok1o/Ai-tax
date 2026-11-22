@@ -142,3 +142,23 @@ def test_train_risk_writes_labelled_outputs(
     assert payload["meta_columns"] == ["lang", "category", "model"]
     assert TARGET_RISK not in payload["columns"]
     assert results["summary"]["n"].min() > 0
+
+
+def test_risk_survives_a_missing_matplotlib(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    """Figures are optional: matplotlib ships only in the shap `plots` extra."""
+    import sys as sys_module
+
+    monkeypatch.setitem(sys_module.modules, "matplotlib", None)
+    monkeypatch.setitem(sys_module.modules, "matplotlib.pyplot", None)
+    train_risk(out_dir=tmp_path, figs_dir=tmp_path / "figs", n_splits=3, seed=SEED)
+    assert list((tmp_path / "figs").glob("*.png")) == []
+    manifest = json.loads(
+        (tmp_path / "risk_metrics_fixture.json").read_text(encoding="utf-8")
+    )
+    assert any("matplotlib" in note for note in manifest["notes"])
+    assert not [name for name in manifest["artifacts"] if name.endswith(".png")]
+    for name in LEARNED:
+        table = pd.read_csv(tmp_path / f"shap_risk_{name}_fixture.csv")
+        assert len(table) == manifest["inputs"]["n_rows"]

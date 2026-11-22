@@ -13,9 +13,9 @@ number below was produced by an executed command. Push to `origin` works.
 | --- | --- | --- | --- | --- |
 | T-005 cost predictor | `arena/ad3092b4-ai-tax` (see branch note) | 9 / 0 (`tests/arena/test_cost_split.py`) | review | fixture |
 | T-006 app skeleton | `arena/ad3092b4-ai-tax` | 14 / 0 (`tests/arena/test_app.py`, also covers T-007/T-008 wiring) | review | fixture |
-| T-007 error risk + SHAP | `arena/ad3092b4-ai-tax` | 8 / 0 (`tests/arena/test_risk.py`) | review | fixture |
-| T-008 router | `arena/ad3092b4-ai-tax` | 11 / 0 (`tests/arena/test_router.py`) | review | fixture |
-| Whole repo | — | 46 / 0 (`make check`, includes codex `tests/test_schema.py`) | review | fixture |
+| T-007 error risk + SHAP | `arena/ad3092b4-ai-tax` | 9 / 0 (`tests/arena/test_risk.py`) | review | fixture |
+| T-008 router | `arena/ad3092b4-ai-tax` | 14 / 0 (`tests/arena/test_router.py`) + 1 lint guard (`tests/arena/test_lint.py`) | review | fixture |
+| Whole repo | — | 51 / 0 (`make check`, includes codex `tests/test_schema.py`) | review | fixture |
 
 Branch note: the platform pinned this session to `arena/ad3092b4-ai-tax`, cut from
 `e47a220` of `dev`. It refused to create `arena/T-005-cost-predictor`,
@@ -23,6 +23,19 @@ Branch note: the platform pinned this session to `arena/ad3092b4-ai-tax`, cut fr
 so the four tasks are four commits on one pushed branch instead of four stacked
 branches. Commit order is T-005 → T-006 (plus one lint fix) → T-007 → T-008, so
 Astra can review or cherry-pick them in that order.
+
+## Review fixes (Sol run, same branch)
+
+| Finding | Root cause | Fix | Regression test |
+| --- | --- | --- | --- |
+| Router picked its threshold on the evaluation data | `pick_threshold` ran on the full held-out sweep | `select_threshold` + `nested_decisions`: every outer fold is routed with the threshold chosen on the other folds only; the full-data value is stored as `deployment_threshold`, for the app alone | `test_threshold_selection_ignores_the_held_out_fold` (corrupting fold 0 outcomes and costs leaves its threshold untouched), `test_nested_decisions_cover_every_key_once` |
+| Correctness decoding inverted numeric flags | `is_incorrect = values.isin({"false", "1"})` read `1` as incorrect | `decode_correctness` maps `true`/`1` to correct and `false`/`0` to incorrect and rejects anything else, naming the offending values | `test_decode_correctness_reads_booleans_and_flags_alike` |
+| Cost-predictor lint errors | Long lines, an unused method argument, a shadowed loop variable; `make check` uses ruff defaults that skip E501 | ARENA files are clean under `E,F,W,I,UP,B,SIM,PLW,ARG,RET,ISC` (E402 and C420 ignored for documented reasons); `decide` was vectorized on the way, 86 s to 5 s for the router tests | `tests/arena/test_lint.py` runs that ruff selection as a test |
+| Risk figures failed to generate | `matplotlib` is only a shap extra (`shap[plots]`) and is absent from `requirements.txt`, so the import died after training | `save_shap_summary` and `save_curve_figure` return `None` without matplotlib; the run still writes CSV, JSON, SHAP tables and joblib models and records a note in the manifest | `test_risk_survives_a_missing_matplotlib` |
+
+Nested selection did not move the fixture numbers: all five folds independently
+select threshold 0.95, so cost and accuracy are unchanged. The fix removes the
+selection leak; it does not rescue this fixture's outcome.
 
 ## Key metrics (all FIXTURE data, n small → preliminary, not results)
 
@@ -89,9 +102,11 @@ resamples of question ids (SEED 42):
 
 Reading: on this fixture the router buys +0.105 accuracy over always_direct at the
 same cost, and is 43.7% cheaper than always_via_english at −0.017 accuracy. The
-operating threshold (0.95) was selected as the largest swept threshold whose
-held-out accuracy is not below always_direct, so it is chosen on the evaluation
-data; the interval covers resampling noise only, not that selection. Sweep range:
+threshold is selected by a nested split: every held-out fold is routed with the
+largest swept threshold whose accuracy on the other folds is not below
+always_direct, and all five folds chose 0.95 (`thresholds_per_fold` in
+`models/router_metrics_fixture.json`). `deployment_threshold` repeats the rule on
+all rows and is only what the app uses. The interval covers resampling noise only. Sweep range:
 cost 96.0–106.9 tokens, accuracy 0.733–0.789 over 19 thresholds
 (`models/router_curve_fixture.csv`, `models/figs/router_curve_fixture.png`).
 
@@ -161,8 +176,12 @@ call was made and no money was spent.
    exact leak. `tasks/T-007.md` names `src/risk.py` and `tests/test_risk_split.py`,
    the run brief limits me to `src/train.py` and `tests/arena/`; risk training lives
    in `src/train.py` (`train_risk`) and tests in `tests/arena/test_risk.py`.
-4. Makefile targets to add (Astra-only): `cost`, `risk`, `router`, and repoint
-   `dashboard` from `app/dashboard.py` to `app/main.py`.
+4. Makefile and requirements (Astra-only): add `cost`, `risk`, `router` targets,
+   repoint `dashboard` from `app/dashboard.py` to `app/main.py`, and add
+   `matplotlib` to `requirements.txt` — today it is only a shap extra, so figures
+   are skipped without it. Optionally pin a ruff config (`line-length = 88`,
+   `select = ["E", "F", "W", "I", "UP", "B", "SIM", "PLW", "ARG", "RET", "ISC"]`)
+   so `make check` catches what `tests/arena/test_lint.py` guards.
 5. `data/demo/` is delegated to ARENA by the T-006 card but excluded by the run
    permissions, so the fixtures live in `models/fixtures/`. The app already reads
    `data/*.csv` → `data/demo/*.csv` → `models/fixtures/*_fixture.csv` in that order

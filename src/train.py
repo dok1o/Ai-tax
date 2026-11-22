@@ -81,12 +81,12 @@ class LanguageMeanBaseline:
 
 
 class TrainRateBaseline:
-    """Predict the incorrect rate of the training fold for every row (T-007 baseline)."""
+    """Predict the training incorrect rate for every row (T-007 baseline)."""
 
     def __init__(self) -> None:
         self.rate_: float = 0.5
 
-    def fit(self, matrix: pd.DataFrame, target: np.ndarray) -> TrainRateBaseline:
+    def fit(self, _matrix: pd.DataFrame, target: np.ndarray) -> TrainRateBaseline:
         self.rate_ = float(np.mean(target)) if len(target) else 0.5
         return self
 
@@ -292,9 +292,9 @@ def cross_validate_cost(
     data = dataset.reset_index(drop=True)
     folds = assign_folds(list(data["q_id"]), n_splits, seed)
     blocks: list[pd.DataFrame] = []
-    for tokenizer, block in data.groupby("tokenizer", sort=True):
-        positions = block.index.to_numpy()
-        block = block.reset_index(drop=True)
+    for tokenizer, group in data.groupby("tokenizer", sort=True):
+        positions = group.index.to_numpy()
+        block = group.reset_index(drop=True)
         block_folds = folds[positions]
         matrix = design_matrix(block)
         target = block[TARGET].to_numpy(dtype=float)
@@ -447,9 +447,16 @@ def slug(value: str) -> str:
 
 def save_shap_summary(
     values: np.ndarray, matrix: pd.DataFrame, path: Path, title: str
-) -> Path:
-    """Write a SHAP bar summary plot as PNG."""
-    import matplotlib
+) -> Path | None:
+    """Write a SHAP bar summary plot as PNG.
+
+    Returns None when matplotlib is not installed: it is an optional extra of
+    shap and is missing from a plain ``pip install -r requirements.txt``.
+    """
+    try:
+        import matplotlib
+    except ImportError:
+        return None
 
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -588,6 +595,7 @@ def train_risk(
     results["calibration"] = calibration_frame(results["oof"])
     matrix = results["matrix"]
     written: list[str] = []
+    missing_plots = False
     for name in RISK_MODELS:
         estimator = risk_estimator(name, seed)
         estimator.fit(matrix, labels[TARGET_RISK].to_numpy(dtype=int))
@@ -618,13 +626,26 @@ def train_risk(
             f"SHAP mean |value|, error-risk {name}"
             + (" (FIXTURE data, not a result)" if is_fixture else ""),
         )
-        written.extend([table.name, figure.name])
+        written.append(table.name)
+        if figure is None:
+            missing_plots = True
+        else:
+            written.append(figure.name)
     results["oof"].to_csv(
         out_dir / artifact_name("risk_oof", "csv", is_fixture), index=False
     )
     results["calibration"].to_csv(
         out_dir / artifact_name("risk_calibration", "csv", is_fixture), index=False
     )
+    notes = [
+        "features are prompt text statistics, lang, category and answering model only",
+        "no response text, grade or post-call usage is used as a feature",
+        "roc_auc is null for folds whose held-out labels are single-class",
+        "train_rate is the training incorrect-rate baseline",
+        "SHAP values are held-out per fold; the train_rate baseline has none",
+    ]
+    if missing_plots:
+        notes.append("figures skipped: matplotlib is not installed (shap plots extra)")
     write_json(
         out_dir / artifact_name("risk_metrics", "json", is_fixture),
         {
@@ -645,13 +666,7 @@ def train_risk(
             "target": TARGET_RISK,
             "models": list(RISK_MODELS),
             "results": json_records(results["summary"]),
-            "notes": [
-                "features are prompt text statistics, lang, category and answering model only",
-                "no response text, grade or post-call usage is used as a feature",
-                "roc_auc is null for folds whose held-out labels are single-class",
-                "train_rate is the training incorrect-rate baseline",
-                "SHAP values are held-out per fold; the train_rate baseline has none",
-            ],
+            "notes": notes,
             "artifacts": sorted(written),
             "versions": versions(),
         },

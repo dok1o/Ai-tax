@@ -129,7 +129,8 @@ def render_router(phrase: str, lang: str, category: str) -> None:
     st.dataframe(options, hide_index=True)
     st.caption(
         "Cheapest strategy whose predicted risk stays under the threshold. "
-        "Estimates come from the saved T-005 and T-007 models plus the T-008 calibration."
+        "Estimates come from the saved T-005 and T-007 models "
+        "plus the T-008 calibration."
     )
 
 
@@ -167,7 +168,8 @@ def render_charts(state: logic.AppState) -> None:
         router = logic.router_rows(state.manifests.get("router_metrics"))
         if router is not None:
             st.caption(
-                "Router sweep and always-use-one-strategy baselines (T-008), held out by q_id."
+                "Router sweep and always-use-one-strategy baselines (T-008), "
+                "held out by q_id."
             )
             st.dataframe(router, hide_index=True)
         risks = logic.risk_rows(state.manifests.get("risk_metrics"))

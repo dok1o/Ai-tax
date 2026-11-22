@@ -37,7 +37,9 @@ FORCE_EMPTY_ENV = "LT_FORCE_EMPTY"
 TABLES: tuple[str, ...] = ("prompts", "tokens", "labels", "routes")
 EXAMPLE_PHRASES = {
     "kk": "Қазақстанның ең биік шыңы қалай аталады және оның биіктігі неше метр?",
-    "ru": "Как называется самая высокая вершина Казахстана и какова её высота в метрах?",
+    "ru": (
+        "Как называется самая высокая вершина Казахстана и какова её высота в метрах?"
+    ),
     "en": "What is the highest peak of Kazakhstan and how tall is it in metres?",
 }
 AD_HOC_PROMPT = {
@@ -275,7 +277,7 @@ def predict_cost(
     features = build_features(phrase_frame(phrase, lang, category))
     matrix = design_matrix(features)
     rows = []
-    for key, payload in sorted(models.items()):
+    for payload in (models[name] for name in sorted(models)):
         aligned = align_matrix(matrix, payload["columns"])
         value = float(payload["estimator"].predict(aligned)[0])
         rows.append(

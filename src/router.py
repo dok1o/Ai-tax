@@ -56,6 +56,23 @@ ROUTER_COMMAND = "python -m src.router --seed 42 --n-splits 5"
 KEY = ["q_id", "lang"]
 
 
+def decode_correctness(values: pd.Series) -> pd.DataFrame:
+    """Decode contract booleans or 0/1 flags into graded 0/1 outcome columns.
+
+    ``true`` and ``1`` mean the answer was correct; ``false`` and ``0`` mean it
+    was not. Any other spelling is rejected instead of being read as false.
+    """
+    normalized = values.astype(str).str.strip().str.lower()
+    if not normalized.isin({"true", "false", "0", "1"}).all():
+        bad = sorted(set(normalized) - {"true", "false", "0", "1"})
+        raise ValueError(f"routes has non-boolean is_correct values: {bad}")
+    incorrect = normalized.isin({"false", "0"})
+    return pd.DataFrame(
+        {"is_correct": (~incorrect).astype(int), "is_incorrect": incorrect.astype(int)},
+        index=values.index,
+    )
+
+
 def prepare_routes(
     routes: pd.DataFrame,
     prompts: pd.DataFrame,
@@ -74,11 +91,7 @@ def prepare_routes(
     require_columns(routes, ROUTE_COLUMNS, "routes")
     data = routes[list(ROUTE_COLUMNS)].copy()
     data["total_tokens"] = pd.to_numeric(data["total_tokens"])
-    values = data["is_correct"].astype(str).str.lower()
-    if not values.isin({"true", "false", "0", "1"}).all():
-        raise ValueError("routes has non-boolean is_correct values")
-    data["is_incorrect"] = (values.isin({"false", "1"})).astype(int)
-    data["is_correct"] = 1 - data["is_incorrect"]
+    data[["is_correct", "is_incorrect"]] = decode_correctness(data["is_correct"])
     unknown = sorted(set(data["strategy"]) - set(STRATEGIES))
     if unknown:
         raise ValueError(f"routes has unknown strategies: {unknown}")
@@ -203,25 +216,29 @@ def choose_strategy(options: pd.DataFrame, threshold: float) -> str:
 
 
 def decide(routes: pd.DataFrame, threshold: float) -> pd.DataFrame:
-    """One routing decision per question and language at a fixed threshold."""
-    rows = []
-    ordered = routes.sort_values([*KEY, "strategy"])
-    for (q_id, lang), options in ordered.groupby(KEY, sort=True):
-        strategy = choose_strategy(options, threshold)
-        chosen = options[options["strategy"] == strategy].iloc[0]
-        rows.append(
-            {
-                "q_id": q_id,
-                "lang": lang,
-                "threshold": threshold,
-                "strategy": strategy,
-                "cost_hat": float(chosen["cost_hat"]),
-                "risk_hat": float(chosen["risk_hat"]),
-                "total_tokens": float(chosen["total_tokens"]),
-                "is_correct": int(chosen["is_correct"]),
-            }
-        )
-    return pd.DataFrame(rows)
+    """One routing decision per question and language at a fixed threshold.
+
+    The cheapest feasible strategy wins; when nothing is feasible the safest one
+    does. Ties break on the strategy name, so a decision is deterministic.
+    """
+    feasible = routes["risk_hat"] <= threshold
+    ordered = routes.assign(
+        infeasible=(~feasible).astype(int),
+        rank=np.where(feasible, routes["cost_hat"], routes["risk_hat"]),
+    ).sort_values([*KEY, "infeasible", "rank", "strategy"], kind="mergesort")
+    chosen = ordered.groupby(KEY, sort=True).head(1).reset_index(drop=True)
+    return pd.DataFrame(
+        {
+            "q_id": chosen["q_id"],
+            "lang": chosen["lang"],
+            "threshold": threshold,
+            "strategy": chosen["strategy"],
+            "cost_hat": chosen["cost_hat"].astype(float),
+            "risk_hat": chosen["risk_hat"].astype(float),
+            "total_tokens": chosen["total_tokens"].astype(float),
+            "is_correct": chosen["is_correct"].astype(int),
+        }
+    )
 
 
 def baseline_decisions(routes: pd.DataFrame, strategy: str) -> pd.DataFrame:
@@ -349,11 +366,41 @@ def bootstrap_saving(
 
 
 def pick_threshold(curve: pd.DataFrame, baseline_accuracy: float) -> float:
-    """Largest threshold whose held-out accuracy is not below always-direct."""
+    """Largest threshold whose accuracy on the given rows is not below always-direct."""
     usable = curve[curve["accuracy"] >= baseline_accuracy]
     if usable.empty:
         return float(curve.loc[curve["accuracy"].idxmax(), "threshold"])
     return float(usable["threshold"].max())
+
+
+def select_threshold(routes: pd.DataFrame, thresholds: Sequence[float]) -> float:
+    """Choose the operating threshold from the given rows only.
+
+    Called with the training folds of one outer split, never with the rows the
+    chosen threshold is then evaluated on.
+    """
+    curve, _ = sweep_thresholds(routes, thresholds)
+    direct = outcome_summary(baseline_decisions(routes, DIRECT), f"always_{DIRECT}")
+    return pick_threshold(curve, float(direct["accuracy"]))
+
+
+def nested_decisions(
+    routes: pd.DataFrame, folds: np.ndarray, thresholds: Sequence[float]
+) -> tuple[pd.DataFrame, dict[int, float]]:
+    """Decide every held-out fold with the threshold picked on the other folds."""
+    blocks: list[pd.DataFrame] = []
+    per_fold: dict[int, float] = {}
+    for fold in sorted({int(value) for value in folds}):
+        train, test = folds != fold, folds == fold
+        if not train.any() or not test.any():
+            raise ValueError(f"fold {fold} is degenerate for threshold selection")
+        threshold = select_threshold(routes[train], thresholds)
+        per_fold[fold] = threshold
+        block = decide(routes[test], threshold)
+        block["fold"] = fold
+        blocks.append(block)
+    decisions = pd.concat(blocks, ignore_index=True)
+    return decisions.sort_values(KEY).reset_index(drop=True), per_fold
 
 
 def threshold_grid(step: float = 0.05) -> list[float]:
@@ -363,9 +410,16 @@ def threshold_grid(step: float = 0.05) -> list[float]:
 
 def save_curve_figure(
     curve: pd.DataFrame, baselines: pd.DataFrame, path: Path, is_fixture: bool
-) -> Path:
-    """Plot realized cost against realized accuracy for the sweep and baselines."""
-    import matplotlib
+) -> Path | None:
+    """Plot realized cost against realized accuracy for the sweep and baselines.
+
+    Returns None when matplotlib is not installed: it is an optional extra of
+    shap and is missing from a plain ``pip install -r requirements.txt``.
+    """
+    try:
+        import matplotlib
+    except ImportError:
+        return None
 
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -451,16 +505,16 @@ def train_router(
     folds = assign_folds(list(data["q_id"]), n_splits, seed)
     data = calibrate(data, folds)
     data["fold"] = folds
-    curve, decisions = sweep_thresholds(data, threshold_grid())
+    thresholds = threshold_grid()
+    curve, _ = sweep_thresholds(data, thresholds)
+    chosen, thresholds_per_fold = nested_decisions(data, folds, thresholds)
+    threshold = select_threshold(data, thresholds)
     baselines = pd.DataFrame(
         [
             outcome_summary(baseline_decisions(data, strategy), f"always_{strategy}")
             for strategy in BASELINES
         ]
     )
-    direct = baselines[baselines["policy"] == f"always_{DIRECT}"].iloc[0]
-    threshold = pick_threshold(curve, float(direct["accuracy"]))
-    chosen = decisions[threshold]
     savings = {
         f"always_{strategy}": bootstrap_saving(
             chosen,
@@ -489,7 +543,7 @@ def train_router(
             "fixture": is_fixture,
             "seed": seed,
             "threshold": threshold,
-            "thresholds": threshold_grid(),
+            "thresholds": thresholds,
             "strategies": list(STRATEGIES),
             "strategy_models": data.groupby("strategy")["model"]
             .agg(lambda values: values.mode().iloc[0])
@@ -521,19 +575,29 @@ def train_router(
             "tokenizer": tokenizer,
             "risk_model": risk_model,
         },
-        "operating_threshold": threshold,
-        "selection_rule": "largest swept threshold whose held-out accuracy is not below always_direct",
+        "deployment_threshold": threshold,
+        "thresholds_per_fold": {
+            str(fold): value for fold, value in thresholds_per_fold.items()
+        },
+        "selection_rule": (
+            "nested by q_id: every held-out fold is routed with the largest swept "
+            "threshold whose accuracy on the other folds is not below always_direct; "
+            "deployment_threshold repeats that rule on all rows and is only "
+            "used by the app"
+        ),
         "curve": json.loads(curve.round(4).to_json(orient="records")),
         "baselines": json.loads(baselines.round(4).to_json(orient="records")),
         "savings": savings,
         "notes": [
-            "risk comes from T-007 out-of-fold predictions, cost from T-005 out-of-fold predictions",
+            "the sweep table is descriptive; the policy uses per-fold thresholds",
+            "figures are skipped when matplotlib is absent; numbers stay in CSV/JSON",
+            "risk from T-007 out-of-fold predictions, cost from T-005 out-of-fold",
             "via_english is scored with the English prompt of the same question",
             "per-strategy multipliers and offsets are fitted on the other folds only",
-            "evaluation uses realized tokens and realized correctness of the chosen route",
+            "evaluation uses realized tokens and correctness of the chosen route",
             "bootstrap resamples question ids, 1000 draws, percentile interval",
         ],
-        "figure": figure.name,
+        "figure": None if figure is None else figure.name,
     }
     path = out_dir / artifact_name("router_metrics", "json", is_fixture)
     path.write_text(
@@ -579,15 +643,17 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 2
     print(results["baselines"].to_string(index=False))
     for policy, saving in results["manifest"]["savings"].items():
+        low, high = saving["saving_percent_ci95"]
         print(
             f"router vs {policy}: saving {saving['saving_tokens']:.1f} tokens "
-            f"({saving['saving_percent']:.1f}%), CI95 {saving['saving_percent_ci95'][0]:.1f}"
-            f"..{saving['saving_percent_ci95'][1]:.1f}, accuracy {saving['accuracy_router']:.3f}"
-            f" vs {saving['accuracy_baseline']:.3f}, n={saving['n_keys']}"
+            f"({saving['saving_percent']:.1f}%, CI95 {low:.1f}..{high:.1f}), "
+            f"accuracy {saving['accuracy_router']:.3f} vs "
+            f"{saving['accuracy_baseline']:.3f}, n={saving['n_keys']}"
         )
-    print(
-        f"threshold {results['manifest']['operating_threshold']}, outputs in {args.out}"
-    )
+    manifest = results["manifest"]
+    per_fold = sorted(set(manifest["thresholds_per_fold"].values()))
+    print(f"deployment threshold {manifest['deployment_threshold']}, folds {per_fold}")
+    print(f"outputs in {args.out}")
     return 0
 
 

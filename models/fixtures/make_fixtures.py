@@ -56,26 +56,47 @@ ANSWER_TYPES = {
 }
 STEMS = {
     "kk": {
-        "arithmetic": "Егер бір қорапта 24 қалам болса, 7 қорапта барлығы қанша қалам болады?",
-        "geography": "Қазақстанның ең биік шыңы қалай аталады және оның биіктігі неше метр?",
-        "biology": "Адам денесіндегі ең үлкен мүше қандай және ол қандай қызмет атқарады?",
+        "arithmetic": (
+            "Егер бір қорапта 24 қалам болса, 7 қорапта барлығы қанша қалам болады?"
+        ),
+        "geography": (
+            "Қазақстанның ең биік шыңы қалай аталады және оның биіктігі неше метр?"
+        ),
+        "biology": (
+            "Адам денесіндегі ең үлкен мүше қандай және ол қандай қызмет атқарады?"
+        ),
         "history": "Ғарышқа тұңғыш ұшқан адамның аты кім және бұл қашан болды?",
         "physics": "Жарықтың вакуумдағы жылдамдығы шамамен қаншаға тең?",
         "everyday": "Бір литр суды қайнату үшін шамамен қанша уақыт қажет?",
     },
     "ru": {
-        "arithmetic": "Если в одной коробке 24 ручки, сколько всего ручек в семи коробках?",
-        "geography": "Как называется самая высокая вершина Казахстана и какова её высота в метрах?",
-        "biology": "Какой орган человеческого тела самый большой и какую функцию он выполняет?",
-        "history": "Как звали первого человека, побывавшего в космосе, и когда это произошло?",
+        "arithmetic": (
+            "Если в одной коробке 24 ручки, сколько всего ручек в семи коробках?"
+        ),
+        "geography": (
+            "Как называется самая высокая вершина Казахстана и "
+            "какова её высота в метрах?"
+        ),
+        "biology": (
+            "Какой орган человеческого тела самый большой и какую функцию он выполняет?"
+        ),
+        "history": (
+            "Как звали первого человека, побывавшего в космосе, и когда это произошло?"
+        ),
         "physics": "Чему примерно равна скорость света в вакууме?",
         "everyday": "Сколько примерно времени нужно, чтобы вскипятить один литр воды?",
     },
     "en": {
-        "arithmetic": "If one box holds 24 pens, how many pens are there in seven boxes?",
-        "geography": "What is the highest peak of Kazakhstan and how tall is it in metres?",
+        "arithmetic": (
+            "If one box holds 24 pens, how many pens are there in seven boxes?"
+        ),
+        "geography": (
+            "What is the highest peak of Kazakhstan and how tall is it in metres?"
+        ),
         "biology": "Which organ of the human body is the largest and what does it do?",
-        "history": "Who was the first human to travel into space and when did it happen?",
+        "history": (
+            "Who was the first human to travel into space and when did it happen?"
+        ),
         "physics": "What is the approximate speed of light in a vacuum?",
         "everyday": "About how long does it take to boil one litre of water?",
     },

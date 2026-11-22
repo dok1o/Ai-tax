@@ -1,7 +1,7 @@
 {
   "task": "token_cost",
   "command": "/home/user/Ai-tax/src/train.py cost",
-  "generated_at": "2026-11-22T12:29:22Z",
+  "generated_at": "2026-11-22T15:53:01Z",
   "seed": 42,
   "n_splits": 5,
   "group_by": "q_id",

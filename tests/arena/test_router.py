@@ -28,7 +28,9 @@ from src.router import (
     calibrate,
     choose_strategy,
     decide,
+    decode_correctness,
     eligible_keys,
+    nested_decisions,
     outcome_summary,
     prepare_routes,
     sweep_thresholds,
@@ -173,6 +175,49 @@ def test_bootstrap_saving_on_the_hand_case() -> None:
     assert low >= -5.0 and high <= 0.0
 
 
+def test_decode_correctness_reads_booleans_and_flags_alike() -> None:
+    decoded = decode_correctness(
+        pd.Series(["true", "false", "1", "0", " TRUE ", "False"])
+    )
+    assert decoded["is_correct"].tolist() == [1, 0, 1, 0, 1, 0]
+    assert decoded["is_incorrect"].tolist() == [0, 1, 0, 1, 0, 1]
+    with pytest.raises(ValueError, match="non-boolean is_correct"):
+        decode_correctness(pd.Series(["yes"]))
+
+
+def test_threshold_selection_ignores_the_held_out_fold(
+    calibrated: pd.DataFrame,
+) -> None:
+    folds = assign_folds(list(calibrated["q_id"]), DEFAULT_SPLITS, SEED)
+    grid = threshold_grid()
+    _, baseline_thresholds = nested_decisions(calibrated, folds, grid)
+    perturbed = calibrated.copy()
+    held_out = folds == 0
+    perturbed.loc[held_out, "is_correct"] = 1 - perturbed.loc[held_out, "is_correct"]
+    perturbed.loc[held_out, "total_tokens"] = (
+        perturbed.loc[held_out, "total_tokens"] * 3
+    )
+    _, after = nested_decisions(perturbed, folds, grid)
+    # Fold 0 is routed with a threshold chosen on folds 1..4, so corrupting fold 0
+    # outcomes and costs must not move that threshold.
+    assert after[0] == baseline_thresholds[0]
+    assert set(after.values()) <= set(grid)
+
+
+def test_nested_decisions_cover_every_key_once(calibrated: pd.DataFrame) -> None:
+    folds = assign_folds(list(calibrated["q_id"]), DEFAULT_SPLITS, SEED)
+    decisions, per_fold = nested_decisions(calibrated, folds, threshold_grid())
+    assert len(decisions) == len(calibrated) // len(STRATEGIES)
+    assert not decisions.duplicated(KEY).any()
+    assert decisions["strategy"].isin(STRATEGIES).all()
+    expected = pd.DataFrame({"q_id": calibrated["q_id"], "expected_fold": folds})
+    merged = decisions.merge(expected.drop_duplicates(), on="q_id")
+    assert (merged["fold"] == merged["expected_fold"]).all()
+    for fold, threshold in per_fold.items():
+        chosen = decisions.loc[decisions["fold"] == fold, "threshold"]
+        assert set(chosen) == {threshold}
+
+
 def test_sweep_is_monotone_on_the_fixture(calibrated: pd.DataFrame) -> None:
     curve, decisions = sweep_thresholds(calibrated, threshold_grid())
     assert list(curve["threshold"]) == threshold_grid()
@@ -259,7 +304,10 @@ def test_train_router_writes_labelled_outputs(tmp_path: Path) -> None:
     assert manifest["fixture"] is True
     assert manifest["seed"] == SEED
     assert manifest["group_by"] == "q_id"
-    assert manifest["operating_threshold"] in threshold_grid()
+    assert manifest["deployment_threshold"] in threshold_grid()
+    assert len(manifest["thresholds_per_fold"]) == DEFAULT_SPLITS
+    assert "nested" in manifest["selection_rule"]
+    assert set(manifest["thresholds_per_fold"].values()) <= set(threshold_grid())
     assert set(manifest["savings"]) == {f"always_{strategy}" for strategy in BASELINES}
     assert manifest["inputs"]["n_questions"] == 60
     assert manifest["command"].startswith("python -m src.router")
@@ -274,5 +322,7 @@ def test_train_router_writes_labelled_outputs(tmp_path: Path) -> None:
     policy = joblib.load(tmp_path / "router_policy_fixture.joblib")
     assert policy["strategies"] == list(STRATEGIES)
     assert set(policy["strategy_models"]) == set(STRATEGIES)
-    assert policy["threshold"] == manifest["operating_threshold"]
+    assert policy["threshold"] == manifest["deployment_threshold"]
+    saved = pd.read_csv(tmp_path / "router_decisions_fixture.csv")
+    assert "fold" in saved.columns and saved["fold"].nunique() == DEFAULT_SPLITS
     assert len(results["curve"]) == len(threshold_grid())
