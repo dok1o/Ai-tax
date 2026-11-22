@@ -1,0 +1,351 @@
+{
+  "task": "token_cost",
+  "command": "/home/user/Ai-tax/src/train.py cost",
+  "generated_at": "2026-11-22T12:10:55Z",
+  "seed": 42,
+  "n_splits": 5,
+  "group_by": "q_id",
+  "fixture": true,
+  "inputs": {
+    "prompts": "/home/user/Ai-tax/models/fixtures/prompts_fixture.csv",
+    "tokens": "/home/user/Ai-tax/models/fixtures/tokens_fixture.csv",
+    "n_questions": 60,
+    "n_prompts": 180,
+    "n_rows": 360,
+    "tokenizers": [
+      "hf-tokenizers/BAAI/bge-m3@a1b2c3d",
+      "tiktoken/cl100k_base"
+    ]
+  },
+  "target": "token_count",
+  "models": [
+    "lang_mean",
+    "linear",
+    "lightgbm"
+  ],
+  "results": [
+    {
+      "model": "lang_mean",
+      "tokenizer": "hf-tokenizers/BAAI/bge-m3@a1b2c3d",
+      "lang": "all",
+      "n": 180,
+      "n_folds": 5,
+      "mae_mean": 10.5787,
+      "mae_std": 0.0946,
+      "r2_mean": 0.0612,
+      "r2_std": 0.0028
+    },
+    {
+      "model": "lightgbm",
+      "tokenizer": "hf-tokenizers/BAAI/bge-m3@a1b2c3d",
+      "lang": "all",
+      "n": 180,
+      "n_folds": 5,
+      "mae_mean": 0.5379,
+      "mae_std": 0.0888,
+      "r2_mean": 0.9971,
+      "r2_std": 0.0009
+    },
+    {
+      "model": "linear",
+      "tokenizer": "hf-tokenizers/BAAI/bge-m3@a1b2c3d",
+      "lang": "all",
+      "n": 180,
+      "n_folds": 5,
+      "mae_mean": 0.584,
+      "mae_std": 0.0782,
+      "r2_mean": 0.9966,
+      "r2_std": 0.0009
+    },
+    {
+      "model": "lang_mean",
+      "tokenizer": "hf-tokenizers/BAAI/bge-m3@a1b2c3d",
+      "lang": "en",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 9.0417,
+      "mae_std": 0.2028,
+      "r2_mean": -0.0001,
+      "r2_std": 0.0002
+    },
+    {
+      "model": "lightgbm",
+      "tokenizer": "hf-tokenizers/BAAI/bge-m3@a1b2c3d",
+      "lang": "en",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 0.5723,
+      "mae_std": 0.143,
+      "r2_mean": 0.9955,
+      "r2_std": 0.0022
+    },
+    {
+      "model": "linear",
+      "tokenizer": "hf-tokenizers/BAAI/bge-m3@a1b2c3d",
+      "lang": "en",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 0.6456,
+      "mae_std": 0.1294,
+      "r2_mean": 0.9942,
+      "r2_std": 0.0023
+    },
+    {
+      "model": "lang_mean",
+      "tokenizer": "hf-tokenizers/BAAI/bge-m3@a1b2c3d",
+      "lang": "kk",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 12.4944,
+      "mae_std": 0.145,
+      "r2_mean": -0.0001,
+      "r2_std": 0.0001
+    },
+    {
+      "model": "lightgbm",
+      "tokenizer": "hf-tokenizers/BAAI/bge-m3@a1b2c3d",
+      "lang": "kk",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 0.5085,
+      "mae_std": 0.0831,
+      "r2_mean": 0.998,
+      "r2_std": 0.0007
+    },
+    {
+      "model": "linear",
+      "tokenizer": "hf-tokenizers/BAAI/bge-m3@a1b2c3d",
+      "lang": "kk",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 0.5823,
+      "mae_std": 0.0764,
+      "r2_mean": 0.9978,
+      "r2_std": 0.0007
+    },
+    {
+      "model": "lang_mean",
+      "tokenizer": "hf-tokenizers/BAAI/bge-m3@a1b2c3d",
+      "lang": "ru",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 10.2,
+      "mae_std": 0.1514,
+      "r2_mean": -0.0002,
+      "r2_std": 0.0003
+    },
+    {
+      "model": "lightgbm",
+      "tokenizer": "hf-tokenizers/BAAI/bge-m3@a1b2c3d",
+      "lang": "ru",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 0.5329,
+      "mae_std": 0.0682,
+      "r2_mean": 0.9964,
+      "r2_std": 0.0011
+    },
+    {
+      "model": "linear",
+      "tokenizer": "hf-tokenizers/BAAI/bge-m3@a1b2c3d",
+      "lang": "ru",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 0.5241,
+      "mae_std": 0.1109,
+      "r2_mean": 0.9961,
+      "r2_std": 0.0012
+    },
+    {
+      "model": "lang_mean",
+      "tokenizer": "tiktoken/cl100k_base",
+      "lang": "all",
+      "n": 180,
+      "n_folds": 5,
+      "mae_mean": 11.9194,
+      "mae_std": 0.1647,
+      "r2_mean": 0.2571,
+      "r2_std": 0.0058
+    },
+    {
+      "model": "lightgbm",
+      "tokenizer": "tiktoken/cl100k_base",
+      "lang": "all",
+      "n": 180,
+      "n_folds": 5,
+      "mae_mean": 0.5657,
+      "mae_std": 0.0647,
+      "r2_mean": 0.998,
+      "r2_std": 0.0003
+    },
+    {
+      "model": "linear",
+      "tokenizer": "tiktoken/cl100k_base",
+      "lang": "all",
+      "n": 180,
+      "n_folds": 5,
+      "mae_mean": 0.7299,
+      "mae_std": 0.0504,
+      "r2_mean": 0.9968,
+      "r2_std": 0.0005
+    },
+    {
+      "model": "lang_mean",
+      "tokenizer": "tiktoken/cl100k_base",
+      "lang": "en",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 8.375,
+      "mae_std": 0.2276,
+      "r2_mean": -0.0003,
+      "r2_std": 0.0003
+    },
+    {
+      "model": "lightgbm",
+      "tokenizer": "tiktoken/cl100k_base",
+      "lang": "en",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 0.6535,
+      "mae_std": 0.1152,
+      "r2_mean": 0.9932,
+      "r2_std": 0.0017
+    },
+    {
+      "model": "linear",
+      "tokenizer": "tiktoken/cl100k_base",
+      "lang": "en",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 0.7929,
+      "mae_std": 0.1885,
+      "r2_mean": 0.9884,
+      "r2_std": 0.0052
+    },
+    {
+      "model": "lang_mean",
+      "tokenizer": "tiktoken/cl100k_base",
+      "lang": "kk",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 15.2,
+      "mae_std": 0.2739,
+      "r2_mean": -0.0001,
+      "r2_std": 0.0001
+    },
+    {
+      "model": "lightgbm",
+      "tokenizer": "tiktoken/cl100k_base",
+      "lang": "kk",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 0.5254,
+      "mae_std": 0.1559,
+      "r2_mean": 0.9985,
+      "r2_std": 0.0006
+    },
+    {
+      "model": "linear",
+      "tokenizer": "tiktoken/cl100k_base",
+      "lang": "kk",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 0.6665,
+      "mae_std": 0.113,
+      "r2_mean": 0.9978,
+      "r2_std": 0.0009
+    },
+    {
+      "model": "lang_mean",
+      "tokenizer": "tiktoken/cl100k_base",
+      "lang": "ru",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 12.1833,
+      "mae_std": 0.2595,
+      "r2_mean": -0.0001,
+      "r2_std": 0.0002
+    },
+    {
+      "model": "lightgbm",
+      "tokenizer": "tiktoken/cl100k_base",
+      "lang": "ru",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 0.5181,
+      "mae_std": 0.1393,
+      "r2_mean": 0.9974,
+      "r2_std": 0.0012
+    },
+    {
+      "model": "linear",
+      "tokenizer": "tiktoken/cl100k_base",
+      "lang": "ru",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 0.7303,
+      "mae_std": 0.1326,
+      "r2_mean": 0.9955,
+      "r2_std": 0.0018
+    }
+  ],
+  "fertility_diagnostic": [
+    {
+      "tokenizer": "hf-tokenizers/BAAI/bge-m3@a1b2c3d",
+      "lang": "en",
+      "n": 60,
+      "fertility_mean": 1.9672
+    },
+    {
+      "tokenizer": "hf-tokenizers/BAAI/bge-m3@a1b2c3d",
+      "lang": "kk",
+      "n": 60,
+      "fertility_mean": 2.827
+    },
+    {
+      "tokenizer": "hf-tokenizers/BAAI/bge-m3@a1b2c3d",
+      "lang": "ru",
+      "n": 60,
+      "fertility_mean": 2.5697
+    },
+    {
+      "tokenizer": "tiktoken/cl100k_base",
+      "lang": "en",
+      "n": 60,
+      "fertility_mean": 1.8633
+    },
+    {
+      "tokenizer": "tiktoken/cl100k_base",
+      "lang": "kk",
+      "n": 60,
+      "fertility_mean": 3.4424
+    },
+    {
+      "tokenizer": "tiktoken/cl100k_base",
+      "lang": "ru",
+      "n": 60,
+      "fertility_mean": 2.995
+    }
+  ],
+  "notes": [
+    "fertility and token_count are targets or diagnostics, never features",
+    "lang_mean is the per-language training mean baseline",
+    "r2 is null for folds whose held-out target is constant"
+  ],
+  "artifacts": [
+    "cost_lang_mean__hf-tokenizers_BAAI_bge-m3_a1b2c3d_fixture.joblib",
+    "cost_lang_mean__tiktoken_cl100k_base_fixture.joblib",
+    "cost_lightgbm__hf-tokenizers_BAAI_bge-m3_a1b2c3d_fixture.joblib",
+    "cost_lightgbm__tiktoken_cl100k_base_fixture.joblib",
+    "cost_linear__hf-tokenizers_BAAI_bge-m3_a1b2c3d_fixture.joblib",
+    "cost_linear__tiktoken_cl100k_base_fixture.joblib"
+  ],
+  "versions": {
+    "python": "3.11.2",
+    "pandas": "3.1.1",
+    "numpy": "2.4.6",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "shap": "0.51.0"
+  }
+}
