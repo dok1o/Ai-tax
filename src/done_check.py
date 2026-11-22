@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import csv
 import json
+import math
 import re
 import subprocess
 from dataclasses import dataclass
@@ -349,8 +350,8 @@ def _table_gate(name: str, root: Path) -> GateResult:
         if not report.is_file():
             return "notebooks/REPORT.md missing comparison family, exact paired test and Holm evidence"
         text = report.read_text(encoding="utf-8").casefold()
-        if "holm" not in text or "mcnemar" not in text or "question" not in text:
-            return "report must document q_id-paired exact McNemar and Holm correction"
+        if not all(term in text for term in ("holm", "mcnemar", "question", "prespecified", "repetition", "bootstrap", "comparison family")):
+            return "report must document prespecified q_id-paired exact McNemar, Holm, and bootstrap family"
         if "95%" not in text:
             return "report must state 95% q_id-bootstrap confidence intervals"
         if "preliminary" not in text:
@@ -384,26 +385,118 @@ def _artifact_gate(name: str, root: Path, folder: str, required: tuple[str, ...]
     return _read_failure(name, [directory], check)
 
 
+def _fold_errors(rows: list[dict[str, str]]) -> list[str]:
+    partitions: dict[str, dict[str, set[str]]] = {}
+    training = {"train", "training"}
+    evaluation = {"test", "eval", "evaluation", "valid", "validation", "heldout", "held-out"}
+    for row in rows:
+        split = row["split"].strip().casefold().replace("_", "-")
+        label = "train" if split in training else "eval" if split in evaluation else "unknown"
+        if label == "unknown":
+            return [f"unknown fold split label {row['split']!r}"]
+        fold = row.get("fold", "0")
+        partitions.setdefault(fold, {}).setdefault(label, set()).add(row["q_id"])
+    if not partitions:
+        return ["fold assignments are missing"]
+    errors: list[str] = []
+    for fold, parts in partitions.items():
+        if "train" not in parts or "eval" not in parts:
+            errors.append(f"fold {fold} is missing train or evaluation rows")
+        elif overlap := parts["train"] & parts["eval"]:
+            errors.append(f"fold {fold} leaks q_ids: {', '.join(sorted(overlap)[:3])}")
+    return errors
+
+
+def _model_comparison_errors(
+    rows: list[dict[str, str]], expected_metric: str
+) -> list[str]:
+    fields = {
+        "metric",
+        "n",
+        "baseline",
+        "model",
+        "baseline_value",
+        "model_value",
+        "signed_difference",
+    }
+    comparisons = [row for row in rows if fields.issubset(row)]
+    if not comparisons:
+        return ["held-out comparison must show n, baseline, model and signed difference"]
+    metric_aliases = {
+        "mae": {"mae", "token_count_mae", "token-count-mae"},
+        "brier": {"brier", "brier_score"},
+    }[expected_metric]
+    matches = [
+        row
+        for row in comparisons
+        if row["metric"].casefold() in metric_aliases
+    ]
+    if not matches:
+        return [f"held-out {expected_metric} comparison is missing"]
+    errors: list[str] = []
+    for row in matches:
+        try:
+            n = int(row["n"])
+            values = [
+                float(row["baseline_value"]),
+                float(row["model_value"]),
+                float(row["signed_difference"]),
+            ]
+            if n <= 0 or not all(math.isfinite(value) for value in values):
+                raise ValueError
+        except ValueError:
+            errors.append(f"invalid {expected_metric} comparison row")
+            continue
+        baseline = row["baseline"].casefold()
+        if "training" not in baseline:
+            errors.append(f"{expected_metric} baseline is not identified as training-derived")
+        if expected_metric == "mae" and "mean" not in baseline:
+            errors.append("token MAE baseline must be the training per-language/tokenizer mean")
+        if expected_metric == "brier" and not any(word in baseline for word in ("error", "rate")):
+            errors.append("Brier baseline must be the training error rate")
+        if not row["model"].strip():
+            errors.append(f"{expected_metric} model name is missing")
+    return errors
+
+
+def _feature_manifest_errors(path: Path | None) -> list[str]:
+    if path is None:
+        return ["pre-call feature manifest is missing"]
+    rows = _csv(path, {"feature", "availability"})
+    if any(row["availability"].casefold().replace("_", "-") not in {"pre-call", "before-call"} for row in rows):
+        return ["feature manifest contains a feature unavailable before the call"]
+    return []
+
+
 def _models_gate(root: Path) -> GateResult:
     paths = [root / "models" / "token_cost", root / "models" / "error_risk"]
 
     def check() -> str:
-        for directory in paths:
+        for directory, metric in zip(paths, ("mae", "brier"), strict=True):
             if not directory.is_dir():
                 return f"missing evidence directory: {_display_path(directory)}"
             files = [path for path in directory.rglob("*.csv") if path.is_file()]
             if not files:
                 return f"no model CSV evidence under {_display_path(directory)}"
-            folds = [row for path in files for row in _csv(path) if "q_id" in row and "split" in row]
-            grouped: dict[str, dict[str, set[str]]] = {}
-            for row in folds:
-                grouped.setdefault(row.get("fold", "0"), {}).setdefault(row["split"].casefold(), set()).add(row["q_id"])
-            if not grouped or any(train & test for parts in grouped.values() for train in [parts.get("train", set())] for test in [parts.get("test", parts.get("eval", set()))]):
-                return f"grouped q_id train/evaluation split missing or leaking under {_display_path(directory)}"
-            headers = [set(_csv(path)[0]) for path in files]
-            all_columns = set.union(*headers)
-            if not ({"baseline", "metric"} <= all_columns or {"baseline_value", "model_value"} <= all_columns):
-                return f"training baseline/model comparison missing under {_display_path(directory)}"
+            csv_rows = [_csv(path) for path in files]
+            folds = [
+                row
+                for rows in csv_rows
+                for row in rows
+                if {"q_id", "split"}.issubset(row)
+            ]
+            errors = _fold_errors(folds)
+            if errors:
+                return f"{errors[0]} under {_display_path(directory)}"
+            manifest = next((path for path in files if path.name == "feature_manifest.csv"), None)
+            errors = _feature_manifest_errors(manifest)
+            if errors:
+                return f"{errors[0]} under {_display_path(directory)}"
+            errors = _model_comparison_errors(
+                [row for rows in csv_rows for row in rows], metric
+            )
+            if errors:
+                return f"{errors[0]} under {_display_path(directory)}"
         return ""
 
     return _read_failure("MODELS", paths, check)
@@ -415,11 +508,134 @@ def _router_gate(root: Path) -> GateResult:
     if not gate.passed:
         return gate
     files = list(path.rglob("*.csv"))
-    names = set().union(*(set(_csv(file)[0]) for file in files))
-    required = {"q_id", "route", "cost", "accuracy"}
-    if not required.issubset(names):
-        return _result("ROUTER", path, f"router CSVs lack fields: {', '.join(sorted(required - names))}")
+    try:
+        rows_by_path = {file: _csv(file) for file in files}
+    except (OSError, ValueError) as error:
+        return _result("ROUTER", path, str(error))
+    observations = [
+        row
+        for rows in rows_by_path.values()
+        for row in rows
+        if {"q_id", "accuracy", "eligible"}.issubset(row)
+        and ("policy" in row or "baseline" in row)
+    ]
+    observation_errors = _router_observation_errors(observations)
+    if observation_errors:
+        return _result("ROUTER", path, observation_errors[0])
+    savings_files = [file for file in files if "saving" in file.name.casefold()]
+    savings_rows = [row for file in savings_files for row in rows_by_path[file]]
+    savings_errors = _router_savings_errors(savings_rows)
+    if savings_errors:
+        return _result("ROUTER", path, savings_errors[0])
+    report_path = path / "REPORT.md"
+    if not report_path.is_file():
+        report_path = root / "RELEASE.md"
+    try:
+        report = report_path.read_text(encoding="utf-8").casefold()
+    except OSError as error:
+        return _result("ROUTER", report_path, f"router report unavailable: {error}")
+    if "threshold" not in report or "training" not in report:
+        return _result("ROUTER", report_path, "threshold selection on training questions is not documented")
+    if "bootstrap" not in report or "q_id" not in report or "translation" not in report:
+        return _result("ROUTER", report_path, "q_id-bootstrap and translation-cost evidence is missing")
+    if any(float(row["ci_low"]) <= 0 <= float(row["ci_high"]) for row in savings_rows) and not any(
+        term in report for term in ("includes zero", "crosses zero", "null result", "no savings")
+    ):
+        return _result("ROUTER", report_path, "CI includes zero but the null outcome is not reported")
+    if any(row["accuracy_matched"].casefold() == "false" for row in savings_rows) and not any(
+        term in report for term in ("cannot match accuracy", "accuracy not matched", "unmatched accuracy")
+    ):
+        return _result("ROUTER", report_path, "unmatched held-out accuracy outcome is not reported")
     return gate
+
+
+def _policy_name(value: str) -> str | None:
+    normalized = value.casefold().replace("-", "_").replace(" ", "_")
+    if "always_direct" in normalized:
+        return "always_direct"
+    if "always_via_english" in normalized:
+        return "always_via_english"
+    if "router" in normalized or "frozen_policy" in normalized:
+        return "router"
+    return None
+
+
+def _router_observation_errors(rows: list[dict[str, str]]) -> list[str]:
+    if not rows:
+        return ["per-q_id router observations with eligibility and policy are missing"]
+    required = {"q_id", "accuracy", "eligible", "translation_cost", "model_cost", "total_cost"}
+    if any(not required.issubset(row) for row in rows):
+        return ["router observations must include per-leg cost components and eligibility"]
+    qids_by_policy: dict[str, set[str]] = {}
+    seen: set[tuple[str, str]] = set()
+    for row in rows:
+        policy = _policy_name(row.get("policy") or row.get("baseline", ""))
+        if policy is None:
+            return [f"unknown router policy {row.get('policy', row.get('baseline', ''))!r}"]
+        if row["eligible"].casefold() not in {"true", "false"}:
+            return [f"invalid eligibility mark for q_id {row['q_id']}"]
+        if row["eligible"].casefold() == "false":
+            continue
+        key = (policy, row["q_id"])
+        if key in seen:
+            return [f"duplicate eligible router result for {policy}/{row['q_id']}"]
+        seen.add(key)
+        qids_by_policy.setdefault(policy, set()).add(row["q_id"])
+        try:
+            accuracy = float(row["accuracy"])
+            translation = float(row["translation_cost"])
+            model = float(row["model_cost"])
+            total = float(row["total_cost"])
+            if not 0 <= accuracy <= 1 or min(translation, model, total) < 0:
+                raise ValueError
+            if not all(math.isfinite(value) for value in (accuracy, translation, model, total)):
+                raise ValueError
+            if not math.isclose(total, translation + model, rel_tol=1e-6, abs_tol=1e-9):
+                return [f"total cost omits a translation/model leg for {policy}/{row['q_id']}"]
+        except ValueError:
+            return [f"invalid router accuracy/cost for {policy}/{row['q_id']}"]
+    required_policies = {"router", "always_direct", "always_via_english"}
+    if set(qids_by_policy) != required_policies:
+        return ["router observations must include router, always_direct and always_via_english"]
+    qid_sets = list(qids_by_policy.values())
+    if any(qids != qid_sets[0] for qids in qid_sets[1:]):
+        return ["router policies are not evaluated on identical eligible q_ids"]
+    return []
+
+
+def _router_savings_errors(rows: list[dict[str, str]]) -> list[str]:
+    fields = {
+        "baseline",
+        "mean_cost_saved",
+        "ci_low",
+        "ci_high",
+        "n_questions",
+        "accuracy_matched",
+        "bootstrap_unit",
+    }
+    if not rows or any(not fields.issubset(row) for row in rows):
+        return ["savings table must report paired mean, q_id-bootstrap CI, n and accuracy match"]
+    found: set[str] = set()
+    for row in rows:
+        baseline = _policy_name(row["baseline"])
+        if baseline not in {"always_direct", "always_via_english"}:
+            continue
+        found.add(baseline)
+        try:
+            mean = float(row["mean_cost_saved"])
+            low, high = float(row["ci_low"]), float(row["ci_high"])
+            n = int(row["n_questions"])
+            if not all(math.isfinite(value) for value in (mean, low, high)) or not low <= mean <= high or n <= 0:
+                raise ValueError
+        except ValueError:
+            return [f"invalid paired savings/CI row for {baseline}"]
+        if row["bootstrap_unit"].casefold() not in {"q_id", "qid", "question_id"}:
+            return [f"savings CI for {baseline} is not bootstrapped by q_id"]
+        if row["accuracy_matched"].casefold() not in {"true", "false"}:
+            return [f"accuracy match outcome missing for {baseline}"]
+    if found != {"always_direct", "always_via_english"}:
+        return ["paired savings missing for always_direct or always_via_english"]
+    return []
 
 
 def _release_text_gate(name: str, root: Path, checks: tuple[str, ...]) -> GateResult:
@@ -444,9 +660,14 @@ def _app_gate(root: Path) -> GateResult:
         if not demo.is_dir() or not any(path.is_file() for path in demo.rglob("*")):
             return "saved demo inputs missing under data/demo"
         text = release.read_text(encoding="utf-8").casefold()
-        for item in (*required_languages, "15 seconds", "external networking disabled", "credentials unset"):
+        for item in (*required_languages, "external networking disabled", "credentials unset", "interactive", "populated"):
             if item not in text:
                 return f"RELEASE.md lacks offline app evidence: {item}"
+        timing = re.search(r"cold start[^\n]{0,100}?(\d+(?:\.\d+)?)\s*(?:seconds?|s)\b", text)
+        if timing is None:
+            return "RELEASE.md lacks a measured cold-start time"
+        if float(timing.group(1)) >= 15:
+            return f"A1 cold-start threshold is 15 seconds; measured {timing.group(1)} seconds"
         if "example data" not in text or "real-only" not in text:
             return "RELEASE.md lacks both fixture-banner and real-only smoke evidence"
         pending = _pending_confirmations(root, ("A1",))
@@ -459,6 +680,7 @@ def _app_gate(root: Path) -> GateResult:
 
 def _repro_gate(root: Path) -> GateResult:
     path = root / "RELEASE.md"
+    comparison_path = root / "notebooks" / "rebuild_comparison.csv"
 
     def check() -> str:
         text = path.read_text(encoding="utf-8").casefold()
@@ -471,9 +693,25 @@ def _repro_gate(root: Path) -> GateResult:
             "keys, counts and values",
         )
         missing = [item for item in required if item not in text]
-        return f"RELEASE.md lacks rebuild evidence: {', '.join(missing)}" if missing else ""
+        if missing:
+            return f"RELEASE.md lacks rebuild evidence: {', '.join(missing)}"
+        rows = _csv(
+            comparison_path,
+            {"artifact", "keys_match", "counts_match", "values_match", "input_version", "command"},
+        )
+        expected = {"measurement", "statistics", "token_cost", "error_risk", "router"}
+        by_artifact = {row["artifact"].casefold(): row for row in rows}
+        if not expected.issubset(by_artifact):
+            return f"rebuild comparison lacks artifacts: {', '.join(sorted(expected - by_artifact.keys()))}"
+        for artifact in expected:
+            row = by_artifact[artifact]
+            if not row["input_version"].strip() or not row["command"].strip():
+                return f"rebuild comparison lacks command/input version for {artifact}"
+            if any(row[column].casefold() != "true" for column in ("keys_match", "counts_match", "values_match")):
+                return f"rebuild comparison differs from release tables for {artifact}"
+        return ""
 
-    return _read_failure("REPRODUCIBILITY", [path], check)
+    return _read_failure("REPRODUCIBILITY", [path, comparison_path], check)
 
 
 def _integrity_gate(root: Path, git: Any) -> GateResult:
@@ -487,6 +725,8 @@ def _integrity_gate(root: Path, git: Any) -> GateResult:
         missing = [item for item in required if item not in text]
         if missing:
             return f"RELEASE.md lacks integrity evidence: {', '.join(missing)}"
+        if not re.search(r"https?://\S+", text) or not re.search(r"20\d{2}-\d{2}-\d{2}", text):
+            return "citation evidence must include a source URL and opened date"
         env = git(["log", "--all", "--full-history", "--format=%H", "--", ".env", ":(glob)**/.env"], root)
         if env.returncode != 0:
             return "git history scan for .env failed"

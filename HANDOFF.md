@@ -6,7 +6,7 @@
 - Next: workers can resume their own cards. Keep native verification and paid collection separate from fixture tests.
 - Release gate: rerun the integrated offline dashboard after T-006 is accepted.
 
-done: T-010 checker, tests, report, and review status are committed on codex/T-010-done-check; run.py check passed (20 tests).
+done: T-010 checker, tests, report, and review status are committed on codex/T-010-done-check; run.py check passed (23 tests).
 next: Astra reviews the checker; run.py done remains FAIL until release evidence and human decisions exist.
 blockers: Missing release evidence and approval-review block for the external push.
 files touched: run.py; src/done_check.py; tests/codex/test_done_check.py; STATUS.md; notebooks/REPORT.md.
