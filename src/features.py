@@ -14,17 +14,21 @@ from __future__ import annotations
 from collections.abc import Iterable, Sequence
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
+from sklearn.model_selection import GroupKFold
 
 from src.common.config import (
     DATA_DIR,
     LABELS_PATH,
     MODELS_DIR,
     PROMPTS_PATH,
+    SEED,
     TOKENS_PATH,
 )
 
 LANGS: tuple[str, ...] = ("kk", "ru", "en")
+DEFAULT_SPLITS = 5
 KAZAKH_SPECIFIC = frozenset("әғқңөұүһіӘҒҚҢӨҰҮҺІ")
 PUNCTUATION = frozenset(".,;:!?()[]{}\"'‘’“”-–—…/\\@#$%&*+=<>_|~`^")
 
@@ -271,6 +275,26 @@ def resolve_input(kind: str) -> tuple[Path, bool]:
     raise FileNotFoundError(
         f"neither {real} nor {fixture} exists; run models/fixtures/make_fixtures.py"
     )
+
+
+def assign_folds(
+    groups: Sequence[str], n_splits: int = DEFAULT_SPLITS, seed: int = SEED
+) -> np.ndarray:
+    """Assign one fold per row so every ``q_id`` stays entirely on one side."""
+    unique = pd.unique(pd.Series(list(groups), dtype="string"))
+    if len(unique) < n_splits:
+        raise ValueError(
+            f"need at least {n_splits} distinct q_id groups, found {len(unique)}"
+        )
+    order = np.random.default_rng(seed).permutation(len(groups))
+    grouped = np.asarray(groups, dtype=object)[order]
+    folds = np.zeros(len(groups), dtype=int)
+    splitter = GroupKFold(n_splits=n_splits)
+    for fold, (_, test) in enumerate(
+        splitter.split(np.zeros((len(order), 1)), groups=grouped)
+    ):
+        folds[order[test]] = fold
+    return folds
 
 
 def assign_folds_frame(dataset: pd.DataFrame, folds: Sequence[int]) -> pd.DataFrame:

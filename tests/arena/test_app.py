@@ -157,3 +157,40 @@ def test_risk_panel_is_a_placeholder_without_artifacts(
     assert not test.exception
     assert "Answering model" not in [box.label for box in test.selectbox]
     assert len(test.number_input) == 1
+
+
+def test_router_options_mark_exactly_one_choice() -> None:
+    policy = logic.load_router_policy(MODELS_DIR)
+    assert policy is not None, "run `python -m src.router` first"
+    for lang in ("kk", "en"):
+        options = logic.router_options(
+            logic.EXAMPLE_PHRASES[lang], lang, "geography", policy
+        )
+        assert options is not None
+        assert options["strategy"].tolist() == list(policy["strategies"])
+        assert int(options["chosen"].sum()) == 1
+        assert (options["cost_hat"] > 0).all()
+        assert options["risk_hat"].between(0.0, 1.0).all()
+    strict = logic.router_options(
+        logic.EXAMPLE_PHRASES["kk"], "kk", "geography", policy, threshold=0.01
+    )
+    assert strict is not None
+    assert strict.loc[strict["chosen"], "risk_hat"].iloc[0] == strict["risk_hat"].min()
+
+
+def test_router_panel_is_enabled_with_artifacts(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    test = run_app(monkeypatch, force_empty=False)
+    assert not test.exception
+    assert "Risk threshold" in [slider.label for slider in test.slider]
+    assert test.metric[0].value in {"direct", "via_english", "stronger_model"}
+
+
+def test_router_panel_is_a_placeholder_without_artifacts(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    test = run_app(monkeypatch, force_empty=True)
+    assert not test.exception
+    assert not test.slider
+    assert any("pending T-008" in item.value for item in test.text_input)

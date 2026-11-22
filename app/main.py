@@ -56,6 +56,12 @@ def render_sidebar(state: logic.AppState) -> None:
     )
 
 
+@st.cache_resource(show_spinner=False)
+def cached_router_policy() -> dict | None:
+    """Saved routing policy."""
+    return logic.load_router_policy()
+
+
 def render_predictor(state: logic.AppState) -> tuple[str, str, str]:
     """Phrase input with the predicted token cost."""
     st.subheader("Predict the token cost of a phrase")
@@ -99,14 +105,31 @@ def render_risk(phrase: str, lang: str, category: str, state: logic.AppState) ->
     )
 
 
-def render_router() -> None:
-    """Router panel: a disabled placeholder until T-008 artifacts exist."""
+def render_router(phrase: str, lang: str, category: str) -> None:
+    """Router panel (T-008): placeholder until the policy artifact exists."""
     st.subheader("Router decision")
-    st.text_input(
-        "Chosen strategy",
-        value="pending T-008",
-        disabled=True,
-        help="Pending T-008: direct / via_english / stronger_model.",
+    policy = cached_router_policy()
+    if policy is None:
+        st.text_input(
+            "Chosen strategy",
+            value="pending T-008",
+            disabled=True,
+            help="Pending T-008: direct / via_english / stronger_model.",
+        )
+        return
+    threshold = st.slider(
+        "Risk threshold", 0.05, 0.95, float(policy["threshold"]), 0.05
+    )
+    options = logic.router_options(phrase, lang, category, policy, threshold)
+    if options is None:
+        st.info(logic.empty_state("cost or risk model"))
+        return
+    chosen = options.loc[options["chosen"], "strategy"].tolist()
+    st.metric("Chosen strategy", chosen[0] if chosen else "none")
+    st.dataframe(options, hide_index=True)
+    st.caption(
+        "Cheapest strategy whose predicted risk stays under the threshold. "
+        "Estimates come from the saved T-005 and T-007 models plus the T-008 calibration."
     )
 
 
@@ -141,6 +164,12 @@ def render_charts(state: logic.AppState) -> None:
             st.bar_chart(
                 costs.pivot(index="tokenizer", columns="model", values="mae_mean")
             )
+        router = logic.router_rows(state.manifests.get("router_metrics"))
+        if router is not None:
+            st.caption(
+                "Router sweep and always-use-one-strategy baselines (T-008), held out by q_id."
+            )
+            st.dataframe(router, hide_index=True)
         risks = logic.risk_rows(state.manifests.get("risk_metrics"))
         if risks is not None:
             st.caption("Error-risk models (T-007), held out by q_id.")
@@ -172,7 +201,7 @@ def render() -> None:
     render_sidebar(state)
     phrase, lang, category = render_predictor(state)
     render_risk(phrase, lang, category, state)
-    render_router()
+    render_router(phrase, lang, category)
     render_charts(state)
 
 

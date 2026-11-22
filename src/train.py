@@ -30,12 +30,13 @@ import sklearn
 from lightgbm import LGBMClassifier, LGBMRegressor
 from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.metrics import accuracy_score, brier_score_loss, r2_score, roc_auc_score
-from sklearn.model_selection import GroupKFold
 
 from src.common.config import MODELS_DIR, SEED
 from src.features import (
+    DEFAULT_SPLITS,
     TARGET,
     artifact_name,
+    assign_folds,
     assign_folds_frame,
     design_matrix,
     fertility_table,
@@ -45,7 +46,6 @@ from src.features import (
 )
 
 FIGS_DIR = MODELS_DIR / "figs"
-DEFAULT_SPLITS = 5
 COST_MODELS: tuple[str, ...] = ("lang_mean", "linear", "lightgbm")
 RISK_MODELS: tuple[str, ...] = ("train_rate", "logistic", "lightgbm")
 RISK_META: tuple[str, ...] = ("lang", "category", "model")
@@ -144,26 +144,6 @@ def risk_estimator(name: str, seed: int = SEED) -> Any:
             verbose=-1,
         )
     raise ValueError(f"unknown risk model: {name}")
-
-
-def assign_folds(
-    groups: Sequence[str], n_splits: int = DEFAULT_SPLITS, seed: int = SEED
-) -> np.ndarray:
-    """Assign one fold per row so every ``q_id`` stays entirely on one side."""
-    unique = pd.unique(pd.Series(list(groups), dtype="string"))
-    if len(unique) < n_splits:
-        raise ValueError(
-            f"need at least {n_splits} distinct q_id groups, found {len(unique)}"
-        )
-    order = np.random.default_rng(seed).permutation(len(groups))
-    grouped = np.asarray(groups, dtype=object)[order]
-    folds = np.zeros(len(groups), dtype=int)
-    splitter = GroupKFold(n_splits=n_splits)
-    for fold, (_, test) in enumerate(
-        splitter.split(np.zeros((len(order), 1)), groups=grouped)
-    ):
-        folds[order[test]] = fold
-    return folds
 
 
 def mean_std(values: Sequence[float]) -> tuple[float, float]:

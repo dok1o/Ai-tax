@@ -27,6 +27,7 @@ from src.features import (
     design_matrix,
     text_features,
 )
+from src.router import choose_strategy
 
 DEMO_DIR = DATA_DIR / "demo"
 FIGS_DIR = MODELS_DIR / "figs"
@@ -313,6 +314,106 @@ def predict_risk(
             }
         )
     return pd.DataFrame(rows)
+
+
+def load_router_policy(models_dir: Path = MODELS_DIR) -> dict[str, Any] | None:
+    """Saved routing policy, or None until T-008 has run."""
+    if inputs_disabled():
+        return None
+    path = candidate(models_dir, "router_policy", "joblib")
+    return None if path is None else joblib.load(path)
+
+
+def _policy_factor(
+    policy: dict[str, Any], field: str, strategy: str, lang: str
+) -> float:
+    """Per-strategy calibration factor for one language, with a documented fallback."""
+    for row in policy["statistics"]:
+        if row["strategy"] == strategy and row["lang"] == lang:
+            return float(row[field])
+    return float(
+        policy[f"fallback_{'multiplier' if field == 'cost_multiplier' else 'offset'}"][
+            strategy
+        ]
+    )
+
+
+def router_options(
+    phrase: str,
+    lang: str,
+    category: str,
+    policy: dict[str, Any],
+    threshold: float | None = None,
+    models_dir: Path = MODELS_DIR,
+) -> pd.DataFrame | None:
+    """Estimated cost and risk of every strategy for one ad-hoc phrase.
+
+    The route language and answering model come from the saved policy; the
+    per-strategy multipliers and offsets are the ones fitted during T-008.
+    """
+    costs = load_cost_models(models_dir)
+    risks = load_risk_models(models_dir)
+    key = f"{policy['tokenizer']}|{policy['cost_model']}"
+    if key not in costs or policy["risk_model"] not in risks:
+        return None
+    features = build_features(phrase_frame(phrase, lang, category))
+    prompt_tokens = float(
+        costs[key]["estimator"].predict(
+            align_matrix(design_matrix(features), costs[key]["columns"])
+        )[0]
+    )
+    risk_features = features.copy()
+    rows = []
+    for strategy in policy["strategies"]:
+        answer_model = policy["strategy_models"][strategy]
+        risk_features["model"] = answer_model
+        matrix = design_matrix(
+            risk_features,
+            meta_columns=tuple(risks[policy["risk_model"]]["meta_columns"]),
+        )
+        raw = float(
+            risks[policy["risk_model"]]["estimator"].predict_proba(
+                align_matrix(matrix, risks[policy["risk_model"]]["columns"])
+            )[0, 1]
+        )
+        rows.append(
+            {
+                "strategy": strategy,
+                "answer_model": answer_model,
+                "estimated_tokens": round(
+                    prompt_tokens
+                    * _policy_factor(policy, "cost_multiplier", strategy, lang),
+                    2,
+                ),
+                "risk_incorrect": round(
+                    min(
+                        max(
+                            raw + _policy_factor(policy, "risk_offset", strategy, lang),
+                            0.0,
+                        ),
+                        1.0,
+                    ),
+                    4,
+                ),
+            }
+        )
+    options = pd.DataFrame(rows).rename(
+        columns={"estimated_tokens": "cost_hat", "risk_incorrect": "risk_hat"}
+    )
+    options["chosen"] = options["strategy"] == choose_strategy(
+        options, threshold if threshold is not None else float(policy["threshold"])
+    )
+    return options[["strategy", "answer_model", "cost_hat", "risk_hat", "chosen"]]
+
+
+def router_rows(manifest: dict[str, Any] | None) -> pd.DataFrame | None:
+    """Router sweep and baselines from the T-008 manifest."""
+    if not manifest or not manifest.get("curve"):
+        return None
+    curve = pd.DataFrame(manifest["curve"])[
+        ["threshold", "n", "cost_tokens_mean", "accuracy", "expected_accuracy"]
+    ]
+    return pd.concat([curve, pd.DataFrame(manifest["baselines"])], ignore_index=True)
 
 
 def figure_paths(figs_dir: Path = FIGS_DIR) -> list[Path]:
