@@ -3,14 +3,14 @@
 | ID | Title | Agent | Branch | State |
 | --- | --- | --- | --- | --- |
 | T-000 | Repository bootstrap | codex | codex/T-000-bootstrap | done |
-| T-001 | Token counts and fertility | codex | codex/T-001-tokens | todo |
-| T-002 | Trilingual prompts and validator | codex | codex/T-002-prompts | review |
-| T-003 | Cached model collection | codex | codex/T-003-collect | todo |
-| T-004 | Grading and paired statistics | codex | codex/T-004-stats | todo |
-| T-005 | Token-cost prediction | arena | arena/T-005-cost | todo |
-| T-006 | Offline dashboard skeleton | arena | arena/T-006-dashboard | todo |
-| T-007 | Error-risk prediction | arena | arena/T-007-risk | todo |
-| T-008 | Routing evaluation | arena | arena/T-008-router | todo |
+| T-001 | Token counts and fertility | codex | codex/T-001-tokens | doing |
+| T-002 | Trilingual prompts and validator | codex | codex/T-002-prompts | done |
+| T-003 | Cached model collection | codex | codex/T-003-collect | doing |
+| T-004 | Grading and paired statistics | codex | codex/T-004-judge-stats | doing |
+| T-005 | Token-cost prediction | arena | arena/T-005-cost-predictor | doing |
+| T-006 | Offline dashboard skeleton | arena | arena/T-006-app-skeleton | doing |
+| T-007 | Error-risk prediction | arena | arena/T-007-error-predictor | doing |
+| T-008 | Routing evaluation | arena | arena/T-008-router | doing |
 | T-009 | PowerShell-compatible Python commands | codex | codex/T-009-runner | done |
 
 ## Requests for Astra
@@ -26,3 +26,6 @@
 - T-002 requests a src/common topic list outside this run's paths; proposed run update: permit it or keep the list under data/.
 - T-001 run.py tokens does not pass --input; proposed v2: add argument forwarding to the shared runner.
 - T-001 branch predates run.py from T-009; proposed integration: include the runner before using run.py commands on that branch.
+- T-003 requests a representation for missing provider usage. Preserve returned answers in the raw cache and keep incomplete rows out of v1 responses.csv pending a contract decision.
+- T-004 requests a metrics.csv contract. The four existing v1 CSV schemas remain in force during this review.
+- ARENA submitted its four tasks on one branch. RELEASE.md identifies the reviewed tips, and each task card records the changes required for resubmission.
