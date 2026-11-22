@@ -197,6 +197,16 @@ def risk_rows(manifest: dict[str, Any] | None) -> pd.DataFrame | None:
     return frame[frame["lang"] == "all"].sort_values("model").reset_index(drop=True)
 
 
+def answer_models(state: AppState) -> list[str]:
+    """Answering models the risk panel can score a phrase against."""
+    labels = state.table("labels")
+    if labels is not None and "model" in labels.columns:
+        return sorted(set(labels["model"]))
+    manifest = state.manifests.get("risk_metrics") or {}
+    known = manifest.get("inputs", {}).get("answer_models", [])
+    return list(known) or ["unspecified"]
+
+
 def empty_state(kind: str) -> str:
     """Readable message for a table or artifact that does not exist yet."""
     return (

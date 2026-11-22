@@ -142,3 +142,18 @@ def test_app_starts_without_any_data(monkeypatch: pytest.MonkeyPatch) -> None:
     messages = [item.value for item in test.info]
     assert any("No tokens available offline" in message for message in messages)
     assert any("No cost model available offline" in message for message in messages)
+
+
+def test_risk_panel_is_enabled_with_artifacts(monkeypatch: pytest.MonkeyPatch) -> None:
+    test = run_app(monkeypatch, force_empty=False)
+    assert not test.exception
+    assert "Answering model" in [box.label for box in test.selectbox]
+
+
+def test_risk_panel_is_a_placeholder_without_artifacts(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    test = run_app(monkeypatch, force_empty=True)
+    assert not test.exception
+    assert "Answering model" not in [box.label for box in test.selectbox]
+    assert len(test.number_input) == 1

@@ -77,8 +77,8 @@ def render_predictor(state: logic.AppState) -> tuple[str, str, str]:
     return phrase, lang, category
 
 
-def render_risk(phrase: str, lang: str, category: str) -> None:
-    """Error-risk panel: a disabled placeholder until T-007 artifacts exist."""
+def render_risk(phrase: str, lang: str, category: str, state: logic.AppState) -> None:
+    """Error-risk panel (T-007): placeholder until risk artifacts exist."""
     st.subheader("Risk of a wrong answer")
     models = cached_risk_models()
     if not models:
@@ -90,8 +90,13 @@ def render_risk(phrase: str, lang: str, category: str) -> None:
         )
         st.caption("Placeholder — enable after T-007 writes models/risk_*.joblib.")
         return
-    risks = logic.predict_risk(phrase, lang, category, "fixture-small-model", models)
+    answer_model = st.selectbox("Answering model", logic.answer_models(state), index=0)
+    risks = logic.predict_risk(phrase, lang, category, answer_model, models)
     st.dataframe(risks, hide_index=True)
+    st.caption(
+        "P(incorrect) from models trained with q_id-grouped folds. "
+        "Fixture-trained models are preliminary, not a result."
+    )
 
 
 def render_router() -> None:
@@ -136,6 +141,10 @@ def render_charts(state: logic.AppState) -> None:
             st.bar_chart(
                 costs.pivot(index="tokenizer", columns="model", values="mae_mean")
             )
+        risks = logic.risk_rows(state.manifests.get("risk_metrics"))
+        if risks is not None:
+            st.caption("Error-risk models (T-007), held out by q_id.")
+            st.dataframe(risks, hide_index=True)
         if fertility is not None:
             st.caption(
                 "Measured fertility (tokens per word) — diagnostic, never a feature."
@@ -162,7 +171,7 @@ def render() -> None:
         st.error(state.banner)
     render_sidebar(state)
     phrase, lang, category = render_predictor(state)
-    render_risk(phrase, lang, category)
+    render_risk(phrase, lang, category, state)
     render_router()
     render_charts(state)
 

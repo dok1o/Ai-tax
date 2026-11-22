@@ -9,7 +9,7 @@
 | T-004 | Grading and paired statistics | codex | codex/T-004-stats | todo |
 | T-005 | Token-cost prediction | arena | arena/ad3092b4-ai-tax | review |
 | T-006 | Offline dashboard skeleton | arena | arena/ad3092b4-ai-tax | review |
-| T-007 | Error-risk prediction | arena | arena/T-007-risk | todo |
+| T-007 | Error-risk prediction | arena | arena/ad3092b4-ai-tax | review |
 | T-008 | Routing evaluation | arena | arena/T-008-router | todo |
 
 ## Requests for Astra
