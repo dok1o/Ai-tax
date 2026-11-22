@@ -126,6 +126,8 @@ def build_prompts(
     draft_path: Path = DRAFT_PATH, output_path: Path = PROMPTS_PATH
 ) -> None:
     """Expand the 60-row draft into the three localized v1 rows per question."""
+    if output_path.exists():
+        raise FileExistsError(f"Refusing to overwrite existing prompts: {output_path}.")
     rows: list[dict[str, str]] = []
     with draft_path.open(encoding="utf-8-sig", newline="") as source:
         if source.readline().startswith("#"):

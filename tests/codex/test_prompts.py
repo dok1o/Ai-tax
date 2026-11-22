@@ -2,7 +2,7 @@ from copy import deepcopy
 
 import pytest
 
-from data.validate_prompts import PROMPT_COLUMNS, main, validate_rows
+from data.validate_prompts import PROMPT_COLUMNS, build_prompts, main, validate_rows
 
 
 def valid_rows() -> list[dict[str, str]]:
@@ -118,3 +118,14 @@ def test_cli_returns_nonzero_for_invalid_csv(tmp_path) -> None:
         main(["--input", str(input_path)])
 
     assert error.value.code == 1
+
+
+def test_builder_refuses_to_overwrite_existing_native_marks(tmp_path) -> None:
+    output_path = tmp_path / "prompts.csv"
+    original = b"existing native corrections"
+    output_path.write_bytes(original)
+
+    with pytest.raises(FileExistsError, match="Refusing to overwrite"):
+        build_prompts(tmp_path / "missing-draft.csv", output_path)
+
+    assert output_path.read_bytes() == original
