@@ -1,8 +1,9 @@
 # T-001 handoff
 
-- Done: Added token counting for `cl100k_base` and revision-pinned `google/byt5-small`; output uses the contract columns and fertility formula.
-- Done: Added targeted tests for kk, ru and en, punctuation, repeated whitespace, tokenizer identifiers and deterministic rows.
-- Next: Run `py -3.11 -m pytest tests/test_tokens.py -q`; run `make tokens` when T-002 provides `data/prompts.csv`.
-- Blockers: Python 3.11 is not installed (`py -3.11` reports no matching runtime); `data/prompts.csv` is pending T-002.
-- Files touched: `src/tokens.py`, `tests/test_tokens.py`, `STATUS.md`, `HANDOFF.md`.
+- Done: Replaced ByT5 with revision-pinned Qwen2.5 subword tokenization alongside `cl100k_base`.
+- Done: Added `--input` CSV support for `text` and `lang`; prompt and question IDs are generated when absent.
+- Done: Added 12 trilingual example phrases with shared question IDs and `is_example=true`.
+- Verification: `git diff --check` passed. The user reports 7 local tests passed before this update; this environment has no Python runtime to rerun them.
+- Next: Run `python -m src.tokens --input data/demo/sample_phrases.csv` to generate `data/tokens.csv`; Astra runs `make check` during review.
+- Files touched: `src/tokens.py`, `tests/test_tokens.py`, `data/demo/sample_phrases.csv`, `STATUS.md`, `HANDOFF.md`.
 - Resume: `git switch codex/T-001-tokens`.

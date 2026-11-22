@@ -3,6 +3,7 @@ import csv
 import pytest
 
 from src import tokens
+from src.common.config import DEMO_DIR
 
 
 class FakeTiktokenEncoding:
@@ -42,7 +43,7 @@ def test_build_rows_covers_languages_whitespace_and_is_repeatable() -> None:
     ]
     encoders = {
         tokens.TIKTOKEN_ENCODING: FakeTiktokenEncoding().encode,
-        tokens.OPEN_TOKENIZER_ID: FakeOpenTokenizer().encode,
+        tokens.SUBWORD_TOKENIZER_ID: FakeOpenTokenizer().encode,
     }
 
     rows = tokens.build_token_rows(prompts, encoders)
@@ -69,8 +70,10 @@ def test_load_encoders_pins_open_revision_and_matches_library_calls(
         calls.append(("tiktoken", name))
         return FakeTiktokenEncoding()
 
-    def from_pretrained(repo: str, revision: str) -> FakeOpenTokenizer:
-        calls.append((repo, revision))
+    def from_pretrained(
+        repo: str, revision: str, use_fast: bool
+    ) -> FakeOpenTokenizer:
+        calls.append((repo, (revision, use_fast)))
         return FakeOpenTokenizer()
 
     monkeypatch.setattr(tokens.tiktoken, "get_encoding", get_encoding)
@@ -81,11 +84,14 @@ def test_load_encoders_pins_open_revision_and_matches_library_calls(
 
     assert calls == [
         ("tiktoken", tokens.TIKTOKEN_ENCODING),
-        (tokens.OPEN_TOKENIZER_REPO, tokens.OPEN_TOKENIZER_REVISION),
+        (
+            tokens.SUBWORD_TOKENIZER_REPO,
+            (tokens.SUBWORD_TOKENIZER_REVISION, True),
+        ),
     ]
     text = "Қазақша  text!"
     assert len(encoders[tokens.TIKTOKEN_ENCODING](text)) == len(text)
-    assert len(encoders[tokens.OPEN_TOKENIZER_ID](text)) == len(text.split())
+    assert len(encoders[tokens.SUBWORD_TOKENIZER_ID](text)) == len(text.split())
 
 
 def test_run_writes_contract_order_and_rejects_empty_prompt(tmp_path) -> None:
@@ -127,3 +133,45 @@ def test_run_writes_contract_order_and_rejects_empty_prompt(tmp_path) -> None:
         )
     with pytest.raises(ValueError, match="must contain a word"):
         tokens.run(prompts_path, output_path, encoders)
+
+
+def test_read_text_lang_csv_without_ids_generates_contract_ids(tmp_path) -> None:
+    input_path = tmp_path / "phrases.csv"
+    input_path.write_text(
+        "lang,text,source\nkk,Сәлем әлем,sample\nen,Hello world,sample\n",
+        encoding="utf-8",
+    )
+
+    prompts = tokens.read_prompts(input_path)
+
+    assert prompts == [
+        {
+            "prompt_id": "input-0001",
+            "q_id": "input-0001",
+            "lang": "kk",
+            "prompt": "Сәлем әлем",
+        },
+        {
+            "prompt_id": "input-0002",
+            "q_id": "input-0002",
+            "lang": "en",
+            "prompt": "Hello world",
+        },
+    ]
+
+
+def test_demo_sample_has_12_trilingual_example_rows() -> None:
+    sample_path = DEMO_DIR / "sample_phrases.csv"
+    with sample_path.open(encoding="utf-8", newline="") as source:
+        sample_rows = list(csv.DictReader(source))
+    prompts = tokens.read_prompts(sample_path)
+    question_ids = {row["q_id"] for row in prompts}
+
+    assert len(sample_rows) == len(prompts) == 12
+    assert all(row["is_example"] == "true" for row in sample_rows)
+    assert {row["lang"] for row in prompts} == {"kk", "ru", "en"}
+    assert question_ids == {"ex-01", "ex-02", "ex-03", "ex-04"}
+    assert all(
+        sum(row["q_id"] == q_id for row in prompts) == 3
+        for q_id in question_ids
+    )

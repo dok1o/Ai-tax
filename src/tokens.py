@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import argparse
 import csv
 from collections.abc import Callable, Iterable, Mapping, Sequence
 from pathlib import Path
@@ -12,9 +13,10 @@ from transformers import AutoTokenizer
 from src.common.config import PROMPTS_PATH, TOKENS_PATH
 
 TIKTOKEN_ENCODING = "cl100k_base"
-OPEN_TOKENIZER_REPO = "google/byt5-small"
-OPEN_TOKENIZER_REVISION = "b0e0bef9a6bfbc5463eed344c2a9c6845b650c4c"
-OPEN_TOKENIZER_ID = f"{OPEN_TOKENIZER_REPO}@{OPEN_TOKENIZER_REVISION}"
+SUBWORD_TOKENIZER_REPO = "Qwen/Qwen2.5-0.5B"
+SUBWORD_TOKENIZER_REVISION = "5796c1d2033cb6257f44cdffa28957680359236d"
+SUBWORD_TOKENIZER_ID = f"{SUBWORD_TOKENIZER_REPO}@{SUBWORD_TOKENIZER_REVISION}"
+SUPPORTED_LANGS = frozenset({"kk", "ru", "en"})
 TOKEN_COLUMNS = (
     "prompt_id",
     "q_id",
@@ -30,14 +32,16 @@ Encoder = Callable[[str], Sequence[object]]
 def load_encoders() -> dict[str, Encoder]:
     """Load the configured tokenizers and return their no-special-token encoders."""
     encoding = tiktoken.get_encoding(TIKTOKEN_ENCODING)
-    open_tokenizer = AutoTokenizer.from_pretrained(
-        OPEN_TOKENIZER_REPO, revision=OPEN_TOKENIZER_REVISION
+    subword_tokenizer = AutoTokenizer.from_pretrained(
+        SUBWORD_TOKENIZER_REPO,
+        revision=SUBWORD_TOKENIZER_REVISION,
+        use_fast=True,
     )
     return {
         TIKTOKEN_ENCODING: lambda text: encoding.encode(
             text, disallowed_special=()
         ),
-        OPEN_TOKENIZER_ID: lambda text: open_tokenizer.encode(
+        SUBWORD_TOKENIZER_ID: lambda text: subword_tokenizer.encode(
             text, add_special_tokens=False
         ),
     }
@@ -70,9 +74,36 @@ def build_token_rows(
 
 
 def read_prompts(path: Path = PROMPTS_PATH) -> list[dict[str, str]]:
-    """Read prompt records from the contract CSV."""
+    """Read any CSV with text and lang, or normalize contract prompt columns."""
     with path.open(encoding="utf-8-sig", newline="") as source:
-        return list(csv.DictReader(source))
+        reader = csv.DictReader(source)
+        columns = set(reader.fieldnames or ())
+        text_column = "text" if "text" in columns else "prompt"
+        if text_column not in columns or "lang" not in columns:
+            raise ValueError("Input CSV must contain 'text' and 'lang' columns.")
+
+        prompts = []
+        for row_number, row in enumerate(reader, start=1):
+            prompt_id = (row.get("prompt_id") or "").strip()
+            q_id = (row.get("q_id") or "").strip()
+            lang = (row.get("lang") or "").strip()
+            if not prompt_id:
+                prompt_id = f"input-{row_number:04d}"
+            if not q_id:
+                q_id = prompt_id
+            if lang not in SUPPORTED_LANGS:
+                raise ValueError(
+                    f"Input row {row_number} has unsupported lang {lang!r}."
+                )
+            prompts.append(
+                {
+                    "prompt_id": prompt_id,
+                    "q_id": q_id,
+                    "lang": lang,
+                    "prompt": row.get(text_column) or "",
+                }
+            )
+        return prompts
 
 
 def write_token_rows(
@@ -99,8 +130,17 @@ def run(
     write_token_rows(rows, output_path)
 
 
-def main() -> None:
-    run()
+def main(argv: Sequence[str] | None = None) -> None:
+    parser = argparse.ArgumentParser(description="Count prompt tokens by language.")
+    parser.add_argument(
+        "--input",
+        type=Path,
+        default=PROMPTS_PATH,
+        help="Input CSV with text and lang.",
+    )
+    parser.add_argument("--output", type=Path, default=TOKENS_PATH)
+    args = parser.parse_args(argv)
+    run(args.input, args.output)
 
 
 if __name__ == "__main__":
