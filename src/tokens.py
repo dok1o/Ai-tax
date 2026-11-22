@@ -17,6 +17,7 @@ SUBWORD_TOKENIZER_REPO = "Qwen/Qwen2.5-0.5B"
 SUBWORD_TOKENIZER_REVISION = "5796c1d2033cb6257f44cdffa28957680359236d"
 SUBWORD_TOKENIZER_ID = f"{SUBWORD_TOKENIZER_REPO}@{SUBWORD_TOKENIZER_REVISION}"
 SUPPORTED_LANGS = frozenset({"kk", "ru", "en"})
+TOKENS_RATIO_PATH = TOKENS_PATH.with_name("tokens_ratio.csv")
 TOKEN_COLUMNS = (
     "prompt_id",
     "q_id",
@@ -73,6 +74,43 @@ def build_token_rows(
     return rows
 
 
+def build_ratio_rows(
+    rows: Iterable[Mapping[str, str | int | float]],
+) -> list[dict[str, str | int | float]]:
+    """Build English-relative token ratios without changing the v1 token schema."""
+    token_rows = list(rows)
+    english_counts: dict[tuple[str, str], int] = {}
+    for row in token_rows:
+        if row["lang"] != "en":
+            continue
+        key = (str(row["q_id"]), str(row["tokenizer"]))
+        if key in english_counts:
+            raise ValueError(f"Duplicate English token row for {key}.")
+        english_counts[key] = int(row["token_count"])
+
+    ratio_rows = []
+    for row in token_rows:
+        key = (str(row["q_id"]), str(row["tokenizer"]))
+        english_count = english_counts.get(key)
+        if english_count == 0:
+            raise ValueError(f"English token count must be positive for {key}.")
+        ratio: float | str = (
+            int(row["token_count"]) / english_count
+            if english_count is not None
+            else ""
+        )
+        ratio_rows.append(
+            {
+                "prompt_id": row["prompt_id"],
+                "q_id": row["q_id"],
+                "lang": row["lang"],
+                "tokenizer": row["tokenizer"],
+                "tokens_vs_en": ratio,
+            }
+        )
+    return ratio_rows
+
+
 def read_prompts(path: Path = PROMPTS_PATH) -> list[dict[str, str]]:
     """Read any CSV with text and lang, or normalize contract prompt columns."""
     with path.open(encoding="utf-8-sig", newline="") as source:
@@ -118,6 +156,17 @@ def write_token_rows(
         writer.writerows(rows)
 
 
+def write_ratio_rows(
+    rows: Iterable[Mapping[str, str | int | float]], path: Path = TOKENS_RATIO_PATH
+) -> None:
+    """Write the English-relative metric to its own non-v1 CSV."""
+    columns = ("prompt_id", "q_id", "lang", "tokenizer", "tokens_vs_en")
+    with path.open("w", encoding="utf-8", newline="") as destination:
+        writer = csv.DictWriter(destination, fieldnames=columns, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+
+
 def run(
     input_path: Path = PROMPTS_PATH,
     output_path: Path = TOKENS_PATH,
@@ -128,6 +177,8 @@ def run(
     selected_encoders = encoders if encoders is not None else load_encoders()
     rows = build_token_rows(prompts, selected_encoders)
     write_token_rows(rows, output_path)
+    ratio_rows = build_ratio_rows(rows)
+    write_ratio_rows(ratio_rows, output_path.with_name("tokens_ratio.csv"))
 
 
 def main(argv: Sequence[str] | None = None) -> None:

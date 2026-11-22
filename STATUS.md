@@ -14,4 +14,11 @@
 
 ## Requests for Astra
 
-None.
+- T-001 tokens_vs_en is absent from tokens.csv v1; proposed v2: add the paired English-relative ratio column.
+- T-002 answer_type values differ from v1; proposed v2: align the enum with mcq/number/short or document the v1 mapping.
+- T-002 task column list omits required prompt_id; proposed v2/task update: clarify prompt_id remains required.
+- T-004 unparsed status is absent from labels.csv v1; proposed v2: add a parse_status field.
+- T-004 metrics.csv has no v1 schema; proposed v2: define its columns and types.
+- T-002 validator path differs between card and run request; proposed v2: standardize on data/validate_prompts.py under current path permissions.
+- T-002 requests a src/common topic list outside this run's paths; proposed v2: allow it or keep the list under data/.
+- T-001 branch predates run.py from T-009; proposed integration: include the runner and forward --input.
