@@ -11,7 +11,7 @@ import pytest
 import streamlit
 from streamlit.testing.v1 import AppTest
 
-from app import logic
+from app import logic, text
 from src.common.config import MODELS_DIR
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -141,7 +141,9 @@ def test_app_starts_without_any_data(monkeypatch: pytest.MonkeyPatch) -> None:
     assert not test.exception
     messages = [item.value for item in test.info]
     assert any("No tokens available offline" in message for message in messages)
-    assert any("No cost model available offline" in message for message in messages)
+    assert any("No prompt predictions offline" in message for message in messages)
+    assert any("No router evaluation offline" in message for message in messages)
+    assert logic.BANNER_EXAMPLE in [item.value for item in test.error]
 
 
 def test_risk_panel_is_enabled_with_artifacts(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -150,13 +152,18 @@ def test_risk_panel_is_enabled_with_artifacts(monkeypatch: pytest.MonkeyPatch) -
     assert "Answering model" in [box.label for box in test.selectbox]
 
 
-def test_risk_panel_is_a_placeholder_without_artifacts(
+def test_missing_models_render_disabled_placeholders(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     test = run_app(monkeypatch, force_empty=True)
     assert not test.exception
     assert "Answering model" not in [box.label for box in test.selectbox]
-    assert len(test.number_input) == 1
+    placeholders = {box.label: box.disabled for box in test.number_input}
+    assert placeholders["Predicted tokens"] is True
+    assert placeholders["Predicted P(incorrect)"] is True
+    strategies = {box.label: box for box in test.text_input}
+    assert strategies["Chosen strategy"].disabled is True
+    assert strategies["Chosen strategy"].value == "pending T-008"
 
 
 def test_router_options_mark_exactly_one_choice() -> None:
@@ -184,7 +191,11 @@ def test_router_panel_is_enabled_with_artifacts(
     test = run_app(monkeypatch, force_empty=False)
     assert not test.exception
     assert "Risk threshold" in [slider.label for slider in test.slider]
-    assert test.metric[0].value in {"direct", "via_english", "stronger_model"}
+    metrics = {metric.label: metric.value for metric in test.metric}
+    assert metrics["Chosen strategy"] in {"direct", "via_english", "stronger_model"}
+    assert float(metrics["Predicted tokens (best T-005 model)"]) > 0.0
+    reasons = [item.value for item in test.markdown]
+    assert any("threshold" in reason for reason in reasons)
 
 
 def test_router_panel_is_a_placeholder_without_artifacts(
@@ -194,3 +205,108 @@ def test_router_panel_is_a_placeholder_without_artifacts(
     assert not test.exception
     assert not test.slider
     assert any("pending T-008" in item.value for item in test.text_input)
+
+
+def test_page_has_the_four_card_tabs(monkeypatch: pytest.MonkeyPatch) -> None:
+    test = run_app(monkeypatch, force_empty=False)
+    assert not test.exception
+    assert len(test.tabs) == 4
+    assert [area.label for area in test.text_area] == ["kk text", "ru text", "en text"]
+    assert "Tokenizer" in [box.label for box in test.sidebar.selectbox]
+
+
+def test_playground_shows_chips_counts_and_unavailable_ratios(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    test = run_app(monkeypatch, force_empty=False)
+    assert not test.exception
+    chip_blocks = [item.value for item in test.markdown if "span title=" in item.value]
+    assert len(chip_blocks) == 3
+    assert 'title="id 0 | whitespace-fallback"' in chip_blocks[0]
+    assert text.LANG_COLORS["kk"] in chip_blocks[0]
+    assert text.LANG_COLORS["en"] in chip_blocks[2]
+    metrics = [metric.value for metric in test.metric]
+    assert metrics[0].isdigit()
+    test.text_area[2].set_value("").run()
+    assert not test.exception
+    metrics = {metric.label: metric.value for metric in test.metric}
+    assert metrics["tokens_vs_en"] == text.UNAVAILABLE
+    # The empty English area loses its chips and shows the unavailable note.
+    chip_blocks = [item.value for item in test.markdown if "line-height" in item.value]
+    assert len(chip_blocks) == 2
+    empty_blocks = [
+        item.value for item in test.markdown if "empty phrase" in item.value
+    ]
+    assert empty_blocks and text.UNAVAILABLE in empty_blocks[0]
+
+
+def test_machine_translation_stays_off_without_both_gates(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    test = run_app(monkeypatch, force_empty=False)
+    buttons = {button.label: button.disabled for button in test.button}
+    assert buttons["Machine translate"] is True
+    monkeypatch.setenv(text.LIVE_ENV, "1")
+    monkeypatch.delenv(text.KEY_ENV, raising=False)
+    test = run_app(monkeypatch, force_empty=False)
+    assert test.button[0].disabled is True
+    monkeypatch.delenv(text.LIVE_ENV, raising=False)
+    monkeypatch.setenv(text.KEY_ENV, "secret")
+    test = run_app(monkeypatch, force_empty=False)
+    assert test.button[0].disabled is True
+
+
+def test_machine_translation_runs_only_with_both_gates(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv(text.LIVE_ENV, "1")
+    monkeypatch.setenv(text.KEY_ENV, "secret")
+    calls: list[tuple[str, str]] = []
+
+    def fake_translate(phrase: str, target: str, _environ=None, _opener=None) -> str:
+        calls.append((phrase, target))
+        return f"mock {target}"
+
+    monkeypatch.setattr(text, "translate_text", fake_translate)
+    test = run_app(monkeypatch, force_empty=False)
+    assert test.button[0].disabled is False
+    test.button[0].click().run()
+    assert not test.exception
+    assert [target for _, target in calls] == ["ru", "en"]
+    assert calls[0][0] == logic.EXAMPLE_PHRASES["kk"]
+    assert test.session_state["text_ru"] == "mock ru"
+    assert [area.value for area in test.text_area][1:] == ["mock ru", "mock en"]
+    assert any(text.TRANSLATE_LABEL in item.value for item in test.caption), (
+        "machine output must be labelled"
+    )
+
+
+def test_sidebar_toggle_switches_both_3d_views_to_2d(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    test = run_app(monkeypatch, force_empty=False)
+    assert "chart_prompts_3d" in test.session_state["rendered_charts"]
+    assert "chart_surface_3d" in test.session_state["rendered_charts"]
+    test.sidebar.radio[0].set_value("2D").run()
+    assert not test.exception
+    rendered = test.session_state["rendered_charts"]
+    assert "chart_prompts_2d" in rendered
+    assert "chart_surface_2d" in rendered
+    assert "chart_prompts_3d" not in rendered
+
+
+def test_recorded_timings_stay_inside_the_card_budgets(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    test = run_app(monkeypatch, force_empty=False)
+    assert not test.exception
+    assert (
+        float(test.session_state["cold_start_seconds"])
+        < logic.COLD_START_BUDGET_SECONDS
+    )
+    assert float(test.session_state["tokenize_seconds"]) < logic.TOKENIZE_BUDGET_SECONDS
+    captions = [item.value for item in test.sidebar.caption]
+    assert any("cold start to interactive results" in item for item in captions)
+    method_notes = [item.value for item in test.markdown]
+    assert any("cold offline start" in item for item in method_notes)
+    assert any("single-phrase tokenization" in item for item in method_notes)

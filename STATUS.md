@@ -13,7 +13,7 @@
 | T-008 | Routing evaluation | arena | arena/T-008-router | doing |
 | T-009 | PowerShell-compatible Python commands | codex | codex/T-009-runner | done |
 | T-010 | Automate project Definition of Done | codex | codex/T-010-done-check | todo |
-| T-011 | Offline trilingual Streamlit dashboard | arena | arena/T-011-ui | todo |
+| T-011 | Offline trilingual Streamlit dashboard | arena | arena/ad3092b4-ai-tax | review |
 | T-012 | Native review worksheet and human import | codex | codex/T-012-native-review | todo |
 
 ## Requests for Astra
@@ -33,4 +33,10 @@
 - T-001 branch predates run.py from T-009; proposed integration: include the runner before using run.py commands on that branch.
 - T-003 requests a representation for missing provider usage. Preserve returned answers in the raw cache and keep incomplete rows out of v1 responses.csv pending a contract decision.
 - T-004 requests a metrics.csv contract. The four existing v1 CSV schemas remain in force during this review.
+- T-011 is delivered on `arena/ad3092b4-ai-tax`, not the `arena/T-011-ui` branch the card names: the Arena platform pins this session to one branch and refuses to create another. Please review that tip or tell ARENA how to hand the work over.
+- `requirements.txt` has no matplotlib, but `src/train.py` writes the SHAP and curve figures when matplotlib is importable. Add it (or an optional extra) so the figures are reproducible on a fresh install instead of silently skipped.
+- `run.py check` runs ruff with the repository defaults, which miss E501/I/UP/B/SIM/PLW/ARG/RET/ISC. `tests/arena/test_lint.py` pins that stricter selection for the ARENA-owned paths only; adopting it in the shared ruff config would remove the duplicate lint gate.
+- `run.py dashboard` starts `app/dashboard.py`. ARENA keeps that file as a two-line shim that runs `app/main.py`; repoint the runner at `app/main.py` and the shim can go.
+- T-011 needs a tokenizer that works offline in the browser process. `app/text.py` picks up `src.tokens.TOKENIZER_IDS` and `src.tokens.encode_pieces(text, tokenizer_id)` as soon as T-001 publishes them; until then the Playground chips come from a labelled whitespace fallback and are not model tokens.
+- The Playground ratios are computed from the user's own text, but the Results and Charts tabs still need a `tokens.csv` whose `q_id` values match `data/prompts.csv` (`m01`..`m60`). The committed fixtures use `q000`..`q059`, so a real tokens table from T-001 is what turns the example banner off.
 - ARENA submitted its four tasks on one branch. RELEASE.md identifies the reviewed tips, and each task card records the changes required for resubmission.

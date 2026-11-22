@@ -1,7 +1,7 @@
-"""Compatibility shim: ``make dashboard`` runs ``app/dashboard.py``.
+"""Compatibility shim: ``python run.py dashboard`` runs ``app/dashboard.py``.
 
-The T-006 page lives in ``app/main.py``; this file only starts it so the
-existing Makefile target keeps working until Astra repoints it.
+The T-011 page lives in ``app/main.py``; this file only starts it so the shared
+runner keeps working without a change outside the ARENA-owned paths.
 """
 
 import runpy

@@ -10,24 +10,43 @@ from __future__ import annotations
 
 import json
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
 import joblib
+import numpy as np
 import pandas as pd
 
-from src.common.config import DATA_DIR, MODELS_DIR
+from src.common.config import DATA_DIR, MODELS_DIR, SEED
 from src.features import (
+    DEFAULT_SPLITS,
     FIXTURE_DIR,
     LANGS,
     META_FEATURES,
     align_matrix,
+    assign_folds,
     build_features,
     design_matrix,
     text_features,
 )
-from src.router import choose_strategy
+from src.router import (
+    DIRECT,
+    KEY,
+    STRONGER,
+    VIA_ENGLISH,
+    baseline_decisions,
+    best_cost_model,
+    best_risk_model,
+    calibrate,
+    choose_strategy,
+    decode_correctness,
+    eligible_keys,
+    outcome_summary,
+    prepare_routes,
+    sweep_thresholds,
+    threshold_grid,
+)
 
 DEMO_DIR = DATA_DIR / "demo"
 FIGS_DIR = MODELS_DIR / "figs"
@@ -35,6 +54,33 @@ BANNER_EXAMPLE = "EXAMPLE DATA, not real results"
 FORCE_EXAMPLE_ENV = "LT_FORCE_EXAMPLE"
 FORCE_EMPTY_ENV = "LT_FORCE_EMPTY"
 TABLES: tuple[str, ...] = ("prompts", "tokens", "labels", "routes")
+METHOD_LIMITATIONS: list[str] = [
+    (
+        "Model artifacts are trained on the committed fixtures until T-001 to T-004 "
+        "deliver real data."
+    ),
+    (
+        "No tokenizer runs in the browser: without a local T-001 backend the "
+        "Playground uses a labelled whitespace fallback, so its chips are not model "
+        "tokens."
+    ),
+    (
+        "Native verification share is reported as measured; zero means no Kazakh "
+        "reviewer has signed off yet."
+    ),
+    (
+        "Bootstrap intervals resample whole questions (q_id), 1000 draws, seed 42; "
+        "small n keeps every number preliminary."
+    ),
+    (
+        "Live machine translation stays disabled without an explicit live flag and a "
+        "key, and its output is labelled unverified."
+    ),
+]
+
+
+COLD_START_BUDGET_SECONDS = 10.0
+TOKENIZE_BUDGET_SECONDS = 1.0
 EXAMPLE_PHRASES = {
     "kk": "Қазақстанның ең биік шыңы қалай аталады және оның биіктігі неше метр?",
     "ru": (
@@ -57,6 +103,7 @@ class AppState:
     tables: dict[str, pd.DataFrame | None]
     manifests: dict[str, dict[str, Any] | None]
     models_dir: Path
+    paths: dict[str, str] = field(default_factory=dict)
 
     @property
     def is_example(self) -> bool:
@@ -71,6 +118,20 @@ class AppState:
     def table(self, kind: str) -> pd.DataFrame | None:
         """One loaded table, or None when it does not exist anywhere."""
         return self.tables.get(kind)
+
+    def join_prompts(self) -> pd.DataFrame | None:
+        """Prompts that share identifiers with the other loaded tables.
+
+        A real ``data/prompts.csv`` cannot be joined with fixture tokens, labels
+        or routes: the identifiers differ. When any partner table is synthetic,
+        the fixture prompts are used for joins and the banner stays on.
+        """
+        partners = ("tokens", "labels", "routes")
+        if any(self.sources.get(kind) != "real" for kind in partners):
+            fixture = FIXTURE_DIR / "prompts_fixture.csv"
+            if fixture.exists():
+                return read_table(fixture)
+        return self.table("prompts")
 
 
 def inputs_disabled() -> bool:
@@ -120,10 +181,15 @@ def load_state(models_dir: Path = MODELS_DIR) -> AppState:
     """Resolve tables and manifests without touching the network."""
     sources: dict[str, str] = {}
     tables: dict[str, pd.DataFrame | None] = {}
+    paths: dict[str, str] = {}
     for kind in TABLES:
         path, source = resolve_table(kind)
-        sources[kind] = source
-        tables[kind] = read_table(path)
+        frame = read_table(path)
+        if source == "real" and frame_is_synthetic(frame):
+            source = "fixture"
+        sources[kind] = source if frame is not None else "missing"
+        tables[kind] = frame
+        paths[kind] = str(path) if path is not None else ""
     manifests = {
         base: load_manifest(models_dir, base)
         for base in ("cost_metrics", "risk_metrics", "router_metrics")
@@ -135,7 +201,11 @@ def load_state(models_dir: Path = MODELS_DIR) -> AppState:
             else ("fixture" if manifest.get("fixture") else "real")
         )
     return AppState(
-        sources=sources, tables=tables, manifests=manifests, models_dir=models_dir
+        sources=sources,
+        tables=tables,
+        manifests=manifests,
+        models_dir=models_dir,
+        paths=paths,
     )
 
 
@@ -215,6 +285,14 @@ def empty_state(kind: str) -> str:
     return (
         f"No {kind} available offline. Add data/{kind}.csv, data/demo/{kind}.csv or "
         f"models/fixtures/{kind}_fixture.csv; the app makes no network request."
+    )
+
+
+def derived_missing(kind: str) -> str:
+    """Readable message for a view built from inputs the app could not find."""
+    return (
+        f"No {kind} offline: the view is derived from the tokens, labels or routes "
+        "tables and the saved models, and at least one of them is missing."
     )
 
 
@@ -449,3 +527,351 @@ def categories(state: AppState) -> list[str]:
 def feature_columns() -> tuple[str, ...]:
     """Feature names the page can show as documentation."""
     return META_FEATURES
+
+
+def frame_is_synthetic(frame: pd.DataFrame | None) -> bool:
+    """True when a canonical CSV carries fixture provenance inside its rows.
+
+    A file can sit in ``data/`` and still hold fake-client observations, so the
+    banner also trusts row-level marks: a ``source`` column saying fixture, or a
+    model, model version or tokenizer identifier starting with ``fixture``.
+    """
+    if frame is None or frame.empty:
+        return False
+    if (
+        "source" in frame.columns
+        and frame["source"].astype(str).str.contains("fixture").any()
+    ):
+        return True
+    for column in ("model", "model_version", "tokenizer"):
+        if (
+            column in frame.columns
+            and frame[column].astype(str).str.startswith("fixture").any()
+        ):
+            return True
+    return False
+
+
+def bootstrap_ci_by_question(
+    values: np.ndarray, questions: np.ndarray, resamples: int = 1000, seed: int = SEED
+) -> tuple[float, float, float]:
+    """Mean and bootstrap 95% percentile interval, resampling whole questions."""
+    rng = np.random.default_rng(seed)
+    unique = pd.unique(pd.Series(questions))
+    positions = {question: np.flatnonzero(questions == question) for question in unique}
+    draws = np.empty(resamples)
+    for sample in range(resamples):
+        picked = rng.choice(unique, size=len(unique), replace=True)
+        draws[sample] = values[
+            np.concatenate([positions[question] for question in picked])
+        ].mean()
+    low, high = np.percentile(draws, [2.5, 97.5])
+    return float(values.mean()), float(low), float(high)
+
+
+def accuracy_with_ci(
+    labels: pd.DataFrame | None, resamples: int = 1000, seed: int = SEED
+) -> pd.DataFrame | None:
+    """Measured accuracy per language with a bootstrap interval over questions."""
+    if labels is None or not {"lang", "q_id", "is_correct"} <= set(labels.columns):
+        return None
+    frame = labels.copy()
+    try:
+        decoded = decode_correctness(frame["is_correct"])
+    except ValueError:
+        return None
+    frame["is_correct"] = decoded["is_correct"].astype(float)
+    rows = []
+    for lang, block in frame.groupby("lang"):
+        if lang not in LANGS:
+            continue
+        values = block["is_correct"].to_numpy(dtype=float)
+        mean, low, high = bootstrap_ci_by_question(
+            values, block["q_id"].to_numpy(), resamples, seed
+        )
+        rows.append(
+            {
+                "lang": lang,
+                "n": len(block),
+                "n_questions": int(block["q_id"].nunique()),
+                "accuracy": mean,
+                "ci_low": low,
+                "ci_high": high,
+            }
+        )
+    if not rows:
+        return None
+    return pd.DataFrame(rows).sort_values("lang").round(4).reset_index(drop=True)
+
+
+def _numeric_tokens(tokens: pd.DataFrame) -> pd.DataFrame:
+    """Copy of a tokens table with a numeric token_count column."""
+    frame = tokens.copy()
+    frame["token_count"] = pd.to_numeric(frame["token_count"], errors="coerce")
+    return frame.dropna(subset=["token_count"])
+
+
+def tokens_vs_en_table(tokens: pd.DataFrame | None) -> pd.DataFrame | None:
+    """Mean tokens_vs_en per tokenizer and language, paired by question."""
+    if tokens is None or not {"q_id", "lang", "tokenizer", "token_count"} <= set(
+        tokens.columns
+    ):
+        return None
+    frame = _numeric_tokens(tokens)
+    rows = []
+    for tokenizer, block in frame.groupby("tokenizer"):
+        wide = block.pivot_table(index="q_id", columns="lang", values="token_count")
+        if "en" not in wide.columns:
+            continue
+        base = wide["en"].where(wide["en"] > 0)
+        for lang in LANGS:
+            if lang not in wide.columns:
+                continue
+            ratios = (
+                (wide[lang] / base)
+                if lang != "en"
+                else base.notna().astype(float).where(base.notna())
+            )
+            ratios = ratios.dropna()
+            if ratios.empty:
+                continue
+            rows.append(
+                {
+                    "tokenizer": tokenizer,
+                    "lang": lang,
+                    "n": len(ratios),
+                    "tokens_vs_en": float(ratios.mean()),
+                }
+            )
+    if not rows:
+        return None
+    return (
+        pd.DataFrame(rows)
+        .round(4)
+        .sort_values(["tokenizer", "lang"])
+        .reset_index(drop=True)
+    )
+
+
+def prompt_ratio_frame(
+    tokens: pd.DataFrame | None, tokenizer: str
+) -> pd.DataFrame | None:
+    """tokens_vs_en per prompt for one tokenizer; missing denominators drop out."""
+    if tokens is None or "tokenizer" not in tokens.columns:
+        return None
+    block = _numeric_tokens(tokens)
+    block = block[block["tokenizer"] == tokenizer]
+    if block.empty:
+        return None
+    english = block.loc[block["lang"] == "en", ["q_id", "token_count"]].rename(
+        columns={"token_count": "en_tokens"}
+    )
+    merged = block.merge(english, on="q_id", how="left")
+    merged["tokens_vs_en"] = merged["token_count"] / merged["en_tokens"].where(
+        merged["en_tokens"] > 0
+    )
+    return merged.loc[:, ["prompt_id", "tokens_vs_en"]].dropna().reset_index(drop=True)
+
+
+def playground_frame(
+    state: AppState, models_dir: Path = MODELS_DIR
+) -> pd.DataFrame | None:
+    """Per-prompt table behind the 3D view: ratio, predicted risk, predicted cost."""
+    tokens = state.table("tokens")
+    prompts = state.join_prompts()
+    cost_path = candidate(models_dir, "cost_oof", "csv")
+    risk_path = candidate(models_dir, "risk_oof", "csv")
+    if tokens is None or prompts is None or cost_path is None or risk_path is None:
+        return None
+    try:
+        cost_model, tokenizer = best_cost_model(state.manifests.get("cost_metrics"))
+        risk_model = best_risk_model(state.manifests.get("risk_metrics"))
+    except ValueError:
+        return None
+    costs = pd.read_csv(cost_path)
+    costs = costs.loc[
+        (costs["model"] == cost_model) & (costs["tokenizer"] == tokenizer),
+        ["prompt_id", "prediction"],
+    ].rename(columns={"prediction": "cost"})
+    risks = pd.read_csv(risk_path)
+    risks = risks[risks["model"] == risk_model]
+    if risks.empty or "answer_model" not in risks.columns:
+        return None
+    answer_model = risks["answer_model"].mode().iloc[0]
+    risks = risks.loc[risks["answer_model"] == answer_model, ["prompt_id", "risk"]]
+    ratios = prompt_ratio_frame(tokens, tokenizer)
+    if ratios is None or costs.empty or risks.empty:
+        return None
+    frame = prompts[["prompt_id", "lang", "category"]].merge(
+        ratios, on="prompt_id", how="left"
+    )
+    frame = frame.merge(costs, on="prompt_id", how="left").merge(
+        risks, on="prompt_id", how="left"
+    )
+    frame = frame.dropna(subset=["tokens_vs_en", "cost", "risk"])
+    return frame.reset_index(drop=True) if not frame.empty else None
+
+
+def router_evaluation(
+    state: AppState, models_dir: Path = MODELS_DIR
+) -> pd.DataFrame | None:
+    """Calibrated route rows for the surface and the curve, or None when unavailable."""
+    routes = state.table("routes")
+    prompts = state.join_prompts()
+    cost_path = candidate(models_dir, "cost_oof", "csv")
+    risk_path = candidate(models_dir, "risk_oof", "csv")
+    if routes is None or prompts is None or cost_path is None or risk_path is None:
+        return None
+    try:
+        cost_model, tokenizer = best_cost_model(state.manifests.get("cost_metrics"))
+        risk_model = best_risk_model(state.manifests.get("risk_metrics"))
+        data = prepare_routes(
+            routes,
+            prompts,
+            pd.read_csv(cost_path),
+            pd.read_csv(risk_path),
+            cost_model,
+            tokenizer,
+            risk_model,
+        )
+    except (ValueError, FileNotFoundError):
+        return None
+    keys = eligible_keys(data)
+    data = data[data.set_index(KEY).index.isin(keys.set_index(KEY).index)].reset_index(
+        drop=True
+    )
+    if data.empty:
+        return None
+    return calibrate(data, assign_folds(list(data["q_id"]), DEFAULT_SPLITS, SEED))
+
+
+def router_surface_frame(routes: pd.DataFrame | None) -> pd.DataFrame | None:
+    """Threshold by language grid of saved tokens and held-out accuracy."""
+    if routes is None:
+        return None
+    _, decisions = sweep_thresholds(routes, threshold_grid())
+    direct = routes.loc[routes["strategy"] == "direct", [*KEY, "total_tokens"]].rename(
+        columns={"total_tokens": "direct_tokens"}
+    )
+    rows = []
+    for threshold, block in decisions.items():
+        merged = block.merge(direct, on=KEY, how="left").dropna(
+            subset=["direct_tokens"]
+        )
+        for lang, part in merged.groupby("lang"):
+            rows.append(
+                {
+                    "threshold": float(threshold),
+                    "lang": lang,
+                    "n": len(part),
+                    "saved_tokens": float(
+                        (part["direct_tokens"] - part["total_tokens"]).mean()
+                    ),
+                    "accuracy": float(part["is_correct"].mean()),
+                }
+            )
+    if not rows:
+        return None
+    return (
+        pd.DataFrame(rows)
+        .round(4)
+        .sort_values(["lang", "threshold"])
+        .reset_index(drop=True)
+    )
+
+
+def observed_tokenizers(tokens: pd.DataFrame | None) -> list[str]:
+    """Tokenizers present in the loaded tokens table, sorted for a stable menu."""
+    if tokens is None or "tokenizer" not in tokens.columns:
+        return []
+    return sorted(tokens["tokenizer"].astype(str).unique())
+
+
+def router_curve_frames(
+    routes: pd.DataFrame | None,
+) -> tuple[pd.DataFrame, pd.DataFrame] | None:
+    """Threshold sweep plus the always-use-one-strategy baselines behind it."""
+    if routes is None:
+        return None
+    curve, _ = sweep_thresholds(routes, threshold_grid())
+    rows = [
+        outcome_summary(baseline_decisions(routes, strategy), f"always_{strategy}")
+        for strategy in (DIRECT, VIA_ENGLISH, STRONGER)
+    ]
+    return curve.round(4), pd.DataFrame(rows).round(4)
+
+
+def curve_baselines(baselines: pd.DataFrame) -> pd.DataFrame:
+    """The two baselines the Results tab compares the router against."""
+    wanted = ("always_direct", "always_via_english")
+    return baselines[baselines["policy"].isin(wanted)].reset_index(drop=True)
+
+
+def route_reason(options: pd.DataFrame, threshold: float) -> str:
+    """One-line explanation of the router decision."""
+    chosen = options[options["chosen"]]
+    if chosen.empty:
+        return "no strategy is available for this phrase"
+    row = chosen.iloc[0]
+    if (options["risk_hat"] <= threshold).any():
+        return (
+            f"{row['strategy']}: cheapest route with predicted risk "
+            f"{row['risk_hat']:.2f} under the threshold {threshold:.2f}, "
+            f"about {row['cost_hat']:.0f} tokens"
+        )
+    return (
+        f"{row['strategy']}: nothing stays under the threshold {threshold:.2f}, "
+        f"so the safest route wins (predicted risk {row['risk_hat']:.2f})"
+    )
+
+
+def verified_share(prompts: pd.DataFrame | None) -> float | None:
+    """Share of prompts a native reviewer marked as verified."""
+    if prompts is None or "verified_by_native" not in prompts.columns:
+        return None
+    values = prompts["verified_by_native"].astype(str).str.strip().str.lower()
+    return float(values.isin({"true", "1"}).mean())
+
+
+def method_tables(state: AppState) -> dict[str, pd.DataFrame]:
+    """Provenance, model versions and limitations for the Method tab."""
+    sources = pd.DataFrame(
+        [
+            {
+                "input": kind,
+                "source": source,
+                "path": state.paths.get(kind, ""),
+                "rows": 0 if state.table(kind) is None else len(state.table(kind)),
+            }
+            for kind, source in sorted(state.sources.items())
+        ]
+    )
+    versions = []
+    for task, manifest in sorted(state.manifests.items()):
+        if not manifest:
+            continue
+        packages = manifest.get("versions", {})
+        versions.append(
+            {
+                "task": task,
+                "generated_at": manifest.get("generated_at", ""),
+                "command": manifest.get("command", ""),
+                "seed": manifest.get("seed", ""),
+                "fixture": bool(manifest.get("fixture")),
+                "n_rows": manifest.get("inputs", {}).get("n_rows", ""),
+                "python": packages.get("python", ""),
+                "scikit-learn": packages.get("scikit-learn", ""),
+                "lightgbm": packages.get("lightgbm", ""),
+                "shap": packages.get("shap", ""),
+            }
+        )
+    version_frame = pd.DataFrame(versions)
+    if not version_frame.empty:
+        # Every column stays text so the page can show it without a dtype mix.
+        version_frame = version_frame.astype(str)
+    limitations = pd.DataFrame({"limitation": METHOD_LIMITATIONS})
+    return {
+        "sources": sources,
+        "versions": version_frame,
+        "limitations": limitations,
+    }
