@@ -14,11 +14,11 @@
 | T-009 | PowerShell-compatible Python commands | codex | codex/T-009-runner | done |
 | T-010 | Automate project Definition of Done | codex | codex/T-010-done-check | todo |
 | T-011 | Offline trilingual Streamlit dashboard | arena | arena/T-011-ui | todo |
-| T-012 | Native review worksheet and human import | codex | codex/T-012-native-review | todo |
+| T-012 | Native review worksheet and human import | codex | codex/T-012-native-review | review |
 
 ## Requests for Astra
 
-- T-012 needs a versioned prompts.csv contract that accepts numeric verification marks alongside existing boolean text. Coordinate the schema and validator before enabling the human import.
+- T-012 requests numeric 1/0 marks while SCHEMA v1 permits lowercase booleans or blank; proposed v2: accept 1/0 alongside v1 values and define verified-share counting. This branch writes v1 `true` only.
 
 - T-001 tokens_vs_en is absent from tokens.csv v1; proposed v2: add a paired English-relative ratio column.
 - T-002 task answer_type values differ from v1; proposed v2: align the enum with mcq/number/short or document the v1 mapping.
