@@ -719,4 +719,8 @@ def main(argv: Sequence[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    # Delegate to the importable module: pickle records the defining module, so
+    # baselines saved from a `python -m src.train` run must come from src.train.
+    import src.train
+
+    raise SystemExit(src.train.main())
