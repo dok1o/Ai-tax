@@ -11,6 +11,7 @@
 | T-006 | Offline dashboard skeleton | arena | arena/T-006-dashboard | todo |
 | T-007 | Error-risk prediction | arena | arena/T-007-risk | todo |
 | T-008 | Routing evaluation | arena | arena/T-008-router | todo |
+| T-009 | PowerShell-compatible Python commands | codex | codex/T-009-runner | done |
 
 ## Requests for Astra
 
