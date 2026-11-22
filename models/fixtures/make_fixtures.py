@@ -25,8 +25,8 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.common.config import SEED  # noqa: E402
-from src.features import text_features  # noqa: E402
+from src.common.config import SEED
+from src.features import text_features
 
 OUT_DIR = Path(__file__).resolve().parent
 N_QUESTIONS = 60
@@ -103,9 +103,7 @@ GOLD = {"kk": "қысқа жауап", "ru": "короткий ответ", "en"
 
 def prompt_text(q_index: int, lang: str, category: str) -> str:
     """Build one localized prompt with deterministic length variation."""
-    parts = [STEMS[lang][category]]
-    for clarifier in CLARIFIERS[lang][: q_index % 3]:
-        parts.append(clarifier)
+    parts = [STEMS[lang][category], *CLARIFIERS[lang][: q_index % 3]]
     parts.append(f"({VARIANT[lang]} {q_index % 10})")
     return " ".join(parts)
 
@@ -114,7 +112,11 @@ def gold_answer(lang: str, category: str, q_index: int) -> str:
     """Return a contract-typed gold answer for a fixture question."""
     if ANSWER_TYPES[category] == "short_text":
         return GOLD[lang]
-    return f"{q_index + 1}.{q_index % 7}" if ANSWER_TYPES[category] == "decimal" else str(q_index * 3)
+    return (
+        f"{q_index + 1}.{q_index % 7}"
+        if ANSWER_TYPES[category] == "decimal"
+        else str(q_index * 3)
+    )
 
 
 def tokens_for(text: str, tokenizer: str, lang: str, rng: np.random.Generator) -> int:
@@ -123,11 +125,15 @@ def tokens_for(text: str, tokenizer: str, lang: str, rng: np.random.Generator) -
     base = len(text) * TOKENIZERS[tokenizer][lang]
     base *= 1.0 + 0.04 * (words % 4)
     base += 0.6 * words
-    return max(1, int(round(base + rng.normal(0.0, 0.6))))
+    return max(1, int(np.rint(base + rng.normal(0.0, 0.6))))
 
 
 def correctness_prob(
-    lang: str, model: str, category: str, kk_share: float, bonus: float,
+    lang: str,
+    model: str,
+    category: str,
+    kk_share: float,
+    bonus: float,
     rng: np.random.Generator,
 ) -> float:
     """Logistic correctness chance; language and script effects are the signal."""
@@ -202,21 +208,26 @@ def build_labels(prompts: list[dict[str, str]], rng: np.random.Generator) -> lis
                         "q_id": row["q_id"],
                         "parsed_answer": row["gold_answer"],
                         "is_correct": str(
-                            draw(correctness_prob(row["lang"], model, row["category"], share, 0.0, rng), rng)
+                            draw(
+                                correctness_prob(
+                                    row["lang"], model, row["category"], share, 0.0, rng
+                                ),
+                                rng,
+                            )
                         ).lower(),
                     }
                 )
     return rows
 
 
-def build_routes(
-    prompts: list[dict[str, str]], rng: np.random.Generator
-) -> list[dict]:
+def build_routes(prompts: list[dict[str, str]], rng: np.random.Generator) -> list[dict]:
     """Return cost and correctness per question, language and routing strategy."""
     rows = []
     for row in prompts:
         share = text_features(row["prompt"])["kk_share"]
-        prompt_tokens = tokens_for(row["prompt"], "tiktoken/cl100k_base", row["lang"], rng)
+        prompt_tokens = tokens_for(
+            row["prompt"], "tiktoken/cl100k_base", row["lang"], rng
+        )
         english_tokens = tokens_for(
             prompt_text(int(row["q_id"][1:]), "en", row["category"]),
             "tiktoken/cl100k_base",
@@ -228,13 +239,17 @@ def build_routes(
             bonus = {"direct": 0.0, "via_english": 0.7, "stronger_model": 0.0}[strategy]
             if strategy == "via_english":
                 input_tokens = prompt_tokens + english_tokens
-                translation_tokens = int(round(prompt_tokens * 0.8))
+                translation_tokens = int(np.rint(prompt_tokens * 0.8))
             else:
-                input_tokens = int(round(prompt_tokens * (1.05 if model == MODELS[1] else 1.0)))
+                factor = 1.05 if model == MODELS[1] else 1.0
+                input_tokens = int(np.rint(prompt_tokens * factor))
                 translation_tokens = 0
             output_tokens = int(rng.integers(25, 70))
             correct = draw(
-                correctness_prob(row["lang"], model, row["category"], share, bonus, rng), rng
+                correctness_prob(
+                    row["lang"], model, row["category"], share, bonus, rng
+                ),
+                rng,
             )
             rows.append(
                 {
