@@ -35,7 +35,7 @@ Ownership, to avoid merge conflicts:
 Owner	Paths
 Codex	data/, src/tokens.py, src/collect.py, src/judge.py, src/stats.py, notebooks/
 ARENA	src/features.py, src/train.py, src/router.py, app/, models/
-Astra only	src/common/, data/SCHEMA.md, AGENTS.md, STATUS.md, Makefile, requirements.txt, tasks/
+Astra only	src/common/, data/SCHEMA.md, AGENTS.md, STATUS.md, run.py, requirements.txt, tasks/
 
 Need a change outside your paths? Add a line to STATUS.md under Requests for Astra. Do not edit it yourself.
 
@@ -44,9 +44,9 @@ CSV schemas in data/SCHEMA.md are a frozen contract. Only Astra may change them,
 4. Workflow
 Astra writes tasks/T-xxx.md (max 15 lines): goal, inputs, outputs, owned paths, acceptance checks, token budget.
 Luna: git switch dev && git pull && git switch -c <branch>. Implement only the card. Run only targeted tests. Commit small: T-xxx: <imperative summary>. Set the STATUS.md row to review. Write HANDOFF.md. Stop.
-Astra reviews: git diff dev...<branch> --stat, then only the relevant hunks. Runs make check. Merges into dev, or returns the card with a short list of fixes. Astra alone resolves conflicts.
+Astra reviews: git diff dev...<branch> --stat, then only the relevant hunks. Runs `python run.py check`. Merges into dev, or returns the card with a short list of fixes. Astra alone resolves conflicts.
 Sol takes failures. Reproduce first, then one hypothesis at a time. After 3 failed hypotheses stop and write findings in the task card.
-Release: when dev passes make check and the demo works offline, Astra writes the RELEASE.md checklist and tells the human to merge dev into main.
+Release: when dev passes `python run.py check` and the demo works offline, Astra writes the RELEASE.md checklist and tells the human to merge dev into main.
 
 STATUS.md is one table: ID | title | agent | branch | state (todo/doing/review/blocked/done), plus a Requests list. Update only your own row.
 
@@ -56,7 +56,7 @@ Do not re-read a file you just wrote or edited. Do not re-read files you already
 Show at most 20 lines of any log, 10 rows of any DataFrame.
 Send diffs and small patches, never full files that did not change.
 One task per session. No side quests. No refactors nobody asked for.
-Batch independent commands in one call. Run targeted tests (pytest tests/test_x.py -q), not the whole suite, until Astra's make check.
+Batch independent commands in one call. Run targeted tests (`python run.py test tests/test_x.py`), not the whole suite, until Astra's `python run.py check`.
 Cache every API response in data/raw/ keyed by (model, prompt_id, lang, rep). Never call the API again for a key that exists.
 No narration, no apologies, no restating the task or the plan. No emojis.
 Final message, 8 lines max: what changed, how it was verified, what is next.
@@ -64,7 +64,7 @@ Context is running out? Write HANDOFF.md (max 20 lines: done / next / blockers /
 6. Science and data integrity (non-negotiable)
 Never fabricate data, results, citations or numbers. Every figure in a chart, README or poster text must trace to a file and a script that produced it. If it does not exist yet, write TODO, not a plausible value.
 Split train and test by question id (GroupKFold / GroupShuffleSplit on q_id), never by row. One question in three languages must stay on one side.
-Fix random seeds (SEED = 42 in src/common/). Every result must reproduce from a make target.
+Fix random seeds (SEED = 42 in src/common/). Every result must reproduce from a `python run.py` command.
 Log for every API call: model name, model version, date, temperature, input tokens, output tokens, latency. Raw responses are append-only. Never overwrite them.
 Report uncertainty: bootstrap confidence intervals, paired tests (McNemar or Wilcoxon), Holm correction when comparing several pairs. Label results with n. Small n means the word "preliminary".
 Do not touch the verified_by_native column or a native speaker's corrections.
@@ -75,7 +75,7 @@ Small functions, type hints, one responsibility per file. No dead code, no comme
 Paths and constants come from src/common/config.py. No hardcoded paths.
 Secrets live only in .env (listed in .gitignore). Keep .env.example current. Never print or commit keys.
 Add a test only for logic that can silently break: token counting, splits, metrics, parsing of model answers.
-make check = format/lint + pytest + schema validation. It must pass before any task goes to review.
+The `python run.py check` command runs Ruff lint checks, pytest and schema validation. It must pass before any task goes to review.
 Demo must run offline from saved results in data/demo/ with no API call.
 8. Stop and ask the human when
 A step spends real money or hits a paid API limit.
@@ -85,4 +85,4 @@ A secret, personal data or a licence question appears.
 Two cards conflict and Astra cannot decide from this file.
 9. Definition of done (per card)
 
-Acceptance checks in the card pass, make check passes, STATUS.md row updated, HANDOFF.md written, no files changed outside owned paths, no unexplained numbers.
+Acceptance checks in the card pass, `python run.py check` passes, STATUS.md row updated, HANDOFF.md written, no files changed outside owned paths, no unexplained numbers.
