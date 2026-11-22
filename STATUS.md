@@ -3,22 +3,34 @@
 | ID | Title | Agent | Branch | State |
 | --- | --- | --- | --- | --- |
 | T-000 | Repository bootstrap | codex | codex/T-000-bootstrap | done |
-| T-001 | Token counts and fertility | codex | codex/T-001-tokens | todo |
-| T-002 | Trilingual prompts and validator | codex | codex/T-002-prompts | todo |
-| T-003 | Cached model collection | codex | codex/T-003-collect | todo |
-| T-004 | Grading and paired statistics | codex | codex/T-004-stats | todo |
-| T-005 | Token-cost prediction | arena | arena/ad3092b4-ai-tax | review |
-| T-006 | Offline dashboard skeleton | arena | arena/ad3092b4-ai-tax | review |
-| T-007 | Error-risk prediction | arena | arena/ad3092b4-ai-tax | review |
-| T-008 | Routing evaluation | arena | arena/ad3092b4-ai-tax | review |
+| T-001 | Token counts and fertility | codex | codex/T-001-tokens | doing |
+| T-002 | Trilingual prompts and validator | codex | codex/T-002-prompts | done |
+| T-003 | Cached model collection | codex | codex/T-003-collect | doing |
+| T-004 | Grading and paired statistics | codex | codex/T-004-judge-stats | doing |
+| T-005 | Token-cost prediction | arena | arena/T-005-cost-predictor | doing |
+| T-006 | Offline dashboard skeleton | arena | arena/T-006-app-skeleton | doing |
+| T-007 | Error-risk prediction | arena | arena/T-007-error-predictor | doing |
+| T-008 | Routing evaluation | arena | arena/T-008-router | doing |
+| T-009 | PowerShell-compatible Python commands | codex | codex/T-009-runner | done |
+| T-010 | Automate project Definition of Done | codex | codex/T-010-done-check | todo |
+| T-011 | Offline trilingual Streamlit dashboard | arena | arena/T-011-ui | todo |
+| T-012 | Native review worksheet and human import | codex | codex/T-012-native-review | todo |
 
 ## Requests for Astra
 
-- T-005..T-008 branch: the platform pinned this session to `arena/ad3092b4-ai-tax` (cut from `e47a220` of dev) and refused to create the four stacked branches, so all four tasks are four commits on that one pushed branch. Please merge, split or rename on your side.
-- Card conflict, T-005: `tasks/T-005.md` excludes `fertility` from model inputs while the run brief lists it as a feature. Kept out of the models (it is `token_count / word_count`, an exact leak) and reported as a diagnostic in `models/REPORT.md`. Please confirm.
-- Card conflict, T-007: the card names `src/risk.py`, `models/error_risk/` and `tests/test_risk_split.py`; the run brief limits ARENA to `src/features.py`, `src/train.py`, `src/router.py`, `app/`, `models/`, `tests/arena/`. Risk training is `src.train.train_risk`, outputs are `models/risk_*` and `models/figs/shap_risk_*`, tests are `tests/arena/test_risk.py`.
-- Makefile (Astra-only): add `cost`, `risk` and `router` targets for `python -m src.train cost|risk` and `python -m src.router`, and repoint `dashboard` from `app/dashboard.py` (now a shim) to `app/main.py`.
-- `data/demo/` is delegated to ARENA by the T-006 card but excluded by the run permissions, so fixtures live in `models/fixtures/`. The app already prefers `data/*.csv`, then `data/demo/*.csv`, then the fixtures. Copy them into `data/demo/` if you want the card's layout.
-- requirements.txt (Astra-only): add `matplotlib`. It is only a shap extra (`shap[plots]`), so `pip install -r requirements.txt` leaves T-007/T-008 figures unbuilt; the code now skips them with a manifest note instead of failing.
-- Ruff config (Astra-only, optional): `make check` uses ruff defaults, which miss E501 and friends. `tests/arena/test_lint.py` guards ARENA files meanwhile; a shared config would cover codex files too.
-- Decide whether generated fixture artifacts (`models/*_fixture.{json,csv,joblib}`, `models/figs/*_fixture.png`) stay committed for the offline demo or get an ignore rule; they must be deleted and regenerated as soon as real `data/*.csv` land.
+- T-012 needs a versioned prompts.csv contract that accepts numeric verification marks alongside existing boolean text. Coordinate the schema and validator before enabling the human import.
+
+- T-001 tokens_vs_en is absent from tokens.csv v1; proposed v2: add a paired English-relative ratio column.
+- T-002 task answer_type values differ from v1; proposed v2: align the enum with mcq/number/short or document the v1 mapping.
+- T-002 task column list omits required prompt_id; proposed v2/task update: clarify prompt_id remains required.
+- T-002 asks equal gold answers across languages while v1 localizes short_text; proposed v2: add canonical_answer or permit localized golds.
+- T-002 asks verified_by_native=0/1 and no empty cells while v1 uses lowercase booleans and permits nullable; proposed v2: clarify serialization.
+- T-004 unparsed status is absent from labels.csv v1; proposed v2: add a parse_status field.
+- T-004 metrics.csv has no v1 schema; proposed v2: define its columns and types.
+- T-002 validator path differs between card and run request; proposed run update: standardize on data/validate_prompts.py under current path permissions.
+- T-002 requests a src/common topic list outside this run's paths; proposed run update: permit it or keep the list under data/.
+- T-001 run.py tokens does not pass --input; proposed v2: add argument forwarding to the shared runner.
+- T-001 branch predates run.py from T-009; proposed integration: include the runner before using run.py commands on that branch.
+- T-003 requests a representation for missing provider usage. Preserve returned answers in the raw cache and keep incomplete rows out of v1 responses.csv pending a contract decision.
+- T-004 requests a metrics.csv contract. The four existing v1 CSV schemas remain in force during this review.
+- ARENA submitted its four tasks on one branch. RELEASE.md identifies the reviewed tips, and each task card records the changes required for resubmission.
