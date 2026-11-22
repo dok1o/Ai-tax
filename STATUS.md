@@ -12,6 +12,7 @@
 | T-007 | Error-risk prediction | arena | arena/T-007-error-predictor | doing |
 | T-008 | Routing evaluation | arena | arena/T-008-router | doing |
 | T-009 | PowerShell-compatible Python commands | codex | codex/T-009-runner | done |
+| T-010 | Automate project Definition of Done | codex | codex/T-010-done-check | todo |
 
 ## Requests for Astra
 
