@@ -1,0 +1,181 @@
+prompt_id,q_id,lang,category,prompt,answer_type,gold_answer,verified_by_native
+m01-kk,m01,kk,math_logic,7-ге 5-ті қосқанда неше болады?,integer,12,false
+m01-ru,m01,ru,math_logic,Сколько будет 7 плюс 5?,integer,12,false
+m01-en,m01,en,math_logic,What is 7 plus 5?,integer,12,false
+m02-kk,m02,kk,math_logic,9-ды 4-ке көбейтсе неше болады?,integer,36,false
+m02-ru,m02,ru,math_logic,Сколько будет 9 умножить на 4?,integer,36,false
+m02-en,m02,en,math_logic,What is 9 times 4?,integer,36,false
+m03-kk,m03,kk,math_logic,Үшбұрыштың неше қабырғасы бар?,integer,3,false
+m03-ru,m03,ru,math_logic,Сколько сторон у треугольника?,integer,3,false
+m03-en,m03,en,math_logic,How many sides does a triangle have?,integer,3,false
+m04-kk,m04,kk,math_logic,15 жұп сан ба?,boolean,false,false
+m04-ru,m04,ru,math_logic,Число 15 чётное?,boolean,false,false
+m04-en,m04,en,math_logic,Is 15 an even number?,boolean,false,false
+m05-kk,m05,kk,math_logic,24-ті 6-ға бөлгенде неше шығады?,integer,4,false
+m05-ru,m05,ru,math_logic,Сколько будет 24 разделить на 6?,integer,4,false
+m05-en,m05,en,math_logic,What is 24 divided by 6?,integer,4,false
+m06-kk,m06,kk,math_logic,Жартыға тең ондық бөлшек қандай?,decimal,0.5,false
+m06-ru,m06,ru,math_logic,Какая десятичная дробь равна одной второй?,decimal,0.5,false
+m06-en,m06,en,math_logic,What decimal equals one half?,decimal,0.5,false
+m07-kk,m07,kk,math_logic,2 4 6 қатарынан кейін қандай сан келеді?,integer,8,false
+m07-ru,m07,ru,math_logic,Какое число следует за последовательностью 2 4 6?,integer,8,false
+m07-en,m07,en,math_logic,What number comes next in the sequence 2 4 6?,integer,8,false
+m08-kk,m08,kk,math_logic,30-дан 12-ні азайтқанда неше болады?,integer,18,false
+m08-ru,m08,ru,math_logic,Сколько будет 30 минус 12?,integer,18,false
+m08-en,m08,en,math_logic,What is 30 minus 12?,integer,18,false
+m09-kk,m09,kk,math_logic,Ширек сағатта неше минут бар?,integer,15,false
+m09-ru,m09,ru,math_logic,Сколько минут в четверти часа?,integer,15,false
+m09-en,m09,en,math_logic,How many minutes are in a quarter hour?,integer,15,false
+m10-kk,m10,kk,math_logic,3 + 4 саны 4 + 3 санына тең бе?,boolean,true,false
+m10-ru,m10,ru,math_logic,Равно ли 3 + 4 числу 4 + 3?,boolean,true,false
+m10-en,m10,en,math_logic,Is 3 plus 4 equal to 4 plus 3?,boolean,true,false
+s01-kk,s01,kk,science,Судың химиялық формуласы қандай?,short_text,H2O,false
+s01-ru,s01,ru,science,Какова химическая формула воды?,short_text,H2O,false
+s01-en,s01,en,science,What is the chemical formula for water?,short_text,H2O,false
+s02-kk,s02,kk,science,Теңіз деңгейінде су шамамен неше градус Цельсийде қайнайды?,integer,100,false
+s02-ru,s02,ru,science,При какой температуре по Цельсию примерно кипит вода на уровне моря?,integer,100,false
+s02-en,s02,en,science,About how many degrees Celsius does water boil at sea level?,integer,100,false
+s03-kk,s03,kk,science,Өсімдіктер фотосинтез үшін қандай газды сіңіреді?,short_text,көмірқышқыл газы,false
+s03-ru,s03,ru,science,Какой газ поглощают растения для фотосинтеза?,short_text,углекислый газ,false
+s03-en,s03,en,science,Which gas do plants absorb for photosynthesis?,short_text,carbon dioxide,false
+s04-kk,s04,kk,science,Заттарды Жерге қарай тартатын күш қалай аталады?,short_text,ауырлық күші,false
+s04-ru,s04,ru,science,Как называется сила которая притягивает предметы к Земле?,short_text,сила тяжести,false
+s04-en,s04,en,science,What force pulls objects toward Earth?,short_text,gravity,false
+s05-kk,s05,kk,science,Жәндіктің неше аяғы бар?,integer,6,false
+s05-ru,s05,ru,science,Сколько ног у насекомого?,integer,6,false
+s05-en,s05,en,science,How many legs does an insect have?,integer,6,false
+s06-kk,s06,kk,science,Жер Күнді айнала ма?,boolean,true,false
+s06-ru,s06,ru,science,Земля обращается вокруг Солнца?,boolean,true,false
+s06-en,s06,en,science,Does Earth orbit the Sun?,boolean,true,false
+s07-kk,s07,kk,science,Жерге ең жақын жұлдыз қайсы?,short_text,Күн,false
+s07-ru,s07,ru,science,Какая звезда ближе всего к Земле?,short_text,Солнце,false
+s07-en,s07,en,science,What is the closest star to Earth?,short_text,Sun,false
+s08-kk,s08,kk,science,Мұз заттың қай күйіне жатады?,short_text,қатты күй,false
+s08-ru,s08,ru,science,К какому состоянию вещества относится лёд?,short_text,твёрдое состояние,false
+s08-en,s08,en,science,What state of matter is ice?,short_text,solid,false
+s09-kk,s09,kk,science,Өсімдіктің қай бөлігі топырақтан су сіңіреді?,short_text,тамыр,false
+s09-ru,s09,ru,science,Какая часть растения поглощает воду из почвы?,short_text,корень,false
+s09-en,s09,en,science,What part of a plant absorbs water from soil?,short_text,root,false
+s10-kk,s10,kk,science,Күн жүйесінде неше ғаламшар бар?,integer,8,false
+s10-ru,s10,ru,science,Сколько планет в Солнечной системе?,integer,8,false
+s10-en,s10,en,science,How many planets are in the Solar System?,integer,8,false
+w01-kk,w01,kk,world_geography_history,Францияның астанасы қай қала?,short_text,Париж,false
+w01-ru,w01,ru,world_geography_history,Какой город является столицей Франции?,short_text,Париж,false
+w01-en,w01,en,world_geography_history,What city is the capital of France?,short_text,Paris,false
+w02-kk,w02,kk,world_geography_history,Әлемдегі ең үлкен мұхит қайсы?,short_text,Тынық мұхиты,false
+w02-ru,w02,ru,world_geography_history,Какой океан самый большой в мире?,short_text,Тихий океан,false
+w02-en,w02,en,world_geography_history,What is the largest ocean in the world?,short_text,Pacific Ocean,false
+w03-kk,w03,kk,world_geography_history,Жапония қай құрлықта орналасқан?,short_text,Азия,false
+w03-ru,w03,ru,world_geography_history,На каком континенте находится Япония?,short_text,Азия,false
+w03-en,w03,en,world_geography_history,On which continent is Japan located?,short_text,Asia,false
+w04-kk,w04,kk,world_geography_history,Берлин қабырғасы қай жылы құлады?,integer,1989,false
+w04-ru,w04,ru,world_geography_history,В каком году пала Берлинская стена?,integer,1989,false
+w04-en,w04,en,world_geography_history,In what year did the Berlin Wall fall?,integer,1989,false
+w05-kk,w05,kk,world_geography_history,Гиза пирамидалары қай елде орналасқан?,short_text,Мысыр,false
+w05-ru,w05,ru,world_geography_history,В какой стране находятся пирамиды Гизы?,short_text,Египет,false
+w05-en,w05,en,world_geography_history,Which country is home to the pyramids of Giza?,short_text,Egypt,false
+w06-kk,w06,kk,world_geography_history,Мысыр арқылы ағатын өзен қалай аталады?,short_text,Ніл,false
+w06-ru,w06,ru,world_geography_history,Какая река протекает через Египет?,short_text,Нил,false
+w06-en,w06,en,world_geography_history,Which river flows through Egypt?,short_text,Nile,false
+w07-kk,w07,kk,world_geography_history,Жеті құрлық үлгісінде неше құрлық бар?,integer,7,false
+w07-ru,w07,ru,world_geography_history,Сколько континентов в модели семи континентов?,integer,7,false
+w07-en,w07,en,world_geography_history,How many continents are in the seven-continent model?,integer,7,false
+w08-kk,w08,kk,world_geography_history,Мачу-Пикчу қай елде орналасқан?,short_text,Перу,false
+w08-ru,w08,ru,world_geography_history,В какой стране находится Мачу-Пикчу?,short_text,Перу,false
+w08-en,w08,en,world_geography_history,Which country is home to Machu Picchu?,short_text,Peru,false
+w09-kk,w09,kk,world_geography_history,Солтүстік пен оңтүстік жарты шарды қандай сызық бөледі?,short_text,экватор,false
+w09-ru,w09,ru,world_geography_history,Какая линия разделяет Северное и Южное полушария?,short_text,экватор,false
+w09-en,w09,en,world_geography_history,What line divides the Northern and Southern Hemispheres?,short_text,equator,false
+w10-kk,w10,kk,world_geography_history,Италияның астанасы қай қала?,short_text,Рим,false
+w10-ru,w10,ru,world_geography_history,Какой город является столицей Италии?,short_text,Рим,false
+w10-en,w10,en,world_geography_history,What city is the capital of Italy?,short_text,Rome,false
+k01-kk,k01,kk,kazakhstan_history_culture,Екі ішекті дәстүрлі қазақ аспабы қалай аталады?,short_text,домбыра,false
+k01-ru,k01,ru,kazakhstan_history_culture,Как называется традиционный казахский инструмент с двумя струнами?,short_text,домбра,false
+k01-en,k01,en,kazakhstan_history_culture,What is the traditional Kazakh two-string instrument called?,short_text,dombra,false
+k02-kk,k02,kk,kazakhstan_history_culture,Дәстүрлі көшпелі баспана қалай аталады?,short_text,киіз үй,false
+k02-ru,k02,ru,kazakhstan_history_culture,Как называется традиционное переносное жилище?,short_text,юрта,false
+k02-en,k02,en,kazakhstan_history_culture,What is the traditional portable dwelling called?,short_text,yurt,false
+k03-kk,k03,kk,kazakhstan_history_culture,Көктемде тойланатын дәстүрлі мереке қалай аталады?,short_text,Наурыз,false
+k03-ru,k03,ru,kazakhstan_history_culture,Как называется традиционный весенний праздник?,short_text,Наурыз,false
+k03-en,k03,en,kazakhstan_history_culture,What is the traditional spring holiday called?,short_text,Nauryz,false
+k04-kk,k04,kk,kazakhstan_history_culture,Бие сүтінен ашытылатын дәстүрлі сусын қалай аталады?,short_text,қымыз,false
+k04-ru,k04,ru,kazakhstan_history_culture,Как называется традиционный напиток из кобыльего молока?,short_text,кумыс,false
+k04-en,k04,en,kazakhstan_history_culture,What is the traditional drink made from fermented mare's milk called?,short_text,kumis,false
+k05-kk,k05,kk,kazakhstan_history_culture,Ет пен қамырдан жасалатын дәстүрлі тағам қалай аталады?,short_text,бешбармақ,false
+k05-ru,k05,ru,kazakhstan_history_culture,Как называется традиционное блюдо из мяса и теста?,short_text,бешбармак,false
+k05-en,k05,en,kazakhstan_history_culture,What is the traditional dish made with meat and dough called?,short_text,beshbarmak,false
+k06-kk,k06,kk,kazakhstan_history_culture,Қазақстанның астанасы қай қала?,short_text,Астана,false
+k06-ru,k06,ru,kazakhstan_history_culture,Какой город является столицей Казахстана?,short_text,Астана,false
+k06-en,k06,en,kazakhstan_history_culture,What city is the capital of Kazakhstan?,short_text,Astana,false
+k07-kk,k07,kk,kazakhstan_history_culture,Қазақстанның ұлттық валютасы қалай аталады?,short_text,теңге,false
+k07-ru,k07,ru,kazakhstan_history_culture,Как называется валюта Казахстана?,short_text,тенге,false
+k07-en,k07,en,kazakhstan_history_culture,What is the currency of Kazakhstan called?,short_text,tenge,false
+k08-kk,k08,kk,kazakhstan_history_culture,Далада дәстүрлі түрде мінетін жануар қандай?,short_text,жылқы,false
+k08-ru,k08,ru,kazakhstan_history_culture,На каком животном традиционно ездили по степи?,short_text,лошадь,false
+k08-en,k08,en,kazakhstan_history_culture,Which animal was traditionally ridden across the steppe?,short_text,horse,false
+k09-kk,k09,kk,kazakhstan_history_culture,Киіз үйдің төбесіндегі дөңгелек бөлік қалай аталады?,short_text,шаңырақ,false
+k09-ru,k09,ru,kazakhstan_history_culture,Как называется круглая верхняя часть юрты?,short_text,шанырак,false
+k09-en,k09,en,kazakhstan_history_culture,What is the circular crown at the top of a yurt called?,short_text,shanyrak,false
+k10-kk,k10,kk,kazakhstan_history_culture,Түйе сүтінен ашытылатын дәстүрлі сусын қалай аталады?,short_text,шұбат,false
+k10-ru,k10,ru,kazakhstan_history_culture,Как называется традиционный напиток из верблюжьего молока?,short_text,шубат,false
+k10-en,k10,en,kazakhstan_history_culture,What is the traditional drink made from fermented camel's milk called?,short_text,shubat,false
+e01-kk,e01,kk,everyday_situations,3 алмаға тағы 2 алма қоссақ неше алма болады?,integer,5,false
+e01-ru,e01,ru,everyday_situations,Сколько яблок будет если к 3 яблокам добавить ещё 2?,integer,5,false
+e01-en,e01,en,everyday_situations,How many apples are there if you add 2 to 3 apples?,integer,5,false
+e02-kk,e02,kk,everyday_situations,Бір сағатта неше минут бар?,integer,60,false
+e02-ru,e02,ru,everyday_situations,Сколько минут в одном часе?,integer,60,false
+e02-en,e02,en,everyday_situations,How many minutes are in one hour?,integer,60,false
+e03-kk,e03,kk,everyday_situations,Әр бумада 4 қарындаш болса 3 бумада неше қарындаш бар?,integer,12,false
+e03-ru,e03,ru,everyday_situations,Сколько карандашей в 3 пачках если в каждой по 4?,integer,12,false
+e03-en,e03,en,everyday_situations,How many pencils are in 3 packs with 4 pencils in each?,integer,12,false
+e04-kk,e04,kk,everyday_situations,10 печеньені 2 адамға тең бөлсе әрқайсысына нешеу тиеді?,integer,5,false
+e04-ru,e04,ru,everyday_situations,Сколько печений получит каждый если 10 печений разделить поровну между 2 людьми?,integer,5,false
+e04-en,e04,en,everyday_situations,How many cookies does each person get when 10 are shared equally by 2 people?,integer,5,false
+e05-kk,e05,kk,everyday_situations,Автобус 09:15-те шығып жолға 10 минут жұмсаса қай уақытта келеді?,short_text,09:25,false
+e05-ru,e05,ru,everyday_situations,Если автобус отправился в 09:15 и ехал 10 минут во сколько он прибудет?,short_text,09:25,false
+e05-en,e05,en,everyday_situations,If a bus leaves at 09:15 and travels for 10 minutes what time does it arrive?,short_text,09:25,false
+e06-kk,e06,kk,everyday_situations,Бір литр судың жартысы неше литр болады?,decimal,0.5,false
+e06-ru,e06,ru,everyday_situations,Сколько литров составляет половина литра воды?,decimal,0.5,false
+e06-en,e06,en,everyday_situations,How many liters is half of one liter of water?,decimal,0.5,false
+e07-kk,e07,kk,everyday_situations,Кәдімгі велосипедте неше дөңгелек бар?,integer,2,false
+e07-ru,e07,ru,everyday_situations,Сколько колёс у обычного велосипеда?,integer,2,false
+e07-en,e07,en,everyday_situations,How many wheels does a standard bicycle have?,integer,2,false
+e08-kk,e08,kk,everyday_situations,Температура 20 градустан 5 градусқа көтерілсе неше градус болады?,integer,25,false
+e08-ru,e08,ru,everyday_situations,Если температура вырастет с 20 на 5 градусов сколько будет?,integer,25,false
+e08-en,e08,en,everyday_situations,If the temperature rises by 5 degrees from 20 what is it?,integer,25,false
+e09-kk,e09,kk,everyday_situations,Хат жазу үшін қандай құрал қолдануға болады?,short_text,қалам,false
+e09-ru,e09,ru,everyday_situations,Какой предмет можно использовать чтобы написать письмо?,short_text,ручка,false
+e09-en,e09,en,everyday_situations,What tool can you use to write a letter?,short_text,pen,false
+e10-kk,e10,kk,everyday_situations,Жаңбыр жауады деген болжам болса қолшатыр пайдалы ма?,boolean,true,false
+e10-ru,e10,ru,everyday_situations,Полезен ли зонт если прогноз обещает дождь?,boolean,true,false
+e10-en,e10,en,everyday_situations,Is an umbrella useful when rain is forecast?,boolean,true,false
+h01-kk,h01,kk,health_education_basics,Адамда неше өкпе бар?,integer,2,false
+h01-ru,h01,ru,health_education_basics,Сколько лёгких у человека?,integer,2,false
+h01-en,h01,en,health_education_basics,How many lungs does a person have?,integer,2,false
+h02-kk,h02,kk,health_education_basics,Қанды айдайтын мүше қалай аталады?,short_text,жүрек,false
+h02-ru,h02,ru,health_education_basics,Как называется орган который перекачивает кровь?,short_text,сердце,false
+h02-en,h02,en,health_education_basics,What organ pumps blood?,short_text,heart,false
+h03-kk,h03,kk,health_education_basics,Қолды сабындап жуу үшін дененің қай бөлігін жуу керек?,short_text,қол,false
+h03-ru,h03,ru,health_education_basics,Какую часть тела нужно мыть водой с мылом?,short_text,руки,false
+h03-en,h03,en,health_education_basics,Which body part should you wash with soap and water?,short_text,hands,false
+h04-kk,h04,kk,health_education_basics,Адам жүрегінде неше камера бар?,integer,4,false
+h04-ru,h04,ru,health_education_basics,Сколько камер в человеческом сердце?,integer,4,false
+h04-en,h04,en,health_education_basics,How many chambers does the human heart have?,integer,4,false
+h05-kk,h05,kk,health_education_basics,Күн сәулесі теріде түзілуіне көмектесетін дәрумен қайсы?,short_text,D,false
+h05-ru,h05,ru,health_education_basics,Какой витамин помогает образовываться в коже под действием солнца?,short_text,D,false
+h05-en,h05,en,health_education_basics,Which vitamin can the skin make with sunlight?,short_text,D,false
+h06-kk,h06,kk,health_education_basics,Дыбысты естуге қай сезім көмектеседі?,short_text,есту,false
+h06-ru,h06,ru,health_education_basics,Какое чувство помогает воспринимать звук?,short_text,слух,false
+h06-en,h06,en,health_education_basics,Which sense lets people hear sound?,short_text,hearing,false
+h07-kk,h07,kk,health_education_basics,Бір жылда неше ай бар?,integer,12,false
+h07-ru,h07,ru,health_education_basics,Сколько месяцев в одном году?,integer,12,false
+h07-en,h07,en,health_education_basics,How many months are in one year?,integer,12,false
+h08-kk,h08,kk,health_education_basics,Температураны өлшейтін құрал қалай аталады?,short_text,термометр,false
+h08-ru,h08,ru,health_education_basics,Как называется прибор для измерения температуры?,short_text,термометр,false
+h08-en,h08,en,health_education_basics,What tool measures temperature?,short_text,thermometer,false
+h09-kk,h09,kk,health_education_basics,Ағылшын әліпбиінде неше әріп бар?,integer,26,false
+h09-ru,h09,ru,health_education_basics,Сколько букв в английском алфавите?,integer,26,false
+h09-en,h09,en,health_education_basics,How many letters are in the English alphabet?,integer,26,false
+h10-kk,h10,kk,health_education_basics,99 санынан кейін қандай сан келеді?,integer,100,false
+h10-ru,h10,ru,health_education_basics,Какое число идёт после 99?,integer,100,false
+h10-en,h10,en,health_education_basics,What number comes after 99?,integer,100,false
