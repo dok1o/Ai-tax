@@ -1,8 +1,8 @@
-# T-000 handoff
+# T-001 handoff
 
-- Done: project layout, shared paths and seed, CSV contract v1, environment template, Make targets and eight task cards.
-- Next: start T-002 for prompts. T-001 can develop against test inputs while prompts are prepared. T-006 can start with offline examples.
-- Blockers: none for these cards. Collection needs configured models, local credentials and human approval before paid calls.
-- Files touched: AGENTS.md (canonical filename), root setup and tracking files, data/SCHEMA.md, src/common/config.py, tests/test_schema.py, tasks/ and empty pipeline placeholders.
-- Resume T-002 from dev: `git switch dev && git pull --ff-only && git switch -c codex/T-002-prompts`.
-- Verify with Python 3.11 and GNU Make: `python -m pip install -r requirements.txt`, then `make check`.
+- Done: Added token counting for `cl100k_base` and revision-pinned `google/byt5-small`; output uses the contract columns and fertility formula.
+- Done: Added targeted tests for kk, ru and en, punctuation, repeated whitespace, tokenizer identifiers and deterministic rows.
+- Next: Run `py -3.11 -m pytest tests/test_tokens.py -q`; run `make tokens` when T-002 provides `data/prompts.csv`.
+- Blockers: Python 3.11 is not installed (`py -3.11` reports no matching runtime); `data/prompts.csv` is pending T-002.
+- Files touched: `src/tokens.py`, `tests/test_tokens.py`, `STATUS.md`, `HANDOFF.md`.
+- Resume: `git switch codex/T-001-tokens`.

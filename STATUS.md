@@ -3,7 +3,7 @@
 | ID | Title | Agent | Branch | State |
 | --- | --- | --- | --- | --- |
 | T-000 | Repository bootstrap | codex | codex/T-000-bootstrap | done |
-| T-001 | Token counts and fertility | codex | codex/T-001-tokens | todo |
+| T-001 | Token counts and fertility | codex | codex/T-001-tokens | blocked |
 | T-002 | Trilingual prompts and validator | codex | codex/T-002-prompts | todo |
 | T-003 | Cached model collection | codex | codex/T-003-collect | todo |
 | T-004 | Grading and paired statistics | codex | codex/T-004-stats | todo |
