@@ -46,18 +46,29 @@ def test_question_bootstrap_is_reproducible_and_reports_small_n() -> None:
     assert accuracy["preliminary"] == "true"
 
 
-def test_pairs_are_aligned_by_question_and_repetition() -> None:
+def test_pairs_use_question_accuracy_even_with_disjoint_repetitions() -> None:
     rows = [
         {"model": "fixture/m", "q_id": "q1", "rep": "0", "lang": "kk", "is_correct": "true"},
         {"model": "fixture/m", "q_id": "q1", "rep": "1", "lang": "kk", "is_correct": "false"},
-        {"model": "fixture/m", "q_id": "q1", "rep": "0", "lang": "en", "is_correct": "false"},
-        {"model": "fixture/m", "q_id": "q1", "rep": "1", "lang": "en", "is_correct": "false"},
+        {"model": "fixture/m", "q_id": "q1", "rep": "2", "lang": "en", "is_correct": "false"},
     ]
 
     comparison = next(
         row for row in compute_metrics(rows, bootstrap_samples=20) if row["metric"] == "mcnemar_exact"
     )
 
-    assert comparison["n"] == 2
+    assert comparison["n"] == 1
     assert comparison["n_questions"] == 1
     assert comparison["effect_size"] == 0.5
+
+
+def test_copying_repetitions_preserves_question_comparison() -> None:
+    rows = paired_rows()
+    repeated_rows = rows + [{**row, "rep": "1"} for row in rows]
+
+    original = compute_metrics(rows, bootstrap_samples=20)
+    repeated = compute_metrics(repeated_rows, bootstrap_samples=20)
+
+    assert [row for row in repeated if row["metric"] == "mcnemar_exact"] == [
+        row for row in original if row["metric"] == "mcnemar_exact"
+    ]
