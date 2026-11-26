@@ -16,7 +16,7 @@ and both are reported by the running page (sidebar caption and the Method tab, f
 - Tokenizer caches: **absent** here. There is no tiktoken BPE file for `cl100k_base`
   in `TIKTOKEN_CACHE_DIR`/`DATA_GYM_CACHE_DIR` and no
   `models--Qwen--Qwen2.5-0.5B` snapshot in the Hugging Face cache, so
-  `app.tokenizers.load_backends()` returns zero backends and two reasons. Every
+  `app.token_backends.load_backends()` returns zero backends and two reasons. Every
   "backend available" number below is therefore measured with a **fake offline
   backend** (one id per whitespace word) injected into `load_backends`, which walks
   the same `Backend.pieces` → `text.token_chips` code path as a real tokenizer. No
@@ -38,7 +38,7 @@ four tabs rendered):
 
 Budget 10 s: met with a factor of about seven. The wall column includes importing
 the Streamlit test harness itself, which a real `streamlit run` pays once at server
-start. `app.tokenizers.load_backends()` costs 0.0017 s when the caches are missing (it stats two
+start. `app.token_backends.load_backends()` costs 0.0017 s when the caches are missing (it stats two
 locations and parses the tiktoken registry source for the expected hash, without calling it)
 and is cached by `cached_backends` in any case.
 

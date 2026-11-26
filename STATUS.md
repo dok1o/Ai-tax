@@ -19,6 +19,7 @@
 | T-014 | Import final v2 prompt dataset | codex | codex/T-014-dataset | done |
 | T-015 | Ollama and Gemini model clients | codex | codex/T-015-clients | done |
 | T-016 | Offline tokenizers and dashboard redesign | arena | arena/ad3092b4-ai-tax | done |
+| T-016-fix | Tokenizers shadowing and byte chips | claude (Sol) | fix/T-016-shadowing | done |
 | T-017 | Prompt text corrections and token regeneration | codex | codex/T-017-text-fixes | done |
 
 ## Requests for Astra
