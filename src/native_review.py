@@ -1,4 +1,4 @@
-"""Export a Kazakh review worksheet and provide a human-run v1 import."""
+"""Export a Kazakh review worksheet and provide a human-run v2 import."""
 
 from __future__ import annotations
 
@@ -32,12 +32,16 @@ Row = Mapping[str, str]
 
 
 def read_prompt_rows(path: Path = PROMPTS_PATH) -> list[dict[str, str]]:
-    """Read and validate a frozen v1 prompt CSV."""
+    """Read and validate a frozen v2 prompt CSV."""
     with path.open(encoding="utf-8-sig", newline="") as source:
         reader = csv.DictReader(source)
         if tuple(reader.fieldnames or ()) != PROMPT_COLUMNS:
-            raise ValueError("prompts.csv header must exactly match SCHEMA v1")
+            raise ValueError("prompts.csv header must exactly match SCHEMA v2")
         rows = list(reader)
+    legacy_flags = {"true": "1", "false": "0", "": "0"}
+    for row in rows:
+        mark = row["verified_by_native"]
+        row["verified_by_native"] = legacy_flags.get(mark, mark)
     validate_rows(rows, load_banned_terms())
     return rows
 
@@ -80,7 +84,7 @@ def build_review_rows(prompts: Iterable[Row]) -> list[dict[str, str]]:
 
 
 def write_review_csv(rows: Iterable[Row], path: Path = REVIEW_PATH) -> int:
-    """Write the extra review worksheet without changing a v1 CSV."""
+    """Write the extra review worksheet without changing a v2 CSV."""
     if path.exists():
         raise FileExistsError(f"Refusing to overwrite an existing review worksheet: {path}")
     row_list = list(rows)
@@ -144,7 +148,7 @@ def apply_review(
         if correction:
             row["prompt"] = correction
         row["gold_answer"] = review["gold_answer"]
-        row["verified_by_native"] = "true"
+        row["verified_by_native"] = "1"
         if before != (row["prompt"], row["gold_answer"]):
             corrected += 1
 

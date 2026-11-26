@@ -1,4 +1,4 @@
-"""Build and validate the frozen v1 trilingual prompt CSV."""
+"""Build and validate the frozen v2 trilingual prompt CSV."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ from src.common.config import DATA_DIR, PROMPTS_PATH
 DRAFT_PATH = DATA_DIR / "prompts_draft.csv"
 BANNED_PATH = DATA_DIR / "banned_topics.txt"
 LANGS = ("kk", "ru", "en")
-ANSWER_TYPES = {"integer", "decimal", "boolean", "short_text"}
+ANSWER_TYPES = {"mcq", "number", "short"}
 PROMPT_COLUMNS = (
     "prompt_id",
     "q_id",
@@ -39,26 +39,21 @@ def load_banned_terms(path: Path = BANNED_PATH) -> tuple[str, ...]:
 
 
 def _validate_gold(answer_type: str, gold: str, q_id: str) -> None:
-    if answer_type == "integer":
-        try:
-            int(gold)
-        except ValueError as error:
-            raise ValueError(f"Question {q_id} has a non-integer gold answer.") from error
-    elif answer_type == "decimal":
+    if answer_type == "mcq" and gold not in {"A", "B", "C", "D"}:
+        raise ValueError(f"Question {q_id} requires a choice letter A-D.")
+    if answer_type == "number":
         try:
             value = float(gold)
         except ValueError as error:
-            raise ValueError(f"Question {q_id} has a non-decimal gold answer.") from error
+            raise ValueError(f"Question {q_id} has a non-numeric answer.") from error
         if not math.isfinite(value):
-            raise ValueError(f"Question {q_id} has a non-finite gold answer.")
-    elif answer_type == "boolean" and gold not in {"true", "false"}:
-        raise ValueError(f"Question {q_id} has a non-boolean gold answer.")
+            raise ValueError(f"Question {q_id} needs a finite number.")
 
 
 def validate_rows(
     rows: Iterable[Row], banned_terms: Iterable[str] = ()
 ) -> dict[str, object]:
-    """Validate v1 rows, allowing localized short-text answers per the contract."""
+    """Validate v2 rows, allowing localized short-text answers per the contract."""
     row_list = list(rows)
     if not row_list:
         raise ValueError("Prompt CSV has no data rows.")
@@ -80,8 +75,8 @@ def validate_rows(
             raise ValueError(f"Unsupported language {row['lang']!r}.")
         if row["answer_type"] not in ANSWER_TYPES:
             raise ValueError(f"Unsupported answer_type {row['answer_type']!r}.")
-        if row["verified_by_native"] not in {"", "true", "false"}:
-            raise ValueError("verified_by_native must be empty, true or false in v1.")
+        if row["verified_by_native"] not in {"0", "1"}:
+            raise ValueError("verified_by_native must be 0 or 1 in v2.")
         if row["prompt_id"] in prompt_ids:
             raise ValueError(f"Duplicate prompt_id {row['prompt_id']}.")
         prompt_ids.add(row["prompt_id"])
@@ -105,13 +100,13 @@ def validate_rows(
         if len({row["answer_type"] for row in group}) != 1:
             raise ValueError(f"Question {q_id} has inconsistent answer types.")
         answer_type = group[0]["answer_type"]
-        if answer_type != "short_text" and len(
+        if answer_type != "short" and len(
             {row["gold_answer"] for row in group}
         ) != 1:
             raise ValueError(f"Question {q_id} has inconsistent gold answers.")
         categories[group[0]["category"]] += 1
 
-    verified_share = sum(row["verified_by_native"] == "true" for row in row_list) / len(
+    verified_share = sum(row["verified_by_native"] == "1" for row in row_list) / len(
         row_list
     )
     return {
@@ -125,7 +120,7 @@ def validate_rows(
 def build_prompts(
     draft_path: Path = DRAFT_PATH, output_path: Path = PROMPTS_PATH
 ) -> None:
-    """Expand the 60-row draft into the three localized v1 rows per question."""
+    """Expand the 60-row draft into the three localized v2 rows per question."""
     if output_path.exists():
         raise FileExistsError(f"Refusing to overwrite existing prompts: {output_path}.")
     rows: list[dict[str, str]] = []
@@ -147,7 +142,7 @@ def build_prompts(
                         "prompt": draft[f"prompt_{lang}"],
                         "answer_type": draft["answer_type"],
                         "gold_answer": draft[f"gold_{lang}"],
-                        "verified_by_native": "false",
+                        "verified_by_native": "0",
                     }
                 )
     with output_path.open("w", encoding="utf-8", newline="") as destination:
@@ -159,11 +154,11 @@ def build_prompts(
 
 
 def validate_csv(path: Path = PROMPTS_PATH) -> dict[str, object]:
-    """Validate the exact v1 header and all prompt rows."""
+    """Validate the exact v2 header and all prompt rows."""
     with path.open(encoding="utf-8-sig", newline="") as source:
         reader = csv.DictReader(source)
         if tuple(reader.fieldnames or ()) != PROMPT_COLUMNS:
-            raise ValueError("prompts.csv header must exactly match SCHEMA v1.")
+            raise ValueError("prompts.csv header must exactly match SCHEMA v2.")
         summary = validate_rows(reader, load_banned_terms())
     if summary["n_questions"] != 60 or summary["n_rows"] != 180:
         raise ValueError("The prompt dataset must contain 60 questions and 180 rows.")

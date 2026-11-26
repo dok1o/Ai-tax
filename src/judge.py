@@ -20,6 +20,7 @@ LABEL_COLUMNS = (
     "q_id",
     "parsed_answer",
     "is_correct",
+    "parse_status",
 )
 STATUS_COLUMNS = (
     "model",
@@ -149,6 +150,7 @@ def grade_rows(
                 **values,
                 "parsed_answer": parsed,
                 "is_correct": "true" if correct else "false",
+                "parse_status": status,
             }
         )
         statuses.append(

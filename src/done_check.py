@@ -48,6 +48,7 @@ RESPONSE_FIELDS = {
     "output_tokens",
     "latency_ms",
     "response",
+    "usage_available",
 }
 LOG_FIELDS = {
     "model",
@@ -152,7 +153,7 @@ def _prompts_gate(root: Path) -> GateResult:
         with path.open(encoding="utf-8-sig", newline="") as source:
             reader = csv.DictReader(source)
             if tuple(reader.fieldnames or ()) != PROMPT_COLUMNS:
-                return "prompts.csv header differs from SCHEMA v1"
+                return "prompts.csv header differs from SCHEMA v2"
             rows = list(reader)
         summary = validate_rows(rows, load_banned_terms(root / "data" / "banned_topics.txt"))
         issues: list[str] = []
@@ -162,7 +163,7 @@ def _prompts_gate(root: Path) -> GateResult:
         if len(categories) != 6 or any(count != 10 for count in categories.values()):
             issues.append("D1 requires 10 q_ids in each of six categories")
         kk_rows = [row for row in rows if row["lang"] == "kk"]
-        verified = sum(row["verified_by_native"] == "true" for row in kk_rows)
+        verified = sum(row["verified_by_native"] == "1" for row in kk_rows)
         if len(kk_rows) < 60 or verified < len(kk_rows):
             issues.append(f"D2 requires all kk rows verified; found {verified}/{len(kk_rows)}")
         if not release.is_file():
@@ -181,11 +182,11 @@ def _provenance(records: list[dict[str, Any]]) -> str:
     recorded = False
     markers = ("fixture", "example", "fake", "stub", "synthetic")
     for record in records:
-        values = [str(record.get(key, "")) for key in ("provenance", "source", "client", "model")]
+        values = [str(record.get(key, "")) for key in ("provenance", "source", "client_type", "client", "model")]
         marked = any(any(marker in value.casefold() for marker in markers) for value in values)
         source_values = [
             str(record.get(key, "")).strip().casefold()
-            for key in ("provenance", "source", "client")
+            for key in ("provenance", "source", "client_type", "client")
             if record.get(key)
         ]
         recorded = recorded or bool(source_values)
@@ -219,6 +220,9 @@ def _measurement_errors(
     cells: dict[tuple[str, str], dict[str, set[str]]] = {}
     for row in responses:
         key = (row["model"], row["prompt_id"], row["lang"], row["rep"])
+        known = all(row.get(field) not in ("", None) for field in ("input_tokens", "output_tokens"))
+        if row.get("usage_available") != ("true" if known else "false"):
+            errors.append(f"usage availability disagrees with token counts for {key}")
         if key in response_keys:
             errors.append(f"duplicate response key {key}")
         response_keys.add(key)
@@ -248,7 +252,7 @@ def _measurement_errors(
     for key, row in label_keys.items():
         cell = counts.setdefault((key[0], key[2]), [0, 0])
         cell[1] += 1
-        if not row["parsed_answer"].strip():
+        if row["parse_status"] == "unparsed":
             cell[0] += 1
         if row["is_correct"] not in {"true", "false"}:
             errors.append(f"invalid is_correct for {key}")
@@ -320,7 +324,7 @@ def _measurement_gate(root: Path) -> GateResult:
                 return "; ".join([missing, f"human confirmation pending for {', '.join(pending)}"] if pending else [missing])
         prompts = _csv(paths[0], PROMPT_FIELDS)
         responses = _csv(paths[2], RESPONSE_FIELDS)
-        labels = _csv(paths[3], {"model", "prompt_id", "lang", "rep", "parsed_answer", "is_correct"})
+        labels = _csv(paths[3], {"model", "prompt_id", "lang", "rep", "parsed_answer", "is_correct", "parse_status"})
         tokens = _csv(paths[1], {"prompt_id", "word_count", "token_count", "fertility"})
         attempts, raw = _jsonl(paths[4]), _jsonl(paths[5])
         errors = _measurement_errors(prompts, responses, labels, tokens, attempts, raw)
@@ -336,13 +340,21 @@ def _table_gate(name: str, root: Path) -> GateResult:
     def check() -> str:
         rows = _csv(path)
         columns = set(rows[0])
-        required = {"model", "lang", "accuracy", "ci_low", "ci_high", "n_questions", "n_observations"}
+        required = {"metric", "model", "lang", "accuracy", "ci_low", "ci_high", "n_questions", "n"}
         if not required.issubset(columns):
             return f"metrics.csv lacks statistical fields: {', '.join(sorted(required - columns))}"
         for row in rows:
             try:
+                if row["data_source"] == "fixture":
+                    return "statistics require real observations"
+                if row["metric"] == "mcnemar_exact":
+                    if not 0 <= float(row["p_value"]) <= float(row["p_value_holm"]) <= 1:
+                        raise ValueError
+                    continue
+                if row["metric"] != "accuracy":
+                    raise ValueError
                 low, high, accuracy = float(row["ci_low"]), float(row["ci_high"]), float(row["accuracy"])
-                n_q, n_obs = int(row["n_questions"]), int(row["n_observations"])
+                n_q, n_obs = int(row["n_questions"]), int(row["n"])
                 if not (0 <= low <= accuracy <= high <= 1 and n_q > 0 and n_obs > 0):
                     raise ValueError
             except ValueError:

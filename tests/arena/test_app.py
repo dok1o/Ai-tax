@@ -128,12 +128,13 @@ def run_app(monkeypatch: pytest.MonkeyPatch, force_empty: bool) -> AppTest:
 
 
 def test_app_starts_with_fixture_data(monkeypatch: pytest.MonkeyPatch) -> None:
+    loaded_before = set(sys.modules)
     test = run_app(monkeypatch, force_empty=False)
     assert not test.exception
     assert logic.BANNER_EXAMPLE in [item.value for item in test.error]
     assert test.title[0].value == "Language Tax in LLMs"
     assert len(test.dataframe) >= 1
-    assert "tiktoken" not in sys.modules and "transformers" not in sys.modules
+    assert {"tiktoken", "transformers"}.isdisjoint(set(sys.modules) - loaded_before)
 
 
 def test_app_starts_without_any_data(monkeypatch: pytest.MonkeyPatch) -> None:

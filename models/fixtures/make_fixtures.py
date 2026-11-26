@@ -184,9 +184,11 @@ def build_prompts() -> list[dict[str, str]]:
                     "lang": lang,
                     "category": category,
                     "prompt": prompt_text(index, lang, category),
-                    "answer_type": ANSWER_TYPES[category],
+                    "answer_type": "short"
+                    if ANSWER_TYPES[category] == "short_text"
+                    else "number",
                     "gold_answer": gold_answer(lang, category, index),
-                    "verified_by_native": "",
+                    "verified_by_native": "0",
                 }
             )
     return rows
@@ -210,6 +212,13 @@ def build_tokens(prompts: list[dict[str, str]], rng: np.random.Generator) -> lis
                     "fertility": round(count / words, 6),
                 }
             )
+    english = {
+        (r["q_id"], r["tokenizer"]): r["token_count"] for r in rows if r["lang"] == "en"
+    }
+    for row in rows:
+        row["tokens_vs_en"] = (
+            row["token_count"] / english[row["q_id"], row["tokenizer"]]
+        )
     return rows
 
 
@@ -236,6 +245,7 @@ def build_labels(prompts: list[dict[str, str]], rng: np.random.Generator) -> lis
                                 rng,
                             )
                         ).lower(),
+                        "parse_status": "graded",
                     }
                 )
     return rows

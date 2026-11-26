@@ -31,9 +31,9 @@ def prompt_group(q_id: str, short_text: bool = False) -> list[dict[str, str]]:
             "lang": lang,
             "category": "math_logic",
             "prompt": prompts[lang],
-            "answer_type": "short_text" if short_text else "integer",
+            "answer_type": "short" if short_text else "number",
             "gold_answer": answers[lang],
-            "verified_by_native": "false",
+            "verified_by_native": "0",
         }
         for lang in ("kk", "ru", "en")
     ]
@@ -75,10 +75,10 @@ def test_export_refuses_to_overwrite_human_work(tmp_path: Path) -> None:
     assert path.read_text(encoding="utf-8") == "completed worksheet"
 
 
-def test_ok_correction_and_unmarked_rows_preserve_v1_data() -> None:
+def test_ok_correction_and_unmarked_rows_preserve_v2_data() -> None:
     prompts = prompt_group("q1") + prompt_group("q2", short_text=True) + prompt_group("q3")
     prompts[-3]["prompt"] = "Existing native correction"
-    prompts[-3]["verified_by_native"] = "true"
+    prompts[-3]["verified_by_native"] = "1"
     original = deepcopy(prompts)
     reviews = [
         worksheet("q1", ok="1"),
@@ -92,10 +92,10 @@ def test_ok_correction_and_unmarked_rows_preserve_v1_data() -> None:
 
     candidate, counts = apply_review(prompts, reviews)
     rows = {row["prompt_id"]: row for row in candidate}
-    assert rows["q1-kk"]["verified_by_native"] == "true"
+    assert rows["q1-kk"]["verified_by_native"] == "1"
     assert rows["q2-kk"]["prompt"] == "Төрттен кейінгі санды атаңыз."
     assert rows["q2-kk"]["gold_answer"] == "солтүстік бағыт"
-    assert rows["q2-kk"]["verified_by_native"] == "true"
+    assert rows["q2-kk"]["verified_by_native"] == "1"
     assert rows["q3-kk"] == original[-3]
     assert [row["prompt_id"] for row in candidate] == [row["prompt_id"] for row in original]
     assert all(
@@ -122,7 +122,7 @@ def test_duplicate_or_unknown_review_does_not_mutate_input(
     assert prompts == original
 
 
-def test_review_only_updates_v1_boolean_and_exact_prompt_columns() -> None:
+def test_review_only_updates_v2_boolean_and_exact_prompt_columns() -> None:
     candidate, _ = apply_review(prompt_group("q1"), [worksheet("q1", ok="1")])
     assert tuple(candidate[0]) == PROMPT_COLUMNS
-    assert {row["verified_by_native"] for row in candidate} == {"false", "true"}
+    assert {row["verified_by_native"] for row in candidate} == {"0", "1"}

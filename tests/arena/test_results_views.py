@@ -204,7 +204,10 @@ def test_join_prompts_falls_back_to_the_fixture_identifiers() -> None:
         assert set(prompts["prompt_id"]) >= set(tokens["prompt_id"])
 
 
-def test_playground_and_evaluation_frames_come_from_the_saved_artifacts() -> None:
+def test_playground_and_evaluation_frames_come_from_the_saved_artifacts(
+    monkeypatch,
+) -> None:
+    monkeypatch.setenv(logic.FORCE_EXAMPLE_ENV, "1")
     state = logic.load_state(MODELS_DIR)
     frame = logic.playground_frame(state)
     assert frame is not None

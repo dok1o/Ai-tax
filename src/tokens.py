@@ -26,6 +26,7 @@ TOKEN_COLUMNS = (
     "word_count",
     "token_count",
     "fertility",
+    "tokens_vs_en",
 )
 Encoder = Callable[[str], Sequence[object]]
 
@@ -71,6 +72,8 @@ def build_token_rows(
                     "fertility": token_count / word_count,
                 }
             )
+    for row, relative in zip(rows, build_ratio_rows(rows), strict=True):
+        row["tokens_vs_en"] = relative["tokens_vs_en"]
     return rows
 
 

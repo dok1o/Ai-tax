@@ -1,361 +1,361 @@
-model,prompt_id,lang,rep,q_id,parsed_answer,is_correct
-fixture-small-model,q000-kk,kk,0,q000,0,true
-fixture-strong-model,q000-kk,kk,0,q000,0,true
-fixture-small-model,q000-ru,ru,0,q000,0,true
-fixture-strong-model,q000-ru,ru,0,q000,0,false
-fixture-small-model,q000-en,en,0,q000,0,true
-fixture-strong-model,q000-en,en,0,q000,0,false
-fixture-small-model,q001-kk,kk,0,q001,қысқа жауап,false
-fixture-strong-model,q001-kk,kk,0,q001,қысқа жауап,false
-fixture-small-model,q001-ru,ru,0,q001,короткий ответ,true
-fixture-strong-model,q001-ru,ru,0,q001,короткий ответ,true
-fixture-small-model,q001-en,en,0,q001,short answer,true
-fixture-strong-model,q001-en,en,0,q001,short answer,true
-fixture-small-model,q002-kk,kk,0,q002,қысқа жауап,false
-fixture-strong-model,q002-kk,kk,0,q002,қысқа жауап,false
-fixture-small-model,q002-ru,ru,0,q002,короткий ответ,true
-fixture-strong-model,q002-ru,ru,0,q002,короткий ответ,false
-fixture-small-model,q002-en,en,0,q002,short answer,false
-fixture-strong-model,q002-en,en,0,q002,short answer,false
-fixture-small-model,q003-kk,kk,0,q003,қысқа жауап,false
-fixture-strong-model,q003-kk,kk,0,q003,қысқа жауап,false
-fixture-small-model,q003-ru,ru,0,q003,короткий ответ,true
-fixture-strong-model,q003-ru,ru,0,q003,короткий ответ,true
-fixture-small-model,q003-en,en,0,q003,short answer,false
-fixture-strong-model,q003-en,en,0,q003,short answer,true
-fixture-small-model,q004-kk,kk,0,q004,5.4,true
-fixture-strong-model,q004-kk,kk,0,q004,5.4,false
-fixture-small-model,q004-ru,ru,0,q004,5.4,false
-fixture-strong-model,q004-ru,ru,0,q004,5.4,true
-fixture-small-model,q004-en,en,0,q004,5.4,true
-fixture-strong-model,q004-en,en,0,q004,5.4,true
-fixture-small-model,q005-kk,kk,0,q005,6.5,true
-fixture-strong-model,q005-kk,kk,0,q005,6.5,false
-fixture-small-model,q005-ru,ru,0,q005,6.5,false
-fixture-strong-model,q005-ru,ru,0,q005,6.5,true
-fixture-small-model,q005-en,en,0,q005,6.5,true
-fixture-strong-model,q005-en,en,0,q005,6.5,false
-fixture-small-model,q006-kk,kk,0,q006,18,true
-fixture-strong-model,q006-kk,kk,0,q006,18,true
-fixture-small-model,q006-ru,ru,0,q006,18,true
-fixture-strong-model,q006-ru,ru,0,q006,18,true
-fixture-small-model,q006-en,en,0,q006,18,false
-fixture-strong-model,q006-en,en,0,q006,18,true
-fixture-small-model,q007-kk,kk,0,q007,қысқа жауап,false
-fixture-strong-model,q007-kk,kk,0,q007,қысқа жауап,false
-fixture-small-model,q007-ru,ru,0,q007,короткий ответ,true
-fixture-strong-model,q007-ru,ru,0,q007,короткий ответ,true
-fixture-small-model,q007-en,en,0,q007,short answer,true
-fixture-strong-model,q007-en,en,0,q007,short answer,true
-fixture-small-model,q008-kk,kk,0,q008,қысқа жауап,true
-fixture-strong-model,q008-kk,kk,0,q008,қысқа жауап,true
-fixture-small-model,q008-ru,ru,0,q008,короткий ответ,true
-fixture-strong-model,q008-ru,ru,0,q008,короткий ответ,true
-fixture-small-model,q008-en,en,0,q008,short answer,true
-fixture-strong-model,q008-en,en,0,q008,short answer,true
-fixture-small-model,q009-kk,kk,0,q009,қысқа жауап,true
-fixture-strong-model,q009-kk,kk,0,q009,қысқа жауап,false
-fixture-small-model,q009-ru,ru,0,q009,короткий ответ,true
-fixture-strong-model,q009-ru,ru,0,q009,короткий ответ,true
-fixture-small-model,q009-en,en,0,q009,short answer,true
-fixture-strong-model,q009-en,en,0,q009,short answer,true
-fixture-small-model,q010-kk,kk,0,q010,11.3,true
-fixture-strong-model,q010-kk,kk,0,q010,11.3,true
-fixture-small-model,q010-ru,ru,0,q010,11.3,false
-fixture-strong-model,q010-ru,ru,0,q010,11.3,false
-fixture-small-model,q010-en,en,0,q010,11.3,true
-fixture-strong-model,q010-en,en,0,q010,11.3,true
-fixture-small-model,q011-kk,kk,0,q011,12.4,false
-fixture-strong-model,q011-kk,kk,0,q011,12.4,true
-fixture-small-model,q011-ru,ru,0,q011,12.4,true
-fixture-strong-model,q011-ru,ru,0,q011,12.4,true
-fixture-small-model,q011-en,en,0,q011,12.4,true
-fixture-strong-model,q011-en,en,0,q011,12.4,true
-fixture-small-model,q012-kk,kk,0,q012,36,false
-fixture-strong-model,q012-kk,kk,0,q012,36,true
-fixture-small-model,q012-ru,ru,0,q012,36,true
-fixture-strong-model,q012-ru,ru,0,q012,36,false
-fixture-small-model,q012-en,en,0,q012,36,true
-fixture-strong-model,q012-en,en,0,q012,36,true
-fixture-small-model,q013-kk,kk,0,q013,қысқа жауап,false
-fixture-strong-model,q013-kk,kk,0,q013,қысқа жауап,true
-fixture-small-model,q013-ru,ru,0,q013,короткий ответ,true
-fixture-strong-model,q013-ru,ru,0,q013,короткий ответ,true
-fixture-small-model,q013-en,en,0,q013,short answer,false
-fixture-strong-model,q013-en,en,0,q013,short answer,true
-fixture-small-model,q014-kk,kk,0,q014,қысқа жауап,true
-fixture-strong-model,q014-kk,kk,0,q014,қысқа жауап,true
-fixture-small-model,q014-ru,ru,0,q014,короткий ответ,false
-fixture-strong-model,q014-ru,ru,0,q014,короткий ответ,true
-fixture-small-model,q014-en,en,0,q014,short answer,true
-fixture-strong-model,q014-en,en,0,q014,short answer,true
-fixture-small-model,q015-kk,kk,0,q015,қысқа жауап,false
-fixture-strong-model,q015-kk,kk,0,q015,қысқа жауап,false
-fixture-small-model,q015-ru,ru,0,q015,короткий ответ,true
-fixture-strong-model,q015-ru,ru,0,q015,короткий ответ,false
-fixture-small-model,q015-en,en,0,q015,short answer,true
-fixture-strong-model,q015-en,en,0,q015,short answer,true
-fixture-small-model,q016-kk,kk,0,q016,17.2,true
-fixture-strong-model,q016-kk,kk,0,q016,17.2,true
-fixture-small-model,q016-ru,ru,0,q016,17.2,true
-fixture-strong-model,q016-ru,ru,0,q016,17.2,true
-fixture-small-model,q016-en,en,0,q016,17.2,false
-fixture-strong-model,q016-en,en,0,q016,17.2,true
-fixture-small-model,q017-kk,kk,0,q017,18.3,false
-fixture-strong-model,q017-kk,kk,0,q017,18.3,true
-fixture-small-model,q017-ru,ru,0,q017,18.3,false
-fixture-strong-model,q017-ru,ru,0,q017,18.3,true
-fixture-small-model,q017-en,en,0,q017,18.3,true
-fixture-strong-model,q017-en,en,0,q017,18.3,true
-fixture-small-model,q018-kk,kk,0,q018,54,true
-fixture-strong-model,q018-kk,kk,0,q018,54,true
-fixture-small-model,q018-ru,ru,0,q018,54,true
-fixture-strong-model,q018-ru,ru,0,q018,54,false
-fixture-small-model,q018-en,en,0,q018,54,true
-fixture-strong-model,q018-en,en,0,q018,54,true
-fixture-small-model,q019-kk,kk,0,q019,қысқа жауап,false
-fixture-strong-model,q019-kk,kk,0,q019,қысқа жауап,false
-fixture-small-model,q019-ru,ru,0,q019,короткий ответ,true
-fixture-strong-model,q019-ru,ru,0,q019,короткий ответ,true
-fixture-small-model,q019-en,en,0,q019,short answer,false
-fixture-strong-model,q019-en,en,0,q019,short answer,true
-fixture-small-model,q020-kk,kk,0,q020,қысқа жауап,false
-fixture-strong-model,q020-kk,kk,0,q020,қысқа жауап,true
-fixture-small-model,q020-ru,ru,0,q020,короткий ответ,false
-fixture-strong-model,q020-ru,ru,0,q020,короткий ответ,false
-fixture-small-model,q020-en,en,0,q020,short answer,false
-fixture-strong-model,q020-en,en,0,q020,short answer,true
-fixture-small-model,q021-kk,kk,0,q021,қысқа жауап,false
-fixture-strong-model,q021-kk,kk,0,q021,қысқа жауап,false
-fixture-small-model,q021-ru,ru,0,q021,короткий ответ,true
-fixture-strong-model,q021-ru,ru,0,q021,короткий ответ,true
-fixture-small-model,q021-en,en,0,q021,short answer,false
-fixture-strong-model,q021-en,en,0,q021,short answer,true
-fixture-small-model,q022-kk,kk,0,q022,23.1,false
-fixture-strong-model,q022-kk,kk,0,q022,23.1,true
-fixture-small-model,q022-ru,ru,0,q022,23.1,true
-fixture-strong-model,q022-ru,ru,0,q022,23.1,true
-fixture-small-model,q022-en,en,0,q022,23.1,true
-fixture-strong-model,q022-en,en,0,q022,23.1,true
-fixture-small-model,q023-kk,kk,0,q023,24.2,false
-fixture-strong-model,q023-kk,kk,0,q023,24.2,false
-fixture-small-model,q023-ru,ru,0,q023,24.2,false
-fixture-strong-model,q023-ru,ru,0,q023,24.2,true
-fixture-small-model,q023-en,en,0,q023,24.2,true
-fixture-strong-model,q023-en,en,0,q023,24.2,true
-fixture-small-model,q024-kk,kk,0,q024,72,true
-fixture-strong-model,q024-kk,kk,0,q024,72,false
-fixture-small-model,q024-ru,ru,0,q024,72,true
-fixture-strong-model,q024-ru,ru,0,q024,72,true
-fixture-small-model,q024-en,en,0,q024,72,false
-fixture-strong-model,q024-en,en,0,q024,72,true
-fixture-small-model,q025-kk,kk,0,q025,қысқа жауап,false
-fixture-strong-model,q025-kk,kk,0,q025,қысқа жауап,true
-fixture-small-model,q025-ru,ru,0,q025,короткий ответ,true
-fixture-strong-model,q025-ru,ru,0,q025,короткий ответ,true
-fixture-small-model,q025-en,en,0,q025,short answer,true
-fixture-strong-model,q025-en,en,0,q025,short answer,true
-fixture-small-model,q026-kk,kk,0,q026,қысқа жауап,false
-fixture-strong-model,q026-kk,kk,0,q026,қысқа жауап,true
-fixture-small-model,q026-ru,ru,0,q026,короткий ответ,true
-fixture-strong-model,q026-ru,ru,0,q026,короткий ответ,false
-fixture-small-model,q026-en,en,0,q026,short answer,true
-fixture-strong-model,q026-en,en,0,q026,short answer,true
-fixture-small-model,q027-kk,kk,0,q027,қысқа жауап,false
-fixture-strong-model,q027-kk,kk,0,q027,қысқа жауап,true
-fixture-small-model,q027-ru,ru,0,q027,короткий ответ,true
-fixture-strong-model,q027-ru,ru,0,q027,короткий ответ,true
-fixture-small-model,q027-en,en,0,q027,short answer,true
-fixture-strong-model,q027-en,en,0,q027,short answer,true
-fixture-small-model,q028-kk,kk,0,q028,29.0,true
-fixture-strong-model,q028-kk,kk,0,q028,29.0,true
-fixture-small-model,q028-ru,ru,0,q028,29.0,false
-fixture-strong-model,q028-ru,ru,0,q028,29.0,true
-fixture-small-model,q028-en,en,0,q028,29.0,false
-fixture-strong-model,q028-en,en,0,q028,29.0,true
-fixture-small-model,q029-kk,kk,0,q029,30.1,true
-fixture-strong-model,q029-kk,kk,0,q029,30.1,true
-fixture-small-model,q029-ru,ru,0,q029,30.1,true
-fixture-strong-model,q029-ru,ru,0,q029,30.1,true
-fixture-small-model,q029-en,en,0,q029,30.1,true
-fixture-strong-model,q029-en,en,0,q029,30.1,true
-fixture-small-model,q030-kk,kk,0,q030,90,true
-fixture-strong-model,q030-kk,kk,0,q030,90,true
-fixture-small-model,q030-ru,ru,0,q030,90,true
-fixture-strong-model,q030-ru,ru,0,q030,90,true
-fixture-small-model,q030-en,en,0,q030,90,true
-fixture-strong-model,q030-en,en,0,q030,90,true
-fixture-small-model,q031-kk,kk,0,q031,қысқа жауап,true
-fixture-strong-model,q031-kk,kk,0,q031,қысқа жауап,true
-fixture-small-model,q031-ru,ru,0,q031,короткий ответ,true
-fixture-strong-model,q031-ru,ru,0,q031,короткий ответ,false
-fixture-small-model,q031-en,en,0,q031,short answer,true
-fixture-strong-model,q031-en,en,0,q031,short answer,true
-fixture-small-model,q032-kk,kk,0,q032,қысқа жауап,true
-fixture-strong-model,q032-kk,kk,0,q032,қысқа жауап,true
-fixture-small-model,q032-ru,ru,0,q032,короткий ответ,true
-fixture-strong-model,q032-ru,ru,0,q032,короткий ответ,true
-fixture-small-model,q032-en,en,0,q032,short answer,true
-fixture-strong-model,q032-en,en,0,q032,short answer,true
-fixture-small-model,q033-kk,kk,0,q033,қысқа жауап,false
-fixture-strong-model,q033-kk,kk,0,q033,қысқа жауап,true
-fixture-small-model,q033-ru,ru,0,q033,короткий ответ,false
-fixture-strong-model,q033-ru,ru,0,q033,короткий ответ,false
-fixture-small-model,q033-en,en,0,q033,short answer,true
-fixture-strong-model,q033-en,en,0,q033,short answer,true
-fixture-small-model,q034-kk,kk,0,q034,35.6,true
-fixture-strong-model,q034-kk,kk,0,q034,35.6,true
-fixture-small-model,q034-ru,ru,0,q034,35.6,true
-fixture-strong-model,q034-ru,ru,0,q034,35.6,true
-fixture-small-model,q034-en,en,0,q034,35.6,true
-fixture-strong-model,q034-en,en,0,q034,35.6,true
-fixture-small-model,q035-kk,kk,0,q035,36.0,false
-fixture-strong-model,q035-kk,kk,0,q035,36.0,true
-fixture-small-model,q035-ru,ru,0,q035,36.0,true
-fixture-strong-model,q035-ru,ru,0,q035,36.0,true
-fixture-small-model,q035-en,en,0,q035,36.0,true
-fixture-strong-model,q035-en,en,0,q035,36.0,false
-fixture-small-model,q036-kk,kk,0,q036,108,true
-fixture-strong-model,q036-kk,kk,0,q036,108,true
-fixture-small-model,q036-ru,ru,0,q036,108,false
-fixture-strong-model,q036-ru,ru,0,q036,108,true
-fixture-small-model,q036-en,en,0,q036,108,true
-fixture-strong-model,q036-en,en,0,q036,108,true
-fixture-small-model,q037-kk,kk,0,q037,қысқа жауап,false
-fixture-strong-model,q037-kk,kk,0,q037,қысқа жауап,true
-fixture-small-model,q037-ru,ru,0,q037,короткий ответ,true
-fixture-strong-model,q037-ru,ru,0,q037,короткий ответ,true
-fixture-small-model,q037-en,en,0,q037,short answer,true
-fixture-strong-model,q037-en,en,0,q037,short answer,true
-fixture-small-model,q038-kk,kk,0,q038,қысқа жауап,false
-fixture-strong-model,q038-kk,kk,0,q038,қысқа жауап,false
-fixture-small-model,q038-ru,ru,0,q038,короткий ответ,true
-fixture-strong-model,q038-ru,ru,0,q038,короткий ответ,true
-fixture-small-model,q038-en,en,0,q038,short answer,true
-fixture-strong-model,q038-en,en,0,q038,short answer,false
-fixture-small-model,q039-kk,kk,0,q039,қысқа жауап,false
-fixture-strong-model,q039-kk,kk,0,q039,қысқа жауап,false
-fixture-small-model,q039-ru,ru,0,q039,короткий ответ,true
-fixture-strong-model,q039-ru,ru,0,q039,короткий ответ,true
-fixture-small-model,q039-en,en,0,q039,short answer,false
-fixture-strong-model,q039-en,en,0,q039,short answer,true
-fixture-small-model,q040-kk,kk,0,q040,41.5,false
-fixture-strong-model,q040-kk,kk,0,q040,41.5,true
-fixture-small-model,q040-ru,ru,0,q040,41.5,false
-fixture-strong-model,q040-ru,ru,0,q040,41.5,true
-fixture-small-model,q040-en,en,0,q040,41.5,true
-fixture-strong-model,q040-en,en,0,q040,41.5,true
-fixture-small-model,q041-kk,kk,0,q041,42.6,true
-fixture-strong-model,q041-kk,kk,0,q041,42.6,false
-fixture-small-model,q041-ru,ru,0,q041,42.6,true
-fixture-strong-model,q041-ru,ru,0,q041,42.6,true
-fixture-small-model,q041-en,en,0,q041,42.6,true
-fixture-strong-model,q041-en,en,0,q041,42.6,true
-fixture-small-model,q042-kk,kk,0,q042,126,true
-fixture-strong-model,q042-kk,kk,0,q042,126,true
-fixture-small-model,q042-ru,ru,0,q042,126,true
-fixture-strong-model,q042-ru,ru,0,q042,126,false
-fixture-small-model,q042-en,en,0,q042,126,true
-fixture-strong-model,q042-en,en,0,q042,126,true
-fixture-small-model,q043-kk,kk,0,q043,қысқа жауап,true
-fixture-strong-model,q043-kk,kk,0,q043,қысқа жауап,true
-fixture-small-model,q043-ru,ru,0,q043,короткий ответ,true
-fixture-strong-model,q043-ru,ru,0,q043,короткий ответ,true
-fixture-small-model,q043-en,en,0,q043,short answer,true
-fixture-strong-model,q043-en,en,0,q043,short answer,true
-fixture-small-model,q044-kk,kk,0,q044,қысқа жауап,true
-fixture-strong-model,q044-kk,kk,0,q044,қысқа жауап,false
-fixture-small-model,q044-ru,ru,0,q044,короткий ответ,false
-fixture-strong-model,q044-ru,ru,0,q044,короткий ответ,false
-fixture-small-model,q044-en,en,0,q044,short answer,true
-fixture-strong-model,q044-en,en,0,q044,short answer,true
-fixture-small-model,q045-kk,kk,0,q045,қысқа жауап,false
-fixture-strong-model,q045-kk,kk,0,q045,қысқа жауап,false
-fixture-small-model,q045-ru,ru,0,q045,короткий ответ,true
-fixture-strong-model,q045-ru,ru,0,q045,короткий ответ,false
-fixture-small-model,q045-en,en,0,q045,short answer,false
-fixture-strong-model,q045-en,en,0,q045,short answer,true
-fixture-small-model,q046-kk,kk,0,q046,47.4,false
-fixture-strong-model,q046-kk,kk,0,q046,47.4,true
-fixture-small-model,q046-ru,ru,0,q046,47.4,true
-fixture-strong-model,q046-ru,ru,0,q046,47.4,true
-fixture-small-model,q046-en,en,0,q046,47.4,false
-fixture-strong-model,q046-en,en,0,q046,47.4,true
-fixture-small-model,q047-kk,kk,0,q047,48.5,true
-fixture-strong-model,q047-kk,kk,0,q047,48.5,false
-fixture-small-model,q047-ru,ru,0,q047,48.5,true
-fixture-strong-model,q047-ru,ru,0,q047,48.5,true
-fixture-small-model,q047-en,en,0,q047,48.5,false
-fixture-strong-model,q047-en,en,0,q047,48.5,true
-fixture-small-model,q048-kk,kk,0,q048,144,true
-fixture-strong-model,q048-kk,kk,0,q048,144,true
-fixture-small-model,q048-ru,ru,0,q048,144,true
-fixture-strong-model,q048-ru,ru,0,q048,144,false
-fixture-small-model,q048-en,en,0,q048,144,false
-fixture-strong-model,q048-en,en,0,q048,144,true
-fixture-small-model,q049-kk,kk,0,q049,қысқа жауап,true
-fixture-strong-model,q049-kk,kk,0,q049,қысқа жауап,true
-fixture-small-model,q049-ru,ru,0,q049,короткий ответ,true
-fixture-strong-model,q049-ru,ru,0,q049,короткий ответ,true
-fixture-small-model,q049-en,en,0,q049,short answer,true
-fixture-strong-model,q049-en,en,0,q049,short answer,false
-fixture-small-model,q050-kk,kk,0,q050,қысқа жауап,false
-fixture-strong-model,q050-kk,kk,0,q050,қысқа жауап,true
-fixture-small-model,q050-ru,ru,0,q050,короткий ответ,true
-fixture-strong-model,q050-ru,ru,0,q050,короткий ответ,true
-fixture-small-model,q050-en,en,0,q050,short answer,true
-fixture-strong-model,q050-en,en,0,q050,short answer,true
-fixture-small-model,q051-kk,kk,0,q051,қысқа жауап,false
-fixture-strong-model,q051-kk,kk,0,q051,қысқа жауап,false
-fixture-small-model,q051-ru,ru,0,q051,короткий ответ,false
-fixture-strong-model,q051-ru,ru,0,q051,короткий ответ,true
-fixture-small-model,q051-en,en,0,q051,short answer,true
-fixture-strong-model,q051-en,en,0,q051,short answer,true
-fixture-small-model,q052-kk,kk,0,q052,53.3,false
-fixture-strong-model,q052-kk,kk,0,q052,53.3,false
-fixture-small-model,q052-ru,ru,0,q052,53.3,true
-fixture-strong-model,q052-ru,ru,0,q052,53.3,true
-fixture-small-model,q052-en,en,0,q052,53.3,true
-fixture-strong-model,q052-en,en,0,q052,53.3,true
-fixture-small-model,q053-kk,kk,0,q053,54.4,true
-fixture-strong-model,q053-kk,kk,0,q053,54.4,false
-fixture-small-model,q053-ru,ru,0,q053,54.4,true
-fixture-strong-model,q053-ru,ru,0,q053,54.4,false
-fixture-small-model,q053-en,en,0,q053,54.4,true
-fixture-strong-model,q053-en,en,0,q053,54.4,true
-fixture-small-model,q054-kk,kk,0,q054,162,true
-fixture-strong-model,q054-kk,kk,0,q054,162,true
-fixture-small-model,q054-ru,ru,0,q054,162,true
-fixture-strong-model,q054-ru,ru,0,q054,162,true
-fixture-small-model,q054-en,en,0,q054,162,true
-fixture-strong-model,q054-en,en,0,q054,162,true
-fixture-small-model,q055-kk,kk,0,q055,қысқа жауап,true
-fixture-strong-model,q055-kk,kk,0,q055,қысқа жауап,true
-fixture-small-model,q055-ru,ru,0,q055,короткий ответ,false
-fixture-strong-model,q055-ru,ru,0,q055,короткий ответ,true
-fixture-small-model,q055-en,en,0,q055,short answer,true
-fixture-strong-model,q055-en,en,0,q055,short answer,true
-fixture-small-model,q056-kk,kk,0,q056,қысқа жауап,false
-fixture-strong-model,q056-kk,kk,0,q056,қысқа жауап,true
-fixture-small-model,q056-ru,ru,0,q056,короткий ответ,false
-fixture-strong-model,q056-ru,ru,0,q056,короткий ответ,true
-fixture-small-model,q056-en,en,0,q056,short answer,true
-fixture-strong-model,q056-en,en,0,q056,short answer,true
-fixture-small-model,q057-kk,kk,0,q057,қысқа жауап,true
-fixture-strong-model,q057-kk,kk,0,q057,қысқа жауап,false
-fixture-small-model,q057-ru,ru,0,q057,короткий ответ,true
-fixture-strong-model,q057-ru,ru,0,q057,короткий ответ,false
-fixture-small-model,q057-en,en,0,q057,short answer,true
-fixture-strong-model,q057-en,en,0,q057,short answer,true
-fixture-small-model,q058-kk,kk,0,q058,59.2,true
-fixture-strong-model,q058-kk,kk,0,q058,59.2,false
-fixture-small-model,q058-ru,ru,0,q058,59.2,false
-fixture-strong-model,q058-ru,ru,0,q058,59.2,true
-fixture-small-model,q058-en,en,0,q058,59.2,true
-fixture-strong-model,q058-en,en,0,q058,59.2,true
-fixture-small-model,q059-kk,kk,0,q059,60.3,true
-fixture-strong-model,q059-kk,kk,0,q059,60.3,true
-fixture-small-model,q059-ru,ru,0,q059,60.3,true
-fixture-strong-model,q059-ru,ru,0,q059,60.3,true
-fixture-small-model,q059-en,en,0,q059,60.3,true
-fixture-strong-model,q059-en,en,0,q059,60.3,true
+model,prompt_id,lang,rep,q_id,parsed_answer,is_correct,parse_status
+fixture-small-model,q000-kk,kk,0,q000,0,true,graded
+fixture-strong-model,q000-kk,kk,0,q000,0,true,graded
+fixture-small-model,q000-ru,ru,0,q000,0,true,graded
+fixture-strong-model,q000-ru,ru,0,q000,0,false,graded
+fixture-small-model,q000-en,en,0,q000,0,true,graded
+fixture-strong-model,q000-en,en,0,q000,0,false,graded
+fixture-small-model,q001-kk,kk,0,q001,қысқа жауап,false,graded
+fixture-strong-model,q001-kk,kk,0,q001,қысқа жауап,false,graded
+fixture-small-model,q001-ru,ru,0,q001,короткий ответ,true,graded
+fixture-strong-model,q001-ru,ru,0,q001,короткий ответ,true,graded
+fixture-small-model,q001-en,en,0,q001,short answer,true,graded
+fixture-strong-model,q001-en,en,0,q001,short answer,true,graded
+fixture-small-model,q002-kk,kk,0,q002,қысқа жауап,false,graded
+fixture-strong-model,q002-kk,kk,0,q002,қысқа жауап,false,graded
+fixture-small-model,q002-ru,ru,0,q002,короткий ответ,true,graded
+fixture-strong-model,q002-ru,ru,0,q002,короткий ответ,false,graded
+fixture-small-model,q002-en,en,0,q002,short answer,false,graded
+fixture-strong-model,q002-en,en,0,q002,short answer,false,graded
+fixture-small-model,q003-kk,kk,0,q003,қысқа жауап,false,graded
+fixture-strong-model,q003-kk,kk,0,q003,қысқа жауап,false,graded
+fixture-small-model,q003-ru,ru,0,q003,короткий ответ,true,graded
+fixture-strong-model,q003-ru,ru,0,q003,короткий ответ,true,graded
+fixture-small-model,q003-en,en,0,q003,short answer,false,graded
+fixture-strong-model,q003-en,en,0,q003,short answer,true,graded
+fixture-small-model,q004-kk,kk,0,q004,5.4,true,graded
+fixture-strong-model,q004-kk,kk,0,q004,5.4,false,graded
+fixture-small-model,q004-ru,ru,0,q004,5.4,false,graded
+fixture-strong-model,q004-ru,ru,0,q004,5.4,true,graded
+fixture-small-model,q004-en,en,0,q004,5.4,true,graded
+fixture-strong-model,q004-en,en,0,q004,5.4,true,graded
+fixture-small-model,q005-kk,kk,0,q005,6.5,true,graded
+fixture-strong-model,q005-kk,kk,0,q005,6.5,false,graded
+fixture-small-model,q005-ru,ru,0,q005,6.5,false,graded
+fixture-strong-model,q005-ru,ru,0,q005,6.5,true,graded
+fixture-small-model,q005-en,en,0,q005,6.5,true,graded
+fixture-strong-model,q005-en,en,0,q005,6.5,false,graded
+fixture-small-model,q006-kk,kk,0,q006,18,true,graded
+fixture-strong-model,q006-kk,kk,0,q006,18,true,graded
+fixture-small-model,q006-ru,ru,0,q006,18,true,graded
+fixture-strong-model,q006-ru,ru,0,q006,18,true,graded
+fixture-small-model,q006-en,en,0,q006,18,false,graded
+fixture-strong-model,q006-en,en,0,q006,18,true,graded
+fixture-small-model,q007-kk,kk,0,q007,қысқа жауап,false,graded
+fixture-strong-model,q007-kk,kk,0,q007,қысқа жауап,false,graded
+fixture-small-model,q007-ru,ru,0,q007,короткий ответ,true,graded
+fixture-strong-model,q007-ru,ru,0,q007,короткий ответ,true,graded
+fixture-small-model,q007-en,en,0,q007,short answer,true,graded
+fixture-strong-model,q007-en,en,0,q007,short answer,true,graded
+fixture-small-model,q008-kk,kk,0,q008,қысқа жауап,true,graded
+fixture-strong-model,q008-kk,kk,0,q008,қысқа жауап,true,graded
+fixture-small-model,q008-ru,ru,0,q008,короткий ответ,true,graded
+fixture-strong-model,q008-ru,ru,0,q008,короткий ответ,true,graded
+fixture-small-model,q008-en,en,0,q008,short answer,true,graded
+fixture-strong-model,q008-en,en,0,q008,short answer,true,graded
+fixture-small-model,q009-kk,kk,0,q009,қысқа жауап,true,graded
+fixture-strong-model,q009-kk,kk,0,q009,қысқа жауап,false,graded
+fixture-small-model,q009-ru,ru,0,q009,короткий ответ,true,graded
+fixture-strong-model,q009-ru,ru,0,q009,короткий ответ,true,graded
+fixture-small-model,q009-en,en,0,q009,short answer,true,graded
+fixture-strong-model,q009-en,en,0,q009,short answer,true,graded
+fixture-small-model,q010-kk,kk,0,q010,11.3,true,graded
+fixture-strong-model,q010-kk,kk,0,q010,11.3,true,graded
+fixture-small-model,q010-ru,ru,0,q010,11.3,false,graded
+fixture-strong-model,q010-ru,ru,0,q010,11.3,false,graded
+fixture-small-model,q010-en,en,0,q010,11.3,true,graded
+fixture-strong-model,q010-en,en,0,q010,11.3,true,graded
+fixture-small-model,q011-kk,kk,0,q011,12.4,false,graded
+fixture-strong-model,q011-kk,kk,0,q011,12.4,true,graded
+fixture-small-model,q011-ru,ru,0,q011,12.4,true,graded
+fixture-strong-model,q011-ru,ru,0,q011,12.4,true,graded
+fixture-small-model,q011-en,en,0,q011,12.4,true,graded
+fixture-strong-model,q011-en,en,0,q011,12.4,true,graded
+fixture-small-model,q012-kk,kk,0,q012,36,false,graded
+fixture-strong-model,q012-kk,kk,0,q012,36,true,graded
+fixture-small-model,q012-ru,ru,0,q012,36,true,graded
+fixture-strong-model,q012-ru,ru,0,q012,36,false,graded
+fixture-small-model,q012-en,en,0,q012,36,true,graded
+fixture-strong-model,q012-en,en,0,q012,36,true,graded
+fixture-small-model,q013-kk,kk,0,q013,қысқа жауап,false,graded
+fixture-strong-model,q013-kk,kk,0,q013,қысқа жауап,true,graded
+fixture-small-model,q013-ru,ru,0,q013,короткий ответ,true,graded
+fixture-strong-model,q013-ru,ru,0,q013,короткий ответ,true,graded
+fixture-small-model,q013-en,en,0,q013,short answer,false,graded
+fixture-strong-model,q013-en,en,0,q013,short answer,true,graded
+fixture-small-model,q014-kk,kk,0,q014,қысқа жауап,true,graded
+fixture-strong-model,q014-kk,kk,0,q014,қысқа жауап,true,graded
+fixture-small-model,q014-ru,ru,0,q014,короткий ответ,false,graded
+fixture-strong-model,q014-ru,ru,0,q014,короткий ответ,true,graded
+fixture-small-model,q014-en,en,0,q014,short answer,true,graded
+fixture-strong-model,q014-en,en,0,q014,short answer,true,graded
+fixture-small-model,q015-kk,kk,0,q015,қысқа жауап,false,graded
+fixture-strong-model,q015-kk,kk,0,q015,қысқа жауап,false,graded
+fixture-small-model,q015-ru,ru,0,q015,короткий ответ,true,graded
+fixture-strong-model,q015-ru,ru,0,q015,короткий ответ,false,graded
+fixture-small-model,q015-en,en,0,q015,short answer,true,graded
+fixture-strong-model,q015-en,en,0,q015,short answer,true,graded
+fixture-small-model,q016-kk,kk,0,q016,17.2,true,graded
+fixture-strong-model,q016-kk,kk,0,q016,17.2,true,graded
+fixture-small-model,q016-ru,ru,0,q016,17.2,true,graded
+fixture-strong-model,q016-ru,ru,0,q016,17.2,true,graded
+fixture-small-model,q016-en,en,0,q016,17.2,false,graded
+fixture-strong-model,q016-en,en,0,q016,17.2,true,graded
+fixture-small-model,q017-kk,kk,0,q017,18.3,false,graded
+fixture-strong-model,q017-kk,kk,0,q017,18.3,true,graded
+fixture-small-model,q017-ru,ru,0,q017,18.3,false,graded
+fixture-strong-model,q017-ru,ru,0,q017,18.3,true,graded
+fixture-small-model,q017-en,en,0,q017,18.3,true,graded
+fixture-strong-model,q017-en,en,0,q017,18.3,true,graded
+fixture-small-model,q018-kk,kk,0,q018,54,true,graded
+fixture-strong-model,q018-kk,kk,0,q018,54,true,graded
+fixture-small-model,q018-ru,ru,0,q018,54,true,graded
+fixture-strong-model,q018-ru,ru,0,q018,54,false,graded
+fixture-small-model,q018-en,en,0,q018,54,true,graded
+fixture-strong-model,q018-en,en,0,q018,54,true,graded
+fixture-small-model,q019-kk,kk,0,q019,қысқа жауап,false,graded
+fixture-strong-model,q019-kk,kk,0,q019,қысқа жауап,false,graded
+fixture-small-model,q019-ru,ru,0,q019,короткий ответ,true,graded
+fixture-strong-model,q019-ru,ru,0,q019,короткий ответ,true,graded
+fixture-small-model,q019-en,en,0,q019,short answer,false,graded
+fixture-strong-model,q019-en,en,0,q019,short answer,true,graded
+fixture-small-model,q020-kk,kk,0,q020,қысқа жауап,false,graded
+fixture-strong-model,q020-kk,kk,0,q020,қысқа жауап,true,graded
+fixture-small-model,q020-ru,ru,0,q020,короткий ответ,false,graded
+fixture-strong-model,q020-ru,ru,0,q020,короткий ответ,false,graded
+fixture-small-model,q020-en,en,0,q020,short answer,false,graded
+fixture-strong-model,q020-en,en,0,q020,short answer,true,graded
+fixture-small-model,q021-kk,kk,0,q021,қысқа жауап,false,graded
+fixture-strong-model,q021-kk,kk,0,q021,қысқа жауап,false,graded
+fixture-small-model,q021-ru,ru,0,q021,короткий ответ,true,graded
+fixture-strong-model,q021-ru,ru,0,q021,короткий ответ,true,graded
+fixture-small-model,q021-en,en,0,q021,short answer,false,graded
+fixture-strong-model,q021-en,en,0,q021,short answer,true,graded
+fixture-small-model,q022-kk,kk,0,q022,23.1,false,graded
+fixture-strong-model,q022-kk,kk,0,q022,23.1,true,graded
+fixture-small-model,q022-ru,ru,0,q022,23.1,true,graded
+fixture-strong-model,q022-ru,ru,0,q022,23.1,true,graded
+fixture-small-model,q022-en,en,0,q022,23.1,true,graded
+fixture-strong-model,q022-en,en,0,q022,23.1,true,graded
+fixture-small-model,q023-kk,kk,0,q023,24.2,false,graded
+fixture-strong-model,q023-kk,kk,0,q023,24.2,false,graded
+fixture-small-model,q023-ru,ru,0,q023,24.2,false,graded
+fixture-strong-model,q023-ru,ru,0,q023,24.2,true,graded
+fixture-small-model,q023-en,en,0,q023,24.2,true,graded
+fixture-strong-model,q023-en,en,0,q023,24.2,true,graded
+fixture-small-model,q024-kk,kk,0,q024,72,true,graded
+fixture-strong-model,q024-kk,kk,0,q024,72,false,graded
+fixture-small-model,q024-ru,ru,0,q024,72,true,graded
+fixture-strong-model,q024-ru,ru,0,q024,72,true,graded
+fixture-small-model,q024-en,en,0,q024,72,false,graded
+fixture-strong-model,q024-en,en,0,q024,72,true,graded
+fixture-small-model,q025-kk,kk,0,q025,қысқа жауап,false,graded
+fixture-strong-model,q025-kk,kk,0,q025,қысқа жауап,true,graded
+fixture-small-model,q025-ru,ru,0,q025,короткий ответ,true,graded
+fixture-strong-model,q025-ru,ru,0,q025,короткий ответ,true,graded
+fixture-small-model,q025-en,en,0,q025,short answer,true,graded
+fixture-strong-model,q025-en,en,0,q025,short answer,true,graded
+fixture-small-model,q026-kk,kk,0,q026,қысқа жауап,false,graded
+fixture-strong-model,q026-kk,kk,0,q026,қысқа жауап,true,graded
+fixture-small-model,q026-ru,ru,0,q026,короткий ответ,true,graded
+fixture-strong-model,q026-ru,ru,0,q026,короткий ответ,false,graded
+fixture-small-model,q026-en,en,0,q026,short answer,true,graded
+fixture-strong-model,q026-en,en,0,q026,short answer,true,graded
+fixture-small-model,q027-kk,kk,0,q027,қысқа жауап,false,graded
+fixture-strong-model,q027-kk,kk,0,q027,қысқа жауап,true,graded
+fixture-small-model,q027-ru,ru,0,q027,короткий ответ,true,graded
+fixture-strong-model,q027-ru,ru,0,q027,короткий ответ,true,graded
+fixture-small-model,q027-en,en,0,q027,short answer,true,graded
+fixture-strong-model,q027-en,en,0,q027,short answer,true,graded
+fixture-small-model,q028-kk,kk,0,q028,29.0,true,graded
+fixture-strong-model,q028-kk,kk,0,q028,29.0,true,graded
+fixture-small-model,q028-ru,ru,0,q028,29.0,false,graded
+fixture-strong-model,q028-ru,ru,0,q028,29.0,true,graded
+fixture-small-model,q028-en,en,0,q028,29.0,false,graded
+fixture-strong-model,q028-en,en,0,q028,29.0,true,graded
+fixture-small-model,q029-kk,kk,0,q029,30.1,true,graded
+fixture-strong-model,q029-kk,kk,0,q029,30.1,true,graded
+fixture-small-model,q029-ru,ru,0,q029,30.1,true,graded
+fixture-strong-model,q029-ru,ru,0,q029,30.1,true,graded
+fixture-small-model,q029-en,en,0,q029,30.1,true,graded
+fixture-strong-model,q029-en,en,0,q029,30.1,true,graded
+fixture-small-model,q030-kk,kk,0,q030,90,true,graded
+fixture-strong-model,q030-kk,kk,0,q030,90,true,graded
+fixture-small-model,q030-ru,ru,0,q030,90,true,graded
+fixture-strong-model,q030-ru,ru,0,q030,90,true,graded
+fixture-small-model,q030-en,en,0,q030,90,true,graded
+fixture-strong-model,q030-en,en,0,q030,90,true,graded
+fixture-small-model,q031-kk,kk,0,q031,қысқа жауап,true,graded
+fixture-strong-model,q031-kk,kk,0,q031,қысқа жауап,true,graded
+fixture-small-model,q031-ru,ru,0,q031,короткий ответ,true,graded
+fixture-strong-model,q031-ru,ru,0,q031,короткий ответ,false,graded
+fixture-small-model,q031-en,en,0,q031,short answer,true,graded
+fixture-strong-model,q031-en,en,0,q031,short answer,true,graded
+fixture-small-model,q032-kk,kk,0,q032,қысқа жауап,true,graded
+fixture-strong-model,q032-kk,kk,0,q032,қысқа жауап,true,graded
+fixture-small-model,q032-ru,ru,0,q032,короткий ответ,true,graded
+fixture-strong-model,q032-ru,ru,0,q032,короткий ответ,true,graded
+fixture-small-model,q032-en,en,0,q032,short answer,true,graded
+fixture-strong-model,q032-en,en,0,q032,short answer,true,graded
+fixture-small-model,q033-kk,kk,0,q033,қысқа жауап,false,graded
+fixture-strong-model,q033-kk,kk,0,q033,қысқа жауап,true,graded
+fixture-small-model,q033-ru,ru,0,q033,короткий ответ,false,graded
+fixture-strong-model,q033-ru,ru,0,q033,короткий ответ,false,graded
+fixture-small-model,q033-en,en,0,q033,short answer,true,graded
+fixture-strong-model,q033-en,en,0,q033,short answer,true,graded
+fixture-small-model,q034-kk,kk,0,q034,35.6,true,graded
+fixture-strong-model,q034-kk,kk,0,q034,35.6,true,graded
+fixture-small-model,q034-ru,ru,0,q034,35.6,true,graded
+fixture-strong-model,q034-ru,ru,0,q034,35.6,true,graded
+fixture-small-model,q034-en,en,0,q034,35.6,true,graded
+fixture-strong-model,q034-en,en,0,q034,35.6,true,graded
+fixture-small-model,q035-kk,kk,0,q035,36.0,false,graded
+fixture-strong-model,q035-kk,kk,0,q035,36.0,true,graded
+fixture-small-model,q035-ru,ru,0,q035,36.0,true,graded
+fixture-strong-model,q035-ru,ru,0,q035,36.0,true,graded
+fixture-small-model,q035-en,en,0,q035,36.0,true,graded
+fixture-strong-model,q035-en,en,0,q035,36.0,false,graded
+fixture-small-model,q036-kk,kk,0,q036,108,true,graded
+fixture-strong-model,q036-kk,kk,0,q036,108,true,graded
+fixture-small-model,q036-ru,ru,0,q036,108,false,graded
+fixture-strong-model,q036-ru,ru,0,q036,108,true,graded
+fixture-small-model,q036-en,en,0,q036,108,true,graded
+fixture-strong-model,q036-en,en,0,q036,108,true,graded
+fixture-small-model,q037-kk,kk,0,q037,қысқа жауап,false,graded
+fixture-strong-model,q037-kk,kk,0,q037,қысқа жауап,true,graded
+fixture-small-model,q037-ru,ru,0,q037,короткий ответ,true,graded
+fixture-strong-model,q037-ru,ru,0,q037,короткий ответ,true,graded
+fixture-small-model,q037-en,en,0,q037,short answer,true,graded
+fixture-strong-model,q037-en,en,0,q037,short answer,true,graded
+fixture-small-model,q038-kk,kk,0,q038,қысқа жауап,false,graded
+fixture-strong-model,q038-kk,kk,0,q038,қысқа жауап,false,graded
+fixture-small-model,q038-ru,ru,0,q038,короткий ответ,true,graded
+fixture-strong-model,q038-ru,ru,0,q038,короткий ответ,true,graded
+fixture-small-model,q038-en,en,0,q038,short answer,true,graded
+fixture-strong-model,q038-en,en,0,q038,short answer,false,graded
+fixture-small-model,q039-kk,kk,0,q039,қысқа жауап,false,graded
+fixture-strong-model,q039-kk,kk,0,q039,қысқа жауап,false,graded
+fixture-small-model,q039-ru,ru,0,q039,короткий ответ,true,graded
+fixture-strong-model,q039-ru,ru,0,q039,короткий ответ,true,graded
+fixture-small-model,q039-en,en,0,q039,short answer,false,graded
+fixture-strong-model,q039-en,en,0,q039,short answer,true,graded
+fixture-small-model,q040-kk,kk,0,q040,41.5,false,graded
+fixture-strong-model,q040-kk,kk,0,q040,41.5,true,graded
+fixture-small-model,q040-ru,ru,0,q040,41.5,false,graded
+fixture-strong-model,q040-ru,ru,0,q040,41.5,true,graded
+fixture-small-model,q040-en,en,0,q040,41.5,true,graded
+fixture-strong-model,q040-en,en,0,q040,41.5,true,graded
+fixture-small-model,q041-kk,kk,0,q041,42.6,true,graded
+fixture-strong-model,q041-kk,kk,0,q041,42.6,false,graded
+fixture-small-model,q041-ru,ru,0,q041,42.6,true,graded
+fixture-strong-model,q041-ru,ru,0,q041,42.6,true,graded
+fixture-small-model,q041-en,en,0,q041,42.6,true,graded
+fixture-strong-model,q041-en,en,0,q041,42.6,true,graded
+fixture-small-model,q042-kk,kk,0,q042,126,true,graded
+fixture-strong-model,q042-kk,kk,0,q042,126,true,graded
+fixture-small-model,q042-ru,ru,0,q042,126,true,graded
+fixture-strong-model,q042-ru,ru,0,q042,126,false,graded
+fixture-small-model,q042-en,en,0,q042,126,true,graded
+fixture-strong-model,q042-en,en,0,q042,126,true,graded
+fixture-small-model,q043-kk,kk,0,q043,қысқа жауап,true,graded
+fixture-strong-model,q043-kk,kk,0,q043,қысқа жауап,true,graded
+fixture-small-model,q043-ru,ru,0,q043,короткий ответ,true,graded
+fixture-strong-model,q043-ru,ru,0,q043,короткий ответ,true,graded
+fixture-small-model,q043-en,en,0,q043,short answer,true,graded
+fixture-strong-model,q043-en,en,0,q043,short answer,true,graded
+fixture-small-model,q044-kk,kk,0,q044,қысқа жауап,true,graded
+fixture-strong-model,q044-kk,kk,0,q044,қысқа жауап,false,graded
+fixture-small-model,q044-ru,ru,0,q044,короткий ответ,false,graded
+fixture-strong-model,q044-ru,ru,0,q044,короткий ответ,false,graded
+fixture-small-model,q044-en,en,0,q044,short answer,true,graded
+fixture-strong-model,q044-en,en,0,q044,short answer,true,graded
+fixture-small-model,q045-kk,kk,0,q045,қысқа жауап,false,graded
+fixture-strong-model,q045-kk,kk,0,q045,қысқа жауап,false,graded
+fixture-small-model,q045-ru,ru,0,q045,короткий ответ,true,graded
+fixture-strong-model,q045-ru,ru,0,q045,короткий ответ,false,graded
+fixture-small-model,q045-en,en,0,q045,short answer,false,graded
+fixture-strong-model,q045-en,en,0,q045,short answer,true,graded
+fixture-small-model,q046-kk,kk,0,q046,47.4,false,graded
+fixture-strong-model,q046-kk,kk,0,q046,47.4,true,graded
+fixture-small-model,q046-ru,ru,0,q046,47.4,true,graded
+fixture-strong-model,q046-ru,ru,0,q046,47.4,true,graded
+fixture-small-model,q046-en,en,0,q046,47.4,false,graded
+fixture-strong-model,q046-en,en,0,q046,47.4,true,graded
+fixture-small-model,q047-kk,kk,0,q047,48.5,true,graded
+fixture-strong-model,q047-kk,kk,0,q047,48.5,false,graded
+fixture-small-model,q047-ru,ru,0,q047,48.5,true,graded
+fixture-strong-model,q047-ru,ru,0,q047,48.5,true,graded
+fixture-small-model,q047-en,en,0,q047,48.5,false,graded
+fixture-strong-model,q047-en,en,0,q047,48.5,true,graded
+fixture-small-model,q048-kk,kk,0,q048,144,true,graded
+fixture-strong-model,q048-kk,kk,0,q048,144,true,graded
+fixture-small-model,q048-ru,ru,0,q048,144,true,graded
+fixture-strong-model,q048-ru,ru,0,q048,144,false,graded
+fixture-small-model,q048-en,en,0,q048,144,false,graded
+fixture-strong-model,q048-en,en,0,q048,144,true,graded
+fixture-small-model,q049-kk,kk,0,q049,қысқа жауап,true,graded
+fixture-strong-model,q049-kk,kk,0,q049,қысқа жауап,true,graded
+fixture-small-model,q049-ru,ru,0,q049,короткий ответ,true,graded
+fixture-strong-model,q049-ru,ru,0,q049,короткий ответ,true,graded
+fixture-small-model,q049-en,en,0,q049,short answer,true,graded
+fixture-strong-model,q049-en,en,0,q049,short answer,false,graded
+fixture-small-model,q050-kk,kk,0,q050,қысқа жауап,false,graded
+fixture-strong-model,q050-kk,kk,0,q050,қысқа жауап,true,graded
+fixture-small-model,q050-ru,ru,0,q050,короткий ответ,true,graded
+fixture-strong-model,q050-ru,ru,0,q050,короткий ответ,true,graded
+fixture-small-model,q050-en,en,0,q050,short answer,true,graded
+fixture-strong-model,q050-en,en,0,q050,short answer,true,graded
+fixture-small-model,q051-kk,kk,0,q051,қысқа жауап,false,graded
+fixture-strong-model,q051-kk,kk,0,q051,қысқа жауап,false,graded
+fixture-small-model,q051-ru,ru,0,q051,короткий ответ,false,graded
+fixture-strong-model,q051-ru,ru,0,q051,короткий ответ,true,graded
+fixture-small-model,q051-en,en,0,q051,short answer,true,graded
+fixture-strong-model,q051-en,en,0,q051,short answer,true,graded
+fixture-small-model,q052-kk,kk,0,q052,53.3,false,graded
+fixture-strong-model,q052-kk,kk,0,q052,53.3,false,graded
+fixture-small-model,q052-ru,ru,0,q052,53.3,true,graded
+fixture-strong-model,q052-ru,ru,0,q052,53.3,true,graded
+fixture-small-model,q052-en,en,0,q052,53.3,true,graded
+fixture-strong-model,q052-en,en,0,q052,53.3,true,graded
+fixture-small-model,q053-kk,kk,0,q053,54.4,true,graded
+fixture-strong-model,q053-kk,kk,0,q053,54.4,false,graded
+fixture-small-model,q053-ru,ru,0,q053,54.4,true,graded
+fixture-strong-model,q053-ru,ru,0,q053,54.4,false,graded
+fixture-small-model,q053-en,en,0,q053,54.4,true,graded
+fixture-strong-model,q053-en,en,0,q053,54.4,true,graded
+fixture-small-model,q054-kk,kk,0,q054,162,true,graded
+fixture-strong-model,q054-kk,kk,0,q054,162,true,graded
+fixture-small-model,q054-ru,ru,0,q054,162,true,graded
+fixture-strong-model,q054-ru,ru,0,q054,162,true,graded
+fixture-small-model,q054-en,en,0,q054,162,true,graded
+fixture-strong-model,q054-en,en,0,q054,162,true,graded
+fixture-small-model,q055-kk,kk,0,q055,қысқа жауап,true,graded
+fixture-strong-model,q055-kk,kk,0,q055,қысқа жауап,true,graded
+fixture-small-model,q055-ru,ru,0,q055,короткий ответ,false,graded
+fixture-strong-model,q055-ru,ru,0,q055,короткий ответ,true,graded
+fixture-small-model,q055-en,en,0,q055,short answer,true,graded
+fixture-strong-model,q055-en,en,0,q055,short answer,true,graded
+fixture-small-model,q056-kk,kk,0,q056,қысқа жауап,false,graded
+fixture-strong-model,q056-kk,kk,0,q056,қысқа жауап,true,graded
+fixture-small-model,q056-ru,ru,0,q056,короткий ответ,false,graded
+fixture-strong-model,q056-ru,ru,0,q056,короткий ответ,true,graded
+fixture-small-model,q056-en,en,0,q056,short answer,true,graded
+fixture-strong-model,q056-en,en,0,q056,short answer,true,graded
+fixture-small-model,q057-kk,kk,0,q057,қысқа жауап,true,graded
+fixture-strong-model,q057-kk,kk,0,q057,қысқа жауап,false,graded
+fixture-small-model,q057-ru,ru,0,q057,короткий ответ,true,graded
+fixture-strong-model,q057-ru,ru,0,q057,короткий ответ,false,graded
+fixture-small-model,q057-en,en,0,q057,short answer,true,graded
+fixture-strong-model,q057-en,en,0,q057,short answer,true,graded
+fixture-small-model,q058-kk,kk,0,q058,59.2,true,graded
+fixture-strong-model,q058-kk,kk,0,q058,59.2,false,graded
+fixture-small-model,q058-ru,ru,0,q058,59.2,false,graded
+fixture-strong-model,q058-ru,ru,0,q058,59.2,true,graded
+fixture-small-model,q058-en,en,0,q058,59.2,true,graded
+fixture-strong-model,q058-en,en,0,q058,59.2,true,graded
+fixture-small-model,q059-kk,kk,0,q059,60.3,true,graded
+fixture-strong-model,q059-kk,kk,0,q059,60.3,true,graded
+fixture-small-model,q059-ru,ru,0,q059,60.3,true,graded
+fixture-strong-model,q059-ru,ru,0,q059,60.3,true,graded
+fixture-small-model,q059-en,en,0,q059,60.3,true,graded
+fixture-strong-model,q059-en,en,0,q059,60.3,true,graded

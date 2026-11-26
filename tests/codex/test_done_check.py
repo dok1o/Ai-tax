@@ -34,12 +34,14 @@ def _complete_fixture() -> tuple[list[dict[str, str]], ...]:
             for rep in ("0", "1"):
                 key = (model, prompt_id, lang, rep)
                 responses.append(dict(zip(("model", "prompt_id", "lang", "rep", "q_id"), (*key, "q1"))))
+                responses[-1].update(input_tokens="3", output_tokens="1", usage_available="true")
                 labels.append({
                     "model": model,
                     "prompt_id": prompt_id,
                     "lang": lang,
                     "rep": rep,
                     "parsed_answer": "4",
+                    "parse_status": "graded",
                     "is_correct": "true",
                 })
                 log = {

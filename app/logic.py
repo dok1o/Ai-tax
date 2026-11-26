@@ -91,7 +91,7 @@ EXAMPLE_PHRASES = {
 AD_HOC_PROMPT = {
     "prompt_id": "ad-hoc",
     "q_id": "ad-hoc",
-    "answer_type": "short_text",
+    "answer_type": "short",
 }
 
 

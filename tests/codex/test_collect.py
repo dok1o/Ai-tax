@@ -43,6 +43,18 @@ def test_cache_hit_skips_second_call_and_preserves_one_csv_row(tmp_path: Path) -
         assert len(list(csv.DictReader(source))) == 1
 
 
+def test_missing_provider_usage_preserves_the_answer_on_restart(tmp_path: Path) -> None:
+    model = DEFAULT_MODELS[0]
+    client = FakeClient({(model, "q1-kk", "kk", 0): [Completion("4", input_tokens=3)]})
+    path = tmp_path / "responses.csv"
+    for _ in range(2):
+        run_collection([prompt()], client, (model,), raw_dir=tmp_path, responses_path=path)
+    with path.open(encoding="utf-8", newline="") as source:
+        row, = csv.DictReader(source)
+    assert len(client.calls) == 1
+    assert (row["response"], row["input_tokens"], row["output_tokens"], row["usage_available"]) == ("4", "3", "", "false")
+
+
 def test_retries_transient_failure_with_backoff(tmp_path: Path) -> None:
     key = (DEFAULT_MODELS[0], "q1-kk", "kk", 0)
     client = FakeClient(

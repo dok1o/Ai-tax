@@ -16,7 +16,7 @@ from typing import Protocol
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-from src.common.config import PROMPTS_PATH, RAW_DIR, RESPONSES_PATH
+from src.common.config import DEMO_DIR, PROMPTS_PATH, RAW_DIR, RESPONSES_PATH
 
 RESPONSE_COLUMNS = (
     "model",
@@ -31,6 +31,7 @@ RESPONSE_COLUMNS = (
     "output_tokens",
     "latency_ms",
     "response",
+    "usage_available",
 )
 DEFAULT_MODELS = ("fixture/model-a", "fixture/model-b")
 MAX_ATTEMPTS = 3
@@ -97,8 +98,10 @@ class FakeClient:
 def _wrong_fixture_answer(answer_type: str, gold_answer: str) -> str:
     if answer_type == "integer":
         return str(int(gold_answer) + 1)
-    if answer_type == "decimal":
+    if answer_type in {"decimal", "number"}:
         return str(float(gold_answer) + 1.0)
+    if answer_type == "mcq":
+        return "B" if gold_answer == "A" else "A"
     if answer_type == "boolean":
         return "false" if gold_answer == "true" else "true"
     return "fixture answer"
@@ -144,13 +147,18 @@ class RealClient:
 
         try:
             content = payload["choices"][0]["message"]["content"]
-            usage = payload["usage"]
-            input_tokens = int(usage["prompt_tokens"])
-            output_tokens = int(usage["completion_tokens"])
+            usage = payload.get("usage") or {}
+            if not isinstance(usage, dict):
+                raise TypeError("Invalid usage object")
+            input_tokens = usage.get("prompt_tokens")
+            output_tokens = usage.get("completion_tokens")
             model_version = str(payload.get("model") or "unknown")
         except (KeyError, IndexError, TypeError, ValueError):
             raise ClientFailure("response or usage metadata unavailable", False) from None
-        if not isinstance(content, str) or input_tokens < 0 or output_tokens < 0:
+        if not isinstance(content, str) or any(
+            count is not None and (type(count) is not int or count < 0)
+            for count in (input_tokens, output_tokens)
+        ):
             raise ClientFailure("response or usage metadata invalid", False)
         return Completion(content, model_version, input_tokens, output_tokens)
 
@@ -224,6 +232,7 @@ def run_collection(
     cache: dict[Key, dict[str, object]] = {}
     for record in _read_jsonl(cache_path):
         if "response" in record:
+            record.setdefault("usage_available", "true" if all(record.get(k) is not None for k in ("input_tokens", "output_tokens")) else "false")
             cache.setdefault(_key_from_record(record), record)
 
     client_type = "fixture" if isinstance(selected_client, FakeClient) else "live"
@@ -278,7 +287,7 @@ def run_collection(
                         and completion.input_tokens >= 0
                         and completion.output_tokens >= 0
                     )
-                    success = bool(completion.response.strip()) and usage_known
+                    success = bool(completion.response.strip())
                     record: dict[str, object] = {
                         "model": model,
                         "prompt_id": prompt["prompt_id"],
@@ -290,6 +299,7 @@ def run_collection(
                         "temperature": temperature,
                         "input_tokens": completion.input_tokens,
                         "output_tokens": completion.output_tokens,
+                        "usage_available": "true" if usage_known else "false",
                         "usage_status": "reported" if usage_known else "unavailable",
                         "latency_ms": latency,
                         "outcome": "success" if success else "failed",
@@ -303,7 +313,12 @@ def run_collection(
                         cache[key] = record
                     break
 
-    responses = list(cache.values())
+    requested_models = set(models)
+    requested_prompts = {(row["prompt_id"], row["lang"]) for row in prompts}
+    responses = [
+        record for (model, prompt_id, lang, rep), record in cache.items()
+        if model in requested_models and (prompt_id, lang) in requested_prompts and rep < repeats
+    ]
     _write_responses(responses, responses_path)
     return responses
 
@@ -319,8 +334,8 @@ def _models_for_live() -> tuple[str, str]:
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=Path, default=PROMPTS_PATH)
-    parser.add_argument("--output", type=Path, default=RESPONSES_PATH)
-    parser.add_argument("--raw-dir", type=Path, default=RAW_DIR)
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--raw-dir", type=Path)
     parser.add_argument("--repeats", type=int, default=1)
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--live", action="store_true")
@@ -333,8 +348,8 @@ def main(argv: list[str] | None = None) -> None:
         models,
         repeats=args.repeats,
         temperature=args.temperature,
-        raw_dir=args.raw_dir,
-        responses_path=args.output,
+        raw_dir=args.raw_dir or (RAW_DIR if args.live else RAW_DIR / "fixture"),
+        responses_path=args.output or (RESPONSES_PATH if args.live else DEMO_DIR / "responses_fixture.csv"),
     )
     print(f"Collected {len(records)} successful observations ({'live' if args.live else 'fixture'}).")
 

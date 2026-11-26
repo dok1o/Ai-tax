@@ -99,7 +99,7 @@ def test_labels_follow_v1_columns_and_mismatched_join_is_rejected(tmp_path: Path
     ]
     labels, _ = grade_rows(prompts, responses)
     assert list(labels[0]) == [
-        "model", "prompt_id", "lang", "rep", "q_id", "parsed_answer", "is_correct"
+        "model", "prompt_id", "lang", "rep", "q_id", "parsed_answer", "is_correct", "parse_status"
     ]
     responses[0]["q_id"] = "other"
     with pytest.raises(ValueError, match="key mismatch"):
