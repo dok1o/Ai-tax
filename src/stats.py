@@ -80,10 +80,14 @@ def compute_metrics(
     bootstrap_samples: int = BOOTSTRAP_SAMPLES,
     seed: int = SEED,
 ) -> list[dict[str, str | int | float]]:
-    """Compute per-language accuracy and paired exact McNemar statistics."""
+    """Compute accuracy and exact paired comparisons of question-level correct shares.
+
+    Each shared question contributes one direction to the binomial test.
+    Tied shares contribute to the pair count and effect size only.
+    """
     if bootstrap_samples < 1:
         raise ValueError("bootstrap_samples must be positive")
-    per_group: dict[tuple[str, str], dict[tuple[str, int], bool]] = defaultdict(dict)
+    seen: set[tuple[str, str, str, int]] = set()
     per_question: dict[tuple[str, str], dict[str, list[bool]]] = defaultdict(
         lambda: defaultdict(list)
     )
@@ -92,17 +96,22 @@ def compute_metrics(
         lang = row["lang"]
         if lang not in LANGS:
             raise ValueError(f"Unsupported language {lang!r}.")
-        key = (row["q_id"], int(row["rep"]))
         group = (model, lang)
-        if key in per_group[group]:
-            raise ValueError(f"Duplicate model/language/question/repetition {group + key}.")
+        q_id = row["q_id"]
+        key = (*group, q_id, int(row["rep"]))
+        if key in seen:
+            raise ValueError(f"Duplicate model/language/question/repetition {key}.")
         correct = _is_correct(row["is_correct"])
-        per_group[group][key] = correct
-        per_question[group][row["q_id"]].append(correct)
+        seen.add(key)
+        per_question[group][q_id].append(correct)
 
     rng = np.random.default_rng(seed)
     metrics: list[dict[str, str | int | float]] = []
-    models = sorted({model for model, _ in per_group})
+    question_accuracy = {
+        group: {q_id: sum(values) / len(values) for q_id, values in questions.items()}
+        for group, questions in per_question.items()
+    }
+    models = sorted({model for model, _ in per_question})
     for model in models:
         for lang in LANGS:
             group = (model, lang)
@@ -138,22 +147,21 @@ def compute_metrics(
     for model in models:
         for index, lang_a in enumerate(LANGS):
             for lang_b in LANGS[index + 1 :]:
-                values_a = per_group.get((model, lang_a), {})
-                values_b = per_group.get((model, lang_b), {})
-                paired_keys = sorted(set(values_a) & set(values_b))
-                if not paired_keys:
+                values_a = question_accuracy.get((model, lang_a), {})
+                values_b = question_accuracy.get((model, lang_b), {})
+                paired_q_ids = sorted(values_a.keys() & values_b.keys())
+                if not paired_q_ids:
                     continue
-                correct_a = [values_a[key] for key in paired_keys]
-                correct_b = [values_b[key] for key in paired_keys]
-                b_only = sum(a and not b for a, b in zip(correct_a, correct_b))
-                a_only = sum(not a and b for a, b in zip(correct_a, correct_b))
-                discordant = b_only + a_only
+                differences = [values_a[q_id] - values_b[q_id] for q_id in paired_q_ids]
+                a_higher = sum(diff > 0 for diff in differences)
+                b_higher = sum(diff < 0 for diff in differences)
+                discordant = a_higher + b_higher
                 p_value = (
-                    float(binomtest(min(b_only, a_only), discordant, 0.5).pvalue)
+                    float(binomtest(min(a_higher, b_higher), discordant, 0.5).pvalue)
                     if discordant
                     else 1.0
                 )
-                q_count = len({q_id for q_id, _ in paired_keys})
+                q_count = len(paired_q_ids)
                 comparisons.append(len(metrics))
                 metrics.append(
                     {
@@ -165,11 +173,9 @@ def compute_metrics(
                         "accuracy": "",
                         "ci_low": "",
                         "ci_high": "",
-                        "n": len(paired_keys),
+                        "n": q_count,
                         "n_questions": q_count,
-                        "effect_size": float(
-                            np.mean([int(a) - int(b) for a, b in zip(correct_a, correct_b)])
-                        ),
+                        "effect_size": float(np.mean(differences)),
                         "p_value": p_value,
                         "p_value_holm": "",
                         "preliminary": "true" if q_count < 30 else "false",

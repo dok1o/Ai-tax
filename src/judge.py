@@ -7,6 +7,7 @@ import csv
 import re
 import unicodedata
 from collections.abc import Mapping, Sequence
+from decimal import Decimal
 from pathlib import Path
 
 from src.common.config import LABELS_PATH, PROMPTS_PATH, RESPONSES_PATH
@@ -30,8 +31,9 @@ STATUS_COLUMNS = (
     "data_source",
 )
 STATUS_PATH = LABELS_PATH.with_name("label_status.csv")
-NUMERIC_TOLERANCE = 0.01
+NUMERIC_TOLERANCE = Decimal("0.01")
 NUMBER_PATTERN = re.compile(r"[-+]?\d+(?:[.,]\d+)?")
+EQUALITY_PATTERN = re.compile(r"(?<![!<>=])=(?!=)")
 CHOICE_PATTERN = re.compile(r"(?<!\w)([a-d])(?!\w)", re.IGNORECASE)
 BOOLEAN_WORDS = {
     "true": True,
@@ -56,14 +58,13 @@ def extract_choice(value: str) -> str | None:
     return next(iter(choices)) if len(choices) == 1 else None
 
 
-def _parse_number(value: str) -> float | None:
-    match = NUMBER_PATTERN.search(value.replace("\u00a0", " "))
-    if match is None:
+def _parse_number(value: str) -> Decimal | None:
+    """Read one number, using the result side of an equation when present."""
+    result = EQUALITY_PATTERN.split(value, maxsplit=1)[-1]
+    numbers = NUMBER_PATTERN.findall(result)
+    if len(numbers) != 1:
         return None
-    try:
-        return float(match.group().replace(",", "."))
-    except ValueError:
-        return None
+    return Decimal(numbers[0].replace(",", "."))
 
 
 def _parse_boolean(value: str) -> bool | None:
@@ -88,9 +89,14 @@ def grade_answer(
         expected_number = _parse_number(gold_answer)
         if parsed_number is None or expected_number is None:
             return "", False, "unparsed"
-        if answer_type == "integer" and abs(parsed_number - round(parsed_number)) > 1e-9:
+        rounded = parsed_number.to_integral_value()
+        if answer_type == "integer" and abs(parsed_number - rounded) > Decimal("1e-9"):
             return "", False, "unparsed"
-        parsed = str(int(parsed_number)) if parsed_number.is_integer() else str(parsed_number)
+        parsed = (
+            str(int(rounded))
+            if parsed_number == rounded
+            else format(parsed_number, "f").rstrip("0")
+        )
         return parsed, abs(parsed_number - expected_number) <= NUMERIC_TOLERANCE, "graded"
 
     if answer_type == "boolean":

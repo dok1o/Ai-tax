@@ -20,6 +20,24 @@ def test_numbers_allow_tolerance_and_units() -> None:
     assert grade_answer("5 apples", "5", "integer")[1] is True
 
 
+@pytest.mark.parametrize(
+    ("answer", "gold", "expected"),
+    [
+        ("7 + 5 = 12", "12", ("12", True, "graded")),
+        ("12 - 1 = 11", "12", ("11", False, "graded")),
+        ("12 or 14 meters", "12", ("", False, "unparsed")),
+        ("7 + 5 = 12 or 14", "12", ("", False, "unparsed")),
+        ("7 + 5 = 12,01 м", "12", ("12.01", True, "graded")),
+        ("7 + 5 = 12,011 м", "12", ("12.011", False, "graded")),
+        ("1,01 м", "1", ("1.01", True, "graded")),
+    ],
+)
+def test_numeric_results_and_ambiguity(
+    answer: str, gold: str, expected: tuple[str, bool, str]
+) -> None:
+    assert grade_answer(answer, gold, "decimal") == expected
+
+
 def test_boolean_answers_accept_russian_and_kazakh() -> None:
     assert grade_answer("Да, верно", "true", "boolean", "ru")[1] is True
     assert grade_answer("жоқ", "false", "boolean", "kk")[1] is True
