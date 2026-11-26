@@ -77,3 +77,4 @@ Review and merge T-001, T-002, T-003, then T-004. Each branch was cut independen
 - Validation command `PYTHONUTF8=1 .\.venv\Scripts\python.exe -m data.validate_prompts --input data/prompts.csv` passed: 60 questions / 180 rows, verified share 0.000. Token command `PYTHONUTF8=1 .\.venv\Scripts\python.exe -m src.tokens --input data/prompts.csv --output data/tokens.csv` used cl100k_base and pinned Qwen revision `5796c1d2033cb6257f44cdffa28957680359236d`.
 - Means of `tokens_vs_en`, real, translations not yet native-verified, n=60: cl100k_base kk=2.380282 and ru=1.614634; Qwen/Qwen2.5-0.5B@5796c1d2033cb6257f44cdffa28957680359236d kk=1.995566 and ru=1.318569.
 - Targeted test/lint commands: `run.py test tests/codex/test_dataset_import.py tests/codex/test_prompts.py tests/test_schema.py` — 22 passed; Ruff passed.
+- q_038-ru wording corrected after collection; 6 responses were collected with the earlier wording.
