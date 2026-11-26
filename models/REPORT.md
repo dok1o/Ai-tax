@@ -37,6 +37,28 @@ Nested selection did not move the fixture numbers: all five folds independently
 select threshold 0.95, so cost and accuracy are unchanged. The fix removes the
 selection leak; it does not rescue this fixture's outcome.
 
+## Review fixes (Sol run 2, after the dev merge of T-013)
+
+| Finding | Root cause | Fix | Regression test |
+| --- | --- | --- | --- |
+| Router still re-selected the deployed threshold on every held-out row | `deployment_threshold = select_threshold(data, thresholds)` ran the rule again on the full frame, so the value the app routes with was picked on the outcomes it is judged on | `deployment_threshold(thresholds_per_fold)`: the mode of the nested per-fold picks, ties towards the smaller threshold; `selection_rule` in the manifest now says so | `test_deployment_threshold_is_the_nested_mode`, `test_router_never_selects_a_threshold_on_the_rows_it_evaluates` (spies on `select_threshold`: every call sees fewer rows than the routes table, one call per fold, deployed value equals the per-fold mode) |
+| Correctness decoding was duplicated and the two copies disagreed | `load_labels` accepted only `true`/`false` and ignored the v2 `parse_status` column, while the router had its own decoder for `0`/`1` | one `decode_correctness(values, source)` in `src/features.py`, re-exported by `src/router.py`; `load_labels` uses it and scores `parse_status=unparsed` false, rejecting unknown statuses | `test_numeric_flags_keep_the_correct_polarity`, `test_unparsed_answers_are_scored_false`, `test_unknown_correctness_and_status_values_are_rejected`, `test_router_and_training_share_one_decoder` |
+| Risk figures failed to generate | T-013 moved `data/labels.csv` to `data/demo/labels_fixture.csv`, so prompts resolved real (`m01-kk`) while labels resolved fixture (`q000-kk`) and `train_risk` died in `load_labels` before any figure was written | `resolve_input(kind, partner=...)`: when the table being joined can only be synthetic, prompts resolve synthetic too; cost, risk and the router each pass their partner | `test_prompts_follow_the_provenance_of_the_table_they_join`, `test_risk_training_writes_its_figures_next_to_a_real_prompts_file`, `test_cost_training_resolves_a_matching_prompts_file` |
+
+No fixture number moved: the router still reports 95.83 tokens and 0.6278
+accuracy for always_direct, savings of -0.2 / 74.6 / 0.9 tokens against the
+three baselines, and every fold selects 0.95, which is now also the deployed
+mode. Only `models/router_metrics_fixture.json` was regenerated, for the
+`selection_rule` wording and its timestamp; it still carries `"fixture": true`.
+
+Lint is clean under the repository defaults and under the stricter ARENA
+selection (`tests/arena/test_lint.py`). `matplotlib` is now in
+`requirements.txt`, so the SHAP figures are written; the no-matplotlib path
+stays covered by `test_risk_survives_a_missing_matplotlib`. Verified with
+`python run.py check`: ruff clean, 158 passed, prompts validator 60 questions
+/ 180 rows. `tests/arena/conftest.py` still hides the real contract CSVs, but
+as a determinism choice now, not as a workaround: the suite passes with and
+without it.
 ## Key metrics (all FIXTURE data, n small → preliminary, not results)
 
 Fixtures: `models/fixtures/make_fixtures.py`, SEED 42, 60 questions × 3 languages,

@@ -75,7 +75,7 @@ def hand_routes() -> pd.DataFrame:
 def prepared() -> pd.DataFrame:
     """Fixture routes with out-of-fold cost and risk predictions attached."""
     routes = pd.read_csv(resolve_input("routes")[0], dtype=str, keep_default_na=False)
-    prompts = read_contract_csv(resolve_input("prompts")[0])
+    prompts = read_contract_csv(resolve_input("prompts", partner="routes")[0])
     cost_manifest = json.loads(
         resolve_artifact(MODELS_DIR, "cost_metrics", "json")[0].read_text(
             encoding="utf-8"
@@ -259,7 +259,7 @@ def test_calibration_ignores_the_held_out_fold(prepared: pd.DataFrame) -> None:
 
 def test_prepare_routes_rejects_missing_predictions() -> None:
     routes = pd.read_csv(resolve_input("routes")[0], dtype=str, keep_default_na=False)
-    prompts = read_contract_csv(resolve_input("prompts")[0])
+    prompts = read_contract_csv(resolve_input("prompts", partner="routes")[0])
     cost_oof = pd.read_csv(resolve_artifact(MODELS_DIR, "cost_oof", "csv")[0])
     risk_oof = pd.read_csv(resolve_artifact(MODELS_DIR, "risk_oof", "csv")[0])
     manifest = json.loads(

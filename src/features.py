@@ -238,15 +238,43 @@ def fertility_table(dataset: pd.DataFrame) -> pd.DataFrame:
     )
 
 
+CORRECTNESS_VALUES = frozenset({"true", "false", "0", "1"})
+PARSE_STATUS_VALUES = frozenset({"graded", "unparsed"})
+
+
+def decode_correctness(values: pd.Series, source: str = "labels") -> pd.DataFrame:
+    """Decode contract booleans or 0/1 flags into graded 0/1 outcome columns.
+
+    ``true`` and ``1`` mean the answer was correct; ``false`` and ``0`` mean it
+    was not, so a numeric flag is never inverted. Any other spelling is rejected
+    instead of being silently read as false.
+    """
+    normalized = values.astype(str).str.strip().str.lower()
+    if not normalized.isin(CORRECTNESS_VALUES).all():
+        bad = sorted(set(normalized) - CORRECTNESS_VALUES)
+        raise ValueError(f"{source} has non-boolean is_correct values: {bad}")
+    incorrect = normalized.isin({"false", "0"})
+    return pd.DataFrame(
+        {"is_correct": (~incorrect).astype(int), "is_incorrect": incorrect.astype(int)},
+        index=values.index,
+    )
+
+
 def load_labels(prompts_path: Path, labels_path: Path) -> pd.DataFrame:
     """Join graded observations with pre-call prompt features."""
     labels = read_contract_csv(labels_path)
     require_columns(labels, LABEL_COLUMNS, labels_path.name)
     frame = labels[list(LABEL_COLUMNS)].copy()
-    values = frame["is_correct"].str.lower()
-    if not values.isin({"true", "false"}).all():
-        raise ValueError(f"{labels_path.name} has non-boolean is_correct values")
-    frame["is_correct"] = (values == "true").astype(int)
+    frame["is_correct"] = decode_correctness(
+        frame["is_correct"], source=labels_path.name
+    )["is_correct"]
+    if "parse_status" in labels.columns:
+        status = labels["parse_status"].astype(str).str.strip().str.lower()
+        unknown = sorted(set(status) - PARSE_STATUS_VALUES)
+        if unknown:
+            raise ValueError(f"{labels_path.name} has unknown parse_status: {unknown}")
+        # Contract v2: an unparsed answer is scored false, whatever the flag says.
+        frame.loc[status == "unparsed", "is_correct"] = 0
     frame["rep"] = frame["rep"].astype(int)
     features = build_features(read_contract_csv(prompts_path))
     merged = frame.merge(features, on="prompt_id", suffixes=("", "_p"))
@@ -255,11 +283,17 @@ def load_labels(prompts_path: Path, labels_path: Path) -> pd.DataFrame:
     return merged.drop(columns=["lang_p", "q_id_p"]).reset_index(drop=True)
 
 
-def resolve_input(kind: str) -> tuple[Path, bool]:
+def resolve_input(kind: str, partner: str | None = None) -> tuple[Path, bool]:
     """Return the real contract file when present, else the labelled fixture.
 
     ``is_fixture`` is True whenever the synthetic file is used, so every caller
     can label its outputs.
+
+    ``partner`` names a second input the caller joins this one on. When the
+    partner can only be resolved synthetically, ``kind`` is resolved
+    synthetically as well: a real ``data/prompts.csv`` shares no identifier with
+    the fixture tables (``m01-kk`` against ``q000-kk``), so a mixed pair joins
+    nothing and would fail deep inside training instead of at resolution.
     """
     real = {
         "prompts": PROMPTS_PATH,
@@ -267,14 +301,26 @@ def resolve_input(kind: str) -> tuple[Path, bool]:
         "labels": LABELS_PATH,
         "routes": ROUTES_PATH,
     }[kind]
+    fixture = FIXTURE_DIR / f"{kind}_fixture.csv"
+    if partner is not None and not _real_path(partner).exists() and fixture.exists():
+        return fixture, True
     if real.exists():
         return real, False
-    fixture = FIXTURE_DIR / f"{kind}_fixture.csv"
     if fixture.exists():
         return fixture, True
     raise FileNotFoundError(
         f"neither {real} nor {fixture} exists; run models/fixtures/make_fixtures.py"
     )
+
+
+def _real_path(kind: str) -> Path:
+    """Contract path of one input kind, whether it exists or not."""
+    return {
+        "prompts": PROMPTS_PATH,
+        "tokens": TOKENS_PATH,
+        "labels": LABELS_PATH,
+        "routes": ROUTES_PATH,
+    }[kind]
 
 
 def assign_folds(
