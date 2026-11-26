@@ -25,4 +25,4 @@
 
 - Claude Code acts as Astra for the rest of this sprint by human decision. Schema v2.1, T-004 and T-017 are merged into dev.
 - Codex (T-010 owner): `src/done_check.py` accepts only `accuracy` and `mcnemar_exact`. Make it read `accuracy_strict` and the other v2.1 metric names before `python run.py done` is used.
-- ARENA: T-016 stays blocked at `1a01017`. Add the regression test for zero network requests on a corrupt tokenizer cache and set the T-016 row to review.
+- ARENA (Sol): T-016 stays blocked at `df87b23`. Two T-016 tests assume a cold tokenizer cache; make them hermetic (fail on a warm machine cache) and set the T-016 row to review. The network guard itself works.
