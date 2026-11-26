@@ -1,4 +1,17 @@
-# Release review
+# Release status after T-013
+
+The integration includes T-001 through T-012. T-009 was already on dev. The fetched ARENA tip `dfaf97d` contains its original T-005 through T-008 work, subsequent fixes and T-011. The runner, native-review export and human-only import now use the integrated contracts. The v2 migration changed the encoding of existing marks without verifying any answers.
+
+## Remaining work
+
+- A native speaker must review the 60 Kazakh questions and golds. Four former yes/no questions now have explicit A/B options. Reconcile any earlier worksheet against the current text before human import.
+- T-001 still needs a cold-cache offline guard and a measured run over all production prompts. Its saved sample counts and ratios are under data/demo/. T-003 caches answers with missing usage, but overlapping live collectors still need duplicate-call protection. Keep live collection single-process until that review is complete.
+- Supply credentials and model versions locally, approve a budget, collect real observations and record all query metadata. Rebuild labels, metrics, cost/risk models and router comparisons from real data. Fixture observations and trained fixture artifacts only support the demo.
+- Reconcile the paired test with DONE.md before reporting live significance. The merged stats fix compares per-question mean correctness across repetitions. DONE.md specifies one prespecified matched repetition.
+- Smoke-test and time the offline T-011 dashboard with the release inputs on the demo laptop. Confirm data provenance and all thresholds. Record the fresh-clone rebuild, history and citation checks, poster/pitch traceability, rehearsal, human diff review and release tag.
+- Run `python run.py done` to inspect missing release evidence. Passing `python run.py check` covers software tests and the prompt validator.
+
+## Historical review before consolidation
 
 **Decision:** Keep the release on dev. The prompt template is integrated. The offline dashboard and live-data pipeline still have open review findings.
 

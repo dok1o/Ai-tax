@@ -17,8 +17,11 @@ def main() -> None:
     commands.add_parser("check", help="Run Ruff, tests and CSV schema validation")
     test = commands.add_parser("test", help="Run all tests or selected pytest paths")
     test.add_argument("paths", nargs="*", help="Test paths or pytest node IDs")
-    commands.add_parser("tokens", help="Compute token counts and fertility")
+    tokens = commands.add_parser("tokens", help="Compute token counts and fertility")
+    tokens.add_argument("--input")
+    tokens.add_argument("--output")
     commands.add_parser("dashboard", help="Start the offline Streamlit dashboard")
+    commands.add_parser("done", help="Check the read-only release evidence gates")
     args = parser.parse_args()
 
     if args.command == "check":
@@ -31,12 +34,18 @@ def main() -> None:
     elif args.command == "tokens":
         if not (ROOT / "src" / "tokens.py").stat().st_size:
             sys.exit("Token counting is pending T-001.")
-        run_module("src.tokens")
+        options = []
+        for name in ("input", "output"):
+            if value := getattr(args, name):
+                options.extend((f"--{name}", value))
+        run_module("src.tokens", *options)
     elif args.command == "dashboard":
         dashboard = ROOT / "app" / "dashboard.py"
         if not dashboard.stat().st_size:
             sys.exit("The offline dashboard is pending T-006.")
         run_module("streamlit", "run", str(dashboard))
+    elif args.command == "done":
+        run_module("src.done_check")
 
 
 if __name__ == "__main__":

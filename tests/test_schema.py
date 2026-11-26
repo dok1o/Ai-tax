@@ -5,6 +5,7 @@ import pytest
 
 from src.common.config import (
     LABELS_PATH,
+    METRICS_PATH,
     PROMPTS_PATH,
     RESPONSES_PATH,
     SCHEMA_PATH,
@@ -13,7 +14,7 @@ from src.common.config import (
 
 
 @pytest.mark.parametrize(
-    "path", [PROMPTS_PATH, RESPONSES_PATH, TOKENS_PATH, LABELS_PATH]
+    "path", [PROMPTS_PATH, RESPONSES_PATH, TOKENS_PATH, LABELS_PATH, METRICS_PATH]
 )
 def test_contract_header(path: Path) -> None:
     contract = SCHEMA_PATH.read_text(encoding="utf-8")
@@ -24,6 +25,9 @@ def test_contract_header(path: Path) -> None:
         if row.startswith("| ")
     ][2:]
     assert columns and len(columns) == len(set(columns))
-    if path.exists():
-        with path.open(encoding="utf-8-sig", newline="") as source:
+    fixture = path.parent / "demo" / f"{path.stem}_fixture.csv"
+    for dataset in (path, fixture):
+        if not dataset.exists():
+            continue
+        with dataset.open(encoding="utf-8-sig", newline="") as source:
             assert next(csv.reader(source), None) == columns

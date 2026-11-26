@@ -13,9 +13,9 @@ def valid_rows() -> list[dict[str, str]]:
             "lang": "kk",
             "category": "math_logic",
             "prompt": "2 қосу 2 неше болады?",
-            "answer_type": "integer",
+            "answer_type": "number",
             "gold_answer": "4",
-            "verified_by_native": "false",
+            "verified_by_native": "0",
         },
         {
             "prompt_id": "q1-ru",
@@ -23,9 +23,9 @@ def valid_rows() -> list[dict[str, str]]:
             "lang": "ru",
             "category": "math_logic",
             "prompt": "Сколько будет 2 плюс 2?",
-            "answer_type": "integer",
+            "answer_type": "number",
             "gold_answer": "4",
-            "verified_by_native": "false",
+            "verified_by_native": "0",
         },
         {
             "prompt_id": "q1-en",
@@ -33,9 +33,9 @@ def valid_rows() -> list[dict[str, str]]:
             "lang": "en",
             "category": "math_logic",
             "prompt": "What is 2 plus 2?",
-            "answer_type": "integer",
+            "answer_type": "number",
             "gold_answer": "4",
-            "verified_by_native": "false",
+            "verified_by_native": "0",
         },
     ]
 
@@ -66,9 +66,9 @@ def test_rejects_inconsistent_gold_answer() -> None:
         validate_rows(rows)
 
 
-def test_rejects_answer_type_outside_v1() -> None:
+def test_rejects_answer_type_outside_v2() -> None:
     rows = valid_rows()
-    rows[0]["answer_type"] = "mcq"
+    rows[0]["answer_type"] = "unsupported"
     with pytest.raises(ValueError, match="Unsupported answer_type"):
         validate_rows(rows)
 
@@ -76,7 +76,7 @@ def test_rejects_answer_type_outside_v1() -> None:
 def test_rejects_unparseable_integer_gold() -> None:
     rows = valid_rows()
     rows[0]["gold_answer"] = "four"
-    with pytest.raises(ValueError, match="non-integer"):
+    with pytest.raises(ValueError, match="non-numeric"):
         validate_rows(rows)
 
 

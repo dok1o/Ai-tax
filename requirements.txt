@@ -12,3 +12,4 @@ tiktoken
 transformers
 pytest
 ruff
+matplotlib

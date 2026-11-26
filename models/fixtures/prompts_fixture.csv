@@ -1,0 +1,181 @@
+prompt_id,q_id,lang,category,prompt,answer_type,gold_answer,verified_by_native
+q000-kk,q000,kk,arithmetic,"Егер бір қорапта 24 қалам болса, 7 қорапта барлығы қанша қалам болады? (нұсқа 0)",number,0,0
+q000-ru,q000,ru,arithmetic,"Если в одной коробке 24 ручки, сколько всего ручек в семи коробках? (вариант 0)",number,0,0
+q000-en,q000,en,arithmetic,"If one box holds 24 pens, how many pens are there in seven boxes? (variant 0)",number,0,0
+q001-kk,q001,kk,geography,Қазақстанның ең биік шыңы қалай аталады және оның биіктігі неше метр? Жауапты бір сөйлеммен беріңіз. (нұсқа 1),short,қысқа жауап,0
+q001-ru,q001,ru,geography,Как называется самая высокая вершина Казахстана и какова её высота в метрах? Ответьте одним предложением. (вариант 1),short,короткий ответ,0
+q001-en,q001,en,geography,What is the highest peak of Kazakhstan and how tall is it in metres? Answer in one sentence. (variant 1),short,short answer,0
+q002-kk,q002,kk,biology,Адам денесіндегі ең үлкен мүше қандай және ол қандай қызмет атқарады? Жауапты бір сөйлеммен беріңіз. Нақты санды және өлшем бірлігін көрсетіңіз. (нұсқа 2),short,қысқа жауап,0
+q002-ru,q002,ru,biology,Какой орган человеческого тела самый большой и какую функцию он выполняет? Ответьте одним предложением. Укажите точное число и единицу измерения. (вариант 2),short,короткий ответ,0
+q002-en,q002,en,biology,Which organ of the human body is the largest and what does it do? Answer in one sentence. State the exact number and its unit. (variant 2),short,short answer,0
+q003-kk,q003,kk,history,Ғарышқа тұңғыш ұшқан адамның аты кім және бұл қашан болды? (нұсқа 3),short,қысқа жауап,0
+q003-ru,q003,ru,history,"Как звали первого человека, побывавшего в космосе, и когда это произошло? (вариант 3)",short,короткий ответ,0
+q003-en,q003,en,history,Who was the first human to travel into space and when did it happen? (variant 3),short,short answer,0
+q004-kk,q004,kk,physics,Жарықтың вакуумдағы жылдамдығы шамамен қаншаға тең? Жауапты бір сөйлеммен беріңіз. (нұсқа 4),number,5.4,0
+q004-ru,q004,ru,physics,Чему примерно равна скорость света в вакууме? Ответьте одним предложением. (вариант 4),number,5.4,0
+q004-en,q004,en,physics,What is the approximate speed of light in a vacuum? Answer in one sentence. (variant 4),number,5.4,0
+q005-kk,q005,kk,everyday,Бір литр суды қайнату үшін шамамен қанша уақыт қажет? Жауапты бір сөйлеммен беріңіз. Нақты санды және өлшем бірлігін көрсетіңіз. (нұсқа 5),number,6.5,0
+q005-ru,q005,ru,everyday,"Сколько примерно времени нужно, чтобы вскипятить один литр воды? Ответьте одним предложением. Укажите точное число и единицу измерения. (вариант 5)",number,6.5,0
+q005-en,q005,en,everyday,About how long does it take to boil one litre of water? Answer in one sentence. State the exact number and its unit. (variant 5),number,6.5,0
+q006-kk,q006,kk,arithmetic,"Егер бір қорапта 24 қалам болса, 7 қорапта барлығы қанша қалам болады? (нұсқа 6)",number,18,0
+q006-ru,q006,ru,arithmetic,"Если в одной коробке 24 ручки, сколько всего ручек в семи коробках? (вариант 6)",number,18,0
+q006-en,q006,en,arithmetic,"If one box holds 24 pens, how many pens are there in seven boxes? (variant 6)",number,18,0
+q007-kk,q007,kk,geography,Қазақстанның ең биік шыңы қалай аталады және оның биіктігі неше метр? Жауапты бір сөйлеммен беріңіз. (нұсқа 7),short,қысқа жауап,0
+q007-ru,q007,ru,geography,Как называется самая высокая вершина Казахстана и какова её высота в метрах? Ответьте одним предложением. (вариант 7),short,короткий ответ,0
+q007-en,q007,en,geography,What is the highest peak of Kazakhstan and how tall is it in metres? Answer in one sentence. (variant 7),short,short answer,0
+q008-kk,q008,kk,biology,Адам денесіндегі ең үлкен мүше қандай және ол қандай қызмет атқарады? Жауапты бір сөйлеммен беріңіз. Нақты санды және өлшем бірлігін көрсетіңіз. (нұсқа 8),short,қысқа жауап,0
+q008-ru,q008,ru,biology,Какой орган человеческого тела самый большой и какую функцию он выполняет? Ответьте одним предложением. Укажите точное число и единицу измерения. (вариант 8),short,короткий ответ,0
+q008-en,q008,en,biology,Which organ of the human body is the largest and what does it do? Answer in one sentence. State the exact number and its unit. (variant 8),short,short answer,0
+q009-kk,q009,kk,history,Ғарышқа тұңғыш ұшқан адамның аты кім және бұл қашан болды? (нұсқа 9),short,қысқа жауап,0
+q009-ru,q009,ru,history,"Как звали первого человека, побывавшего в космосе, и когда это произошло? (вариант 9)",short,короткий ответ,0
+q009-en,q009,en,history,Who was the first human to travel into space and when did it happen? (variant 9),short,short answer,0
+q010-kk,q010,kk,physics,Жарықтың вакуумдағы жылдамдығы шамамен қаншаға тең? Жауапты бір сөйлеммен беріңіз. (нұсқа 0),number,11.3,0
+q010-ru,q010,ru,physics,Чему примерно равна скорость света в вакууме? Ответьте одним предложением. (вариант 0),number,11.3,0
+q010-en,q010,en,physics,What is the approximate speed of light in a vacuum? Answer in one sentence. (variant 0),number,11.3,0
+q011-kk,q011,kk,everyday,Бір литр суды қайнату үшін шамамен қанша уақыт қажет? Жауапты бір сөйлеммен беріңіз. Нақты санды және өлшем бірлігін көрсетіңіз. (нұсқа 1),number,12.4,0
+q011-ru,q011,ru,everyday,"Сколько примерно времени нужно, чтобы вскипятить один литр воды? Ответьте одним предложением. Укажите точное число и единицу измерения. (вариант 1)",number,12.4,0
+q011-en,q011,en,everyday,About how long does it take to boil one litre of water? Answer in one sentence. State the exact number and its unit. (variant 1),number,12.4,0
+q012-kk,q012,kk,arithmetic,"Егер бір қорапта 24 қалам болса, 7 қорапта барлығы қанша қалам болады? (нұсқа 2)",number,36,0
+q012-ru,q012,ru,arithmetic,"Если в одной коробке 24 ручки, сколько всего ручек в семи коробках? (вариант 2)",number,36,0
+q012-en,q012,en,arithmetic,"If one box holds 24 pens, how many pens are there in seven boxes? (variant 2)",number,36,0
+q013-kk,q013,kk,geography,Қазақстанның ең биік шыңы қалай аталады және оның биіктігі неше метр? Жауапты бір сөйлеммен беріңіз. (нұсқа 3),short,қысқа жауап,0
+q013-ru,q013,ru,geography,Как называется самая высокая вершина Казахстана и какова её высота в метрах? Ответьте одним предложением. (вариант 3),short,короткий ответ,0
+q013-en,q013,en,geography,What is the highest peak of Kazakhstan and how tall is it in metres? Answer in one sentence. (variant 3),short,short answer,0
+q014-kk,q014,kk,biology,Адам денесіндегі ең үлкен мүше қандай және ол қандай қызмет атқарады? Жауапты бір сөйлеммен беріңіз. Нақты санды және өлшем бірлігін көрсетіңіз. (нұсқа 4),short,қысқа жауап,0
+q014-ru,q014,ru,biology,Какой орган человеческого тела самый большой и какую функцию он выполняет? Ответьте одним предложением. Укажите точное число и единицу измерения. (вариант 4),short,короткий ответ,0
+q014-en,q014,en,biology,Which organ of the human body is the largest and what does it do? Answer in one sentence. State the exact number and its unit. (variant 4),short,short answer,0
+q015-kk,q015,kk,history,Ғарышқа тұңғыш ұшқан адамның аты кім және бұл қашан болды? (нұсқа 5),short,қысқа жауап,0
+q015-ru,q015,ru,history,"Как звали первого человека, побывавшего в космосе, и когда это произошло? (вариант 5)",short,короткий ответ,0
+q015-en,q015,en,history,Who was the first human to travel into space and when did it happen? (variant 5),short,short answer,0
+q016-kk,q016,kk,physics,Жарықтың вакуумдағы жылдамдығы шамамен қаншаға тең? Жауапты бір сөйлеммен беріңіз. (нұсқа 6),number,17.2,0
+q016-ru,q016,ru,physics,Чему примерно равна скорость света в вакууме? Ответьте одним предложением. (вариант 6),number,17.2,0
+q016-en,q016,en,physics,What is the approximate speed of light in a vacuum? Answer in one sentence. (variant 6),number,17.2,0
+q017-kk,q017,kk,everyday,Бір литр суды қайнату үшін шамамен қанша уақыт қажет? Жауапты бір сөйлеммен беріңіз. Нақты санды және өлшем бірлігін көрсетіңіз. (нұсқа 7),number,18.3,0
+q017-ru,q017,ru,everyday,"Сколько примерно времени нужно, чтобы вскипятить один литр воды? Ответьте одним предложением. Укажите точное число и единицу измерения. (вариант 7)",number,18.3,0
+q017-en,q017,en,everyday,About how long does it take to boil one litre of water? Answer in one sentence. State the exact number and its unit. (variant 7),number,18.3,0
+q018-kk,q018,kk,arithmetic,"Егер бір қорапта 24 қалам болса, 7 қорапта барлығы қанша қалам болады? (нұсқа 8)",number,54,0
+q018-ru,q018,ru,arithmetic,"Если в одной коробке 24 ручки, сколько всего ручек в семи коробках? (вариант 8)",number,54,0
+q018-en,q018,en,arithmetic,"If one box holds 24 pens, how many pens are there in seven boxes? (variant 8)",number,54,0
+q019-kk,q019,kk,geography,Қазақстанның ең биік шыңы қалай аталады және оның биіктігі неше метр? Жауапты бір сөйлеммен беріңіз. (нұсқа 9),short,қысқа жауап,0
+q019-ru,q019,ru,geography,Как называется самая высокая вершина Казахстана и какова её высота в метрах? Ответьте одним предложением. (вариант 9),short,короткий ответ,0
+q019-en,q019,en,geography,What is the highest peak of Kazakhstan and how tall is it in metres? Answer in one sentence. (variant 9),short,short answer,0
+q020-kk,q020,kk,biology,Адам денесіндегі ең үлкен мүше қандай және ол қандай қызмет атқарады? Жауапты бір сөйлеммен беріңіз. Нақты санды және өлшем бірлігін көрсетіңіз. (нұсқа 0),short,қысқа жауап,0
+q020-ru,q020,ru,biology,Какой орган человеческого тела самый большой и какую функцию он выполняет? Ответьте одним предложением. Укажите точное число и единицу измерения. (вариант 0),short,короткий ответ,0
+q020-en,q020,en,biology,Which organ of the human body is the largest and what does it do? Answer in one sentence. State the exact number and its unit. (variant 0),short,short answer,0
+q021-kk,q021,kk,history,Ғарышқа тұңғыш ұшқан адамның аты кім және бұл қашан болды? (нұсқа 1),short,қысқа жауап,0
+q021-ru,q021,ru,history,"Как звали первого человека, побывавшего в космосе, и когда это произошло? (вариант 1)",short,короткий ответ,0
+q021-en,q021,en,history,Who was the first human to travel into space and when did it happen? (variant 1),short,short answer,0
+q022-kk,q022,kk,physics,Жарықтың вакуумдағы жылдамдығы шамамен қаншаға тең? Жауапты бір сөйлеммен беріңіз. (нұсқа 2),number,23.1,0
+q022-ru,q022,ru,physics,Чему примерно равна скорость света в вакууме? Ответьте одним предложением. (вариант 2),number,23.1,0
+q022-en,q022,en,physics,What is the approximate speed of light in a vacuum? Answer in one sentence. (variant 2),number,23.1,0
+q023-kk,q023,kk,everyday,Бір литр суды қайнату үшін шамамен қанша уақыт қажет? Жауапты бір сөйлеммен беріңіз. Нақты санды және өлшем бірлігін көрсетіңіз. (нұсқа 3),number,24.2,0
+q023-ru,q023,ru,everyday,"Сколько примерно времени нужно, чтобы вскипятить один литр воды? Ответьте одним предложением. Укажите точное число и единицу измерения. (вариант 3)",number,24.2,0
+q023-en,q023,en,everyday,About how long does it take to boil one litre of water? Answer in one sentence. State the exact number and its unit. (variant 3),number,24.2,0
+q024-kk,q024,kk,arithmetic,"Егер бір қорапта 24 қалам болса, 7 қорапта барлығы қанша қалам болады? (нұсқа 4)",number,72,0
+q024-ru,q024,ru,arithmetic,"Если в одной коробке 24 ручки, сколько всего ручек в семи коробках? (вариант 4)",number,72,0
+q024-en,q024,en,arithmetic,"If one box holds 24 pens, how many pens are there in seven boxes? (variant 4)",number,72,0
+q025-kk,q025,kk,geography,Қазақстанның ең биік шыңы қалай аталады және оның биіктігі неше метр? Жауапты бір сөйлеммен беріңіз. (нұсқа 5),short,қысқа жауап,0
+q025-ru,q025,ru,geography,Как называется самая высокая вершина Казахстана и какова её высота в метрах? Ответьте одним предложением. (вариант 5),short,короткий ответ,0
+q025-en,q025,en,geography,What is the highest peak of Kazakhstan and how tall is it in metres? Answer in one sentence. (variant 5),short,short answer,0
+q026-kk,q026,kk,biology,Адам денесіндегі ең үлкен мүше қандай және ол қандай қызмет атқарады? Жауапты бір сөйлеммен беріңіз. Нақты санды және өлшем бірлігін көрсетіңіз. (нұсқа 6),short,қысқа жауап,0
+q026-ru,q026,ru,biology,Какой орган человеческого тела самый большой и какую функцию он выполняет? Ответьте одним предложением. Укажите точное число и единицу измерения. (вариант 6),short,короткий ответ,0
+q026-en,q026,en,biology,Which organ of the human body is the largest and what does it do? Answer in one sentence. State the exact number and its unit. (variant 6),short,short answer,0
+q027-kk,q027,kk,history,Ғарышқа тұңғыш ұшқан адамның аты кім және бұл қашан болды? (нұсқа 7),short,қысқа жауап,0
+q027-ru,q027,ru,history,"Как звали первого человека, побывавшего в космосе, и когда это произошло? (вариант 7)",short,короткий ответ,0
+q027-en,q027,en,history,Who was the first human to travel into space and when did it happen? (variant 7),short,short answer,0
+q028-kk,q028,kk,physics,Жарықтың вакуумдағы жылдамдығы шамамен қаншаға тең? Жауапты бір сөйлеммен беріңіз. (нұсқа 8),number,29.0,0
+q028-ru,q028,ru,physics,Чему примерно равна скорость света в вакууме? Ответьте одним предложением. (вариант 8),number,29.0,0
+q028-en,q028,en,physics,What is the approximate speed of light in a vacuum? Answer in one sentence. (variant 8),number,29.0,0
+q029-kk,q029,kk,everyday,Бір литр суды қайнату үшін шамамен қанша уақыт қажет? Жауапты бір сөйлеммен беріңіз. Нақты санды және өлшем бірлігін көрсетіңіз. (нұсқа 9),number,30.1,0
+q029-ru,q029,ru,everyday,"Сколько примерно времени нужно, чтобы вскипятить один литр воды? Ответьте одним предложением. Укажите точное число и единицу измерения. (вариант 9)",number,30.1,0
+q029-en,q029,en,everyday,About how long does it take to boil one litre of water? Answer in one sentence. State the exact number and its unit. (variant 9),number,30.1,0
+q030-kk,q030,kk,arithmetic,"Егер бір қорапта 24 қалам болса, 7 қорапта барлығы қанша қалам болады? (нұсқа 0)",number,90,0
+q030-ru,q030,ru,arithmetic,"Если в одной коробке 24 ручки, сколько всего ручек в семи коробках? (вариант 0)",number,90,0
+q030-en,q030,en,arithmetic,"If one box holds 24 pens, how many pens are there in seven boxes? (variant 0)",number,90,0
+q031-kk,q031,kk,geography,Қазақстанның ең биік шыңы қалай аталады және оның биіктігі неше метр? Жауапты бір сөйлеммен беріңіз. (нұсқа 1),short,қысқа жауап,0
+q031-ru,q031,ru,geography,Как называется самая высокая вершина Казахстана и какова её высота в метрах? Ответьте одним предложением. (вариант 1),short,короткий ответ,0
+q031-en,q031,en,geography,What is the highest peak of Kazakhstan and how tall is it in metres? Answer in one sentence. (variant 1),short,short answer,0
+q032-kk,q032,kk,biology,Адам денесіндегі ең үлкен мүше қандай және ол қандай қызмет атқарады? Жауапты бір сөйлеммен беріңіз. Нақты санды және өлшем бірлігін көрсетіңіз. (нұсқа 2),short,қысқа жауап,0
+q032-ru,q032,ru,biology,Какой орган человеческого тела самый большой и какую функцию он выполняет? Ответьте одним предложением. Укажите точное число и единицу измерения. (вариант 2),short,короткий ответ,0
+q032-en,q032,en,biology,Which organ of the human body is the largest and what does it do? Answer in one sentence. State the exact number and its unit. (variant 2),short,short answer,0
+q033-kk,q033,kk,history,Ғарышқа тұңғыш ұшқан адамның аты кім және бұл қашан болды? (нұсқа 3),short,қысқа жауап,0
+q033-ru,q033,ru,history,"Как звали первого человека, побывавшего в космосе, и когда это произошло? (вариант 3)",short,короткий ответ,0
+q033-en,q033,en,history,Who was the first human to travel into space and when did it happen? (variant 3),short,short answer,0
+q034-kk,q034,kk,physics,Жарықтың вакуумдағы жылдамдығы шамамен қаншаға тең? Жауапты бір сөйлеммен беріңіз. (нұсқа 4),number,35.6,0
+q034-ru,q034,ru,physics,Чему примерно равна скорость света в вакууме? Ответьте одним предложением. (вариант 4),number,35.6,0
+q034-en,q034,en,physics,What is the approximate speed of light in a vacuum? Answer in one sentence. (variant 4),number,35.6,0
+q035-kk,q035,kk,everyday,Бір литр суды қайнату үшін шамамен қанша уақыт қажет? Жауапты бір сөйлеммен беріңіз. Нақты санды және өлшем бірлігін көрсетіңіз. (нұсқа 5),number,36.0,0
+q035-ru,q035,ru,everyday,"Сколько примерно времени нужно, чтобы вскипятить один литр воды? Ответьте одним предложением. Укажите точное число и единицу измерения. (вариант 5)",number,36.0,0
+q035-en,q035,en,everyday,About how long does it take to boil one litre of water? Answer in one sentence. State the exact number and its unit. (variant 5),number,36.0,0
+q036-kk,q036,kk,arithmetic,"Егер бір қорапта 24 қалам болса, 7 қорапта барлығы қанша қалам болады? (нұсқа 6)",number,108,0
+q036-ru,q036,ru,arithmetic,"Если в одной коробке 24 ручки, сколько всего ручек в семи коробках? (вариант 6)",number,108,0
+q036-en,q036,en,arithmetic,"If one box holds 24 pens, how many pens are there in seven boxes? (variant 6)",number,108,0
+q037-kk,q037,kk,geography,Қазақстанның ең биік шыңы қалай аталады және оның биіктігі неше метр? Жауапты бір сөйлеммен беріңіз. (нұсқа 7),short,қысқа жауап,0
+q037-ru,q037,ru,geography,Как называется самая высокая вершина Казахстана и какова её высота в метрах? Ответьте одним предложением. (вариант 7),short,короткий ответ,0
+q037-en,q037,en,geography,What is the highest peak of Kazakhstan and how tall is it in metres? Answer in one sentence. (variant 7),short,short answer,0
+q038-kk,q038,kk,biology,Адам денесіндегі ең үлкен мүше қандай және ол қандай қызмет атқарады? Жауапты бір сөйлеммен беріңіз. Нақты санды және өлшем бірлігін көрсетіңіз. (нұсқа 8),short,қысқа жауап,0
+q038-ru,q038,ru,biology,Какой орган человеческого тела самый большой и какую функцию он выполняет? Ответьте одним предложением. Укажите точное число и единицу измерения. (вариант 8),short,короткий ответ,0
+q038-en,q038,en,biology,Which organ of the human body is the largest and what does it do? Answer in one sentence. State the exact number and its unit. (variant 8),short,short answer,0
+q039-kk,q039,kk,history,Ғарышқа тұңғыш ұшқан адамның аты кім және бұл қашан болды? (нұсқа 9),short,қысқа жауап,0
+q039-ru,q039,ru,history,"Как звали первого человека, побывавшего в космосе, и когда это произошло? (вариант 9)",short,короткий ответ,0
+q039-en,q039,en,history,Who was the first human to travel into space and when did it happen? (variant 9),short,short answer,0
+q040-kk,q040,kk,physics,Жарықтың вакуумдағы жылдамдығы шамамен қаншаға тең? Жауапты бір сөйлеммен беріңіз. (нұсқа 0),number,41.5,0
+q040-ru,q040,ru,physics,Чему примерно равна скорость света в вакууме? Ответьте одним предложением. (вариант 0),number,41.5,0
+q040-en,q040,en,physics,What is the approximate speed of light in a vacuum? Answer in one sentence. (variant 0),number,41.5,0
+q041-kk,q041,kk,everyday,Бір литр суды қайнату үшін шамамен қанша уақыт қажет? Жауапты бір сөйлеммен беріңіз. Нақты санды және өлшем бірлігін көрсетіңіз. (нұсқа 1),number,42.6,0
+q041-ru,q041,ru,everyday,"Сколько примерно времени нужно, чтобы вскипятить один литр воды? Ответьте одним предложением. Укажите точное число и единицу измерения. (вариант 1)",number,42.6,0
+q041-en,q041,en,everyday,About how long does it take to boil one litre of water? Answer in one sentence. State the exact number and its unit. (variant 1),number,42.6,0
+q042-kk,q042,kk,arithmetic,"Егер бір қорапта 24 қалам болса, 7 қорапта барлығы қанша қалам болады? (нұсқа 2)",number,126,0
+q042-ru,q042,ru,arithmetic,"Если в одной коробке 24 ручки, сколько всего ручек в семи коробках? (вариант 2)",number,126,0
+q042-en,q042,en,arithmetic,"If one box holds 24 pens, how many pens are there in seven boxes? (variant 2)",number,126,0
+q043-kk,q043,kk,geography,Қазақстанның ең биік шыңы қалай аталады және оның биіктігі неше метр? Жауапты бір сөйлеммен беріңіз. (нұсқа 3),short,қысқа жауап,0
+q043-ru,q043,ru,geography,Как называется самая высокая вершина Казахстана и какова её высота в метрах? Ответьте одним предложением. (вариант 3),short,короткий ответ,0
+q043-en,q043,en,geography,What is the highest peak of Kazakhstan and how tall is it in metres? Answer in one sentence. (variant 3),short,short answer,0
+q044-kk,q044,kk,biology,Адам денесіндегі ең үлкен мүше қандай және ол қандай қызмет атқарады? Жауапты бір сөйлеммен беріңіз. Нақты санды және өлшем бірлігін көрсетіңіз. (нұсқа 4),short,қысқа жауап,0
+q044-ru,q044,ru,biology,Какой орган человеческого тела самый большой и какую функцию он выполняет? Ответьте одним предложением. Укажите точное число и единицу измерения. (вариант 4),short,короткий ответ,0
+q044-en,q044,en,biology,Which organ of the human body is the largest and what does it do? Answer in one sentence. State the exact number and its unit. (variant 4),short,short answer,0
+q045-kk,q045,kk,history,Ғарышқа тұңғыш ұшқан адамның аты кім және бұл қашан болды? (нұсқа 5),short,қысқа жауап,0
+q045-ru,q045,ru,history,"Как звали первого человека, побывавшего в космосе, и когда это произошло? (вариант 5)",short,короткий ответ,0
+q045-en,q045,en,history,Who was the first human to travel into space and when did it happen? (variant 5),short,short answer,0
+q046-kk,q046,kk,physics,Жарықтың вакуумдағы жылдамдығы шамамен қаншаға тең? Жауапты бір сөйлеммен беріңіз. (нұсқа 6),number,47.4,0
+q046-ru,q046,ru,physics,Чему примерно равна скорость света в вакууме? Ответьте одним предложением. (вариант 6),number,47.4,0
+q046-en,q046,en,physics,What is the approximate speed of light in a vacuum? Answer in one sentence. (variant 6),number,47.4,0
+q047-kk,q047,kk,everyday,Бір литр суды қайнату үшін шамамен қанша уақыт қажет? Жауапты бір сөйлеммен беріңіз. Нақты санды және өлшем бірлігін көрсетіңіз. (нұсқа 7),number,48.5,0
+q047-ru,q047,ru,everyday,"Сколько примерно времени нужно, чтобы вскипятить один литр воды? Ответьте одним предложением. Укажите точное число и единицу измерения. (вариант 7)",number,48.5,0
+q047-en,q047,en,everyday,About how long does it take to boil one litre of water? Answer in one sentence. State the exact number and its unit. (variant 7),number,48.5,0
+q048-kk,q048,kk,arithmetic,"Егер бір қорапта 24 қалам болса, 7 қорапта барлығы қанша қалам болады? (нұсқа 8)",number,144,0
+q048-ru,q048,ru,arithmetic,"Если в одной коробке 24 ручки, сколько всего ручек в семи коробках? (вариант 8)",number,144,0
+q048-en,q048,en,arithmetic,"If one box holds 24 pens, how many pens are there in seven boxes? (variant 8)",number,144,0
+q049-kk,q049,kk,geography,Қазақстанның ең биік шыңы қалай аталады және оның биіктігі неше метр? Жауапты бір сөйлеммен беріңіз. (нұсқа 9),short,қысқа жауап,0
+q049-ru,q049,ru,geography,Как называется самая высокая вершина Казахстана и какова её высота в метрах? Ответьте одним предложением. (вариант 9),short,короткий ответ,0
+q049-en,q049,en,geography,What is the highest peak of Kazakhstan and how tall is it in metres? Answer in one sentence. (variant 9),short,short answer,0
+q050-kk,q050,kk,biology,Адам денесіндегі ең үлкен мүше қандай және ол қандай қызмет атқарады? Жауапты бір сөйлеммен беріңіз. Нақты санды және өлшем бірлігін көрсетіңіз. (нұсқа 0),short,қысқа жауап,0
+q050-ru,q050,ru,biology,Какой орган человеческого тела самый большой и какую функцию он выполняет? Ответьте одним предложением. Укажите точное число и единицу измерения. (вариант 0),short,короткий ответ,0
+q050-en,q050,en,biology,Which organ of the human body is the largest and what does it do? Answer in one sentence. State the exact number and its unit. (variant 0),short,short answer,0
+q051-kk,q051,kk,history,Ғарышқа тұңғыш ұшқан адамның аты кім және бұл қашан болды? (нұсқа 1),short,қысқа жауап,0
+q051-ru,q051,ru,history,"Как звали первого человека, побывавшего в космосе, и когда это произошло? (вариант 1)",short,короткий ответ,0
+q051-en,q051,en,history,Who was the first human to travel into space and when did it happen? (variant 1),short,short answer,0
+q052-kk,q052,kk,physics,Жарықтың вакуумдағы жылдамдығы шамамен қаншаға тең? Жауапты бір сөйлеммен беріңіз. (нұсқа 2),number,53.3,0
+q052-ru,q052,ru,physics,Чему примерно равна скорость света в вакууме? Ответьте одним предложением. (вариант 2),number,53.3,0
+q052-en,q052,en,physics,What is the approximate speed of light in a vacuum? Answer in one sentence. (variant 2),number,53.3,0
+q053-kk,q053,kk,everyday,Бір литр суды қайнату үшін шамамен қанша уақыт қажет? Жауапты бір сөйлеммен беріңіз. Нақты санды және өлшем бірлігін көрсетіңіз. (нұсқа 3),number,54.4,0
+q053-ru,q053,ru,everyday,"Сколько примерно времени нужно, чтобы вскипятить один литр воды? Ответьте одним предложением. Укажите точное число и единицу измерения. (вариант 3)",number,54.4,0
+q053-en,q053,en,everyday,About how long does it take to boil one litre of water? Answer in one sentence. State the exact number and its unit. (variant 3),number,54.4,0
+q054-kk,q054,kk,arithmetic,"Егер бір қорапта 24 қалам болса, 7 қорапта барлығы қанша қалам болады? (нұсқа 4)",number,162,0
+q054-ru,q054,ru,arithmetic,"Если в одной коробке 24 ручки, сколько всего ручек в семи коробках? (вариант 4)",number,162,0
+q054-en,q054,en,arithmetic,"If one box holds 24 pens, how many pens are there in seven boxes? (variant 4)",number,162,0
+q055-kk,q055,kk,geography,Қазақстанның ең биік шыңы қалай аталады және оның биіктігі неше метр? Жауапты бір сөйлеммен беріңіз. (нұсқа 5),short,қысқа жауап,0
+q055-ru,q055,ru,geography,Как называется самая высокая вершина Казахстана и какова её высота в метрах? Ответьте одним предложением. (вариант 5),short,короткий ответ,0
+q055-en,q055,en,geography,What is the highest peak of Kazakhstan and how tall is it in metres? Answer in one sentence. (variant 5),short,short answer,0
+q056-kk,q056,kk,biology,Адам денесіндегі ең үлкен мүше қандай және ол қандай қызмет атқарады? Жауапты бір сөйлеммен беріңіз. Нақты санды және өлшем бірлігін көрсетіңіз. (нұсқа 6),short,қысқа жауап,0
+q056-ru,q056,ru,biology,Какой орган человеческого тела самый большой и какую функцию он выполняет? Ответьте одним предложением. Укажите точное число и единицу измерения. (вариант 6),short,короткий ответ,0
+q056-en,q056,en,biology,Which organ of the human body is the largest and what does it do? Answer in one sentence. State the exact number and its unit. (variant 6),short,short answer,0
+q057-kk,q057,kk,history,Ғарышқа тұңғыш ұшқан адамның аты кім және бұл қашан болды? (нұсқа 7),short,қысқа жауап,0
+q057-ru,q057,ru,history,"Как звали первого человека, побывавшего в космосе, и когда это произошло? (вариант 7)",short,короткий ответ,0
+q057-en,q057,en,history,Who was the first human to travel into space and when did it happen? (variant 7),short,short answer,0
+q058-kk,q058,kk,physics,Жарықтың вакуумдағы жылдамдығы шамамен қаншаға тең? Жауапты бір сөйлеммен беріңіз. (нұсқа 8),number,59.2,0
+q058-ru,q058,ru,physics,Чему примерно равна скорость света в вакууме? Ответьте одним предложением. (вариант 8),number,59.2,0
+q058-en,q058,en,physics,What is the approximate speed of light in a vacuum? Answer in one sentence. (variant 8),number,59.2,0
+q059-kk,q059,kk,everyday,Бір литр суды қайнату үшін шамамен қанша уақыт қажет? Жауапты бір сөйлеммен беріңіз. Нақты санды және өлшем бірлігін көрсетіңіз. (нұсқа 9),number,60.3,0
+q059-ru,q059,ru,everyday,"Сколько примерно времени нужно, чтобы вскипятить один литр воды? Ответьте одним предложением. Укажите точное число и единицу измерения. (вариант 9)",number,60.3,0
+q059-en,q059,en,everyday,About how long does it take to boil one litre of water? Answer in one sentence. State the exact number and its unit. (variant 9),number,60.3,0
