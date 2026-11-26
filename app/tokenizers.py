@@ -310,13 +310,24 @@ def _tiktoken_backend(encoding: str) -> Backend:
     return Backend(identifier=encoding, encode=encode)
 
 
-def _subword_backend(repo: str, revision: str, identifier: str) -> Backend:
-    """Load the pinned subword tokenizer offline: local files plus hub offline."""
+def _subword_backend(
+    repo: str, revision: str, identifier: str, cache_dir: Path | None = None
+) -> Backend:
+    """Load the pinned subword tokenizer offline: local files plus hub offline.
+
+    ``cache_dir`` defaults to the hub cache that ``huggingface_hub`` resolved at
+    import time; tests pass an explicit folder because that import-time value
+    ignores a later ``HF_HOME``.
+    """
     from transformers import AutoTokenizer
 
     with _hub_offline():
         handle = AutoTokenizer.from_pretrained(
-            repo, revision=revision, use_fast=True, local_files_only=True
+            repo,
+            revision=revision,
+            use_fast=True,
+            local_files_only=True,
+            cache_dir=str(cache_dir) if cache_dir is not None else None,
         )
 
     def encode(text: str) -> list[tuple[int, str]]:

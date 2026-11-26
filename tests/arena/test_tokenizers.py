@@ -193,9 +193,12 @@ def test_the_tiktoken_loader_refuses_to_download(
     monkeypatch: pytest.MonkeyPatch, tmp_path: Path
 ) -> None:
     """Even without the pre-flight check, the loader itself cannot download."""
-    pytest.importorskip("tiktoken")
+    tiktoken_registry = pytest.importorskip("tiktoken.registry")
     attempts = block_network(monkeypatch)
     monkeypatch.setenv("TIKTOKEN_CACHE_DIR", str(tmp_path / "cold"))
+    # tiktoken keeps every loaded encoding in memory; a warm process would
+    # return it without reading the cache. monkeypatch restores the original.
+    monkeypatch.setattr(tiktoken_registry, "ENCODINGS", {})
     with pytest.raises(tokenizers.OfflineCacheError):
         tokenizers._tiktoken_backend(ENCODING)
     assert attempts == []
@@ -207,11 +210,13 @@ def test_the_subword_loader_never_connects_on_a_cold_cache(
     """``local_files_only=True`` alone still opens a socket; offline mode does not."""
     pytest.importorskip("transformers")
     attempts = block_network(monkeypatch)
-    monkeypatch.setenv("HF_HOME", str(tmp_path / "hf"))
+    # huggingface_hub reads HF_HOME at import, so a late setenv would still load
+    # a warm cache; an explicit empty cache folder keeps the test cold.
+    cold = tmp_path / "hf" / "hub"
     # The raised type varies with the transformers/hub version; what matters is
     # that it is raised here instead of on a socket.
     with pytest.raises(Exception) as failure:
-        tokenizers._subword_backend(REPO, REVISION, PINNED)
+        tokenizers._subword_backend(REPO, REVISION, PINNED, cache_dir=cold)
     assert attempts == [], "from_pretrained must not connect to huggingface.co"
     assert (
         "offline" in str(failure.value).lower()
