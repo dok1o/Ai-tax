@@ -1,181 +1,856 @@
 prompt_id,q_id,lang,category,prompt,answer_type,gold_answer,verified_by_native
-m01-kk,m01,kk,math_logic,7-ге 5-ті қосқанда неше болады?,number,12,0
-m01-ru,m01,ru,math_logic,Сколько будет 7 плюс 5?,number,12,0
-m01-en,m01,en,math_logic,What is 7 plus 5?,number,12,0
-m02-kk,m02,kk,math_logic,9-ды 4-ке көбейтсе неше болады?,number,36,0
-m02-ru,m02,ru,math_logic,Сколько будет 9 умножить на 4?,number,36,0
-m02-en,m02,en,math_logic,What is 9 times 4?,number,36,0
-m03-kk,m03,kk,math_logic,Үшбұрыштың неше қабырғасы бар?,number,3,0
-m03-ru,m03,ru,math_logic,Сколько сторон у треугольника?,number,3,0
-m03-en,m03,en,math_logic,How many sides does a triangle have?,number,3,0
-m04-kk,m04,kk,math_logic,15 жұп сан ба? A) Иә B) Жоқ,mcq,B,0
-m04-ru,m04,ru,math_logic,Число 15 чётное? A) Да B) Нет,mcq,B,0
-m04-en,m04,en,math_logic,Is 15 an even number? A) Yes B) No,mcq,B,0
-m05-kk,m05,kk,math_logic,24-ті 6-ға бөлгенде неше шығады?,number,4,0
-m05-ru,m05,ru,math_logic,Сколько будет 24 разделить на 6?,number,4,0
-m05-en,m05,en,math_logic,What is 24 divided by 6?,number,4,0
-m06-kk,m06,kk,math_logic,Жартыға тең ондық бөлшек қандай?,number,0.5,0
-m06-ru,m06,ru,math_logic,Какая десятичная дробь равна одной второй?,number,0.5,0
-m06-en,m06,en,math_logic,What decimal equals one half?,number,0.5,0
-m07-kk,m07,kk,math_logic,2 4 6 қатарынан кейін қандай сан келеді?,number,8,0
-m07-ru,m07,ru,math_logic,Какое число следует за последовательностью 2 4 6?,number,8,0
-m07-en,m07,en,math_logic,What number comes next in the sequence 2 4 6?,number,8,0
-m08-kk,m08,kk,math_logic,30-дан 12-ні азайтқанда неше болады?,number,18,0
-m08-ru,m08,ru,math_logic,Сколько будет 30 минус 12?,number,18,0
-m08-en,m08,en,math_logic,What is 30 minus 12?,number,18,0
-m09-kk,m09,kk,math_logic,Ширек сағатта неше минут бар?,number,15,0
-m09-ru,m09,ru,math_logic,Сколько минут в четверти часа?,number,15,0
-m09-en,m09,en,math_logic,How many minutes are in a quarter hour?,number,15,0
-m10-kk,m10,kk,math_logic,3 + 4 саны 4 + 3 санына тең бе? A) Иә B) Жоқ,mcq,A,0
-m10-ru,m10,ru,math_logic,Равно ли 3 + 4 числу 4 + 3? A) Да B) Нет,mcq,A,0
-m10-en,m10,en,math_logic,Is 3 plus 4 equal to 4 plus 3? A) Yes B) No,mcq,A,0
-s01-kk,s01,kk,science,Судың химиялық формуласы қандай?,short,H2O,0
-s01-ru,s01,ru,science,Какова химическая формула воды?,short,H2O,0
-s01-en,s01,en,science,What is the chemical formula for water?,short,H2O,0
-s02-kk,s02,kk,science,Теңіз деңгейінде су шамамен неше градус Цельсийде қайнайды?,number,100,0
-s02-ru,s02,ru,science,При какой температуре по Цельсию примерно кипит вода на уровне моря?,number,100,0
-s02-en,s02,en,science,About how many degrees Celsius does water boil at sea level?,number,100,0
-s03-kk,s03,kk,science,Өсімдіктер фотосинтез үшін қандай газды сіңіреді?,short,көмірқышқыл газы,0
-s03-ru,s03,ru,science,Какой газ поглощают растения для фотосинтеза?,short,углекислый газ,0
-s03-en,s03,en,science,Which gas do plants absorb for photosynthesis?,short,carbon dioxide,0
-s04-kk,s04,kk,science,Заттарды Жерге қарай тартатын күш қалай аталады?,short,ауырлық күші,0
-s04-ru,s04,ru,science,Как называется сила которая притягивает предметы к Земле?,short,сила тяжести,0
-s04-en,s04,en,science,What force pulls objects toward Earth?,short,gravity,0
-s05-kk,s05,kk,science,Жәндіктің неше аяғы бар?,number,6,0
-s05-ru,s05,ru,science,Сколько ног у насекомого?,number,6,0
-s05-en,s05,en,science,How many legs does an insect have?,number,6,0
-s06-kk,s06,kk,science,Жер Күнді айнала ма? A) Иә B) Жоқ,mcq,A,0
-s06-ru,s06,ru,science,Земля обращается вокруг Солнца? A) Да B) Нет,mcq,A,0
-s06-en,s06,en,science,Does Earth orbit the Sun? A) Yes B) No,mcq,A,0
-s07-kk,s07,kk,science,Жерге ең жақын жұлдыз қайсы?,short,Күн,0
-s07-ru,s07,ru,science,Какая звезда ближе всего к Земле?,short,Солнце,0
-s07-en,s07,en,science,What is the closest star to Earth?,short,Sun,0
-s08-kk,s08,kk,science,Мұз заттың қай күйіне жатады?,short,қатты күй,0
-s08-ru,s08,ru,science,К какому состоянию вещества относится лёд?,short,твёрдое состояние,0
-s08-en,s08,en,science,What state of matter is ice?,short,solid,0
-s09-kk,s09,kk,science,Өсімдіктің қай бөлігі топырақтан су сіңіреді?,short,тамыр,0
-s09-ru,s09,ru,science,Какая часть растения поглощает воду из почвы?,short,корень,0
-s09-en,s09,en,science,What part of a plant absorbs water from soil?,short,root,0
-s10-kk,s10,kk,science,Күн жүйесінде неше ғаламшар бар?,number,8,0
-s10-ru,s10,ru,science,Сколько планет в Солнечной системе?,number,8,0
-s10-en,s10,en,science,How many planets are in the Solar System?,number,8,0
-w01-kk,w01,kk,world_geography_history,Францияның астанасы қай қала?,short,Париж,0
-w01-ru,w01,ru,world_geography_history,Какой город является столицей Франции?,short,Париж,0
-w01-en,w01,en,world_geography_history,What city is the capital of France?,short,Paris,0
-w02-kk,w02,kk,world_geography_history,Әлемдегі ең үлкен мұхит қайсы?,short,Тынық мұхиты,0
-w02-ru,w02,ru,world_geography_history,Какой океан самый большой в мире?,short,Тихий океан,0
-w02-en,w02,en,world_geography_history,What is the largest ocean in the world?,short,Pacific Ocean,0
-w03-kk,w03,kk,world_geography_history,Жапония қай құрлықта орналасқан?,short,Азия,0
-w03-ru,w03,ru,world_geography_history,На каком континенте находится Япония?,short,Азия,0
-w03-en,w03,en,world_geography_history,On which continent is Japan located?,short,Asia,0
-w04-kk,w04,kk,world_geography_history,Берлин қабырғасы қай жылы құлады?,number,1989,0
-w04-ru,w04,ru,world_geography_history,В каком году пала Берлинская стена?,number,1989,0
-w04-en,w04,en,world_geography_history,In what year did the Berlin Wall fall?,number,1989,0
-w05-kk,w05,kk,world_geography_history,Гиза пирамидалары қай елде орналасқан?,short,Мысыр,0
-w05-ru,w05,ru,world_geography_history,В какой стране находятся пирамиды Гизы?,short,Египет,0
-w05-en,w05,en,world_geography_history,Which country is home to the pyramids of Giza?,short,Egypt,0
-w06-kk,w06,kk,world_geography_history,Мысыр арқылы ағатын өзен қалай аталады?,short,Ніл,0
-w06-ru,w06,ru,world_geography_history,Какая река протекает через Египет?,short,Нил,0
-w06-en,w06,en,world_geography_history,Which river flows through Egypt?,short,Nile,0
-w07-kk,w07,kk,world_geography_history,Жеті құрлық үлгісінде неше құрлық бар?,number,7,0
-w07-ru,w07,ru,world_geography_history,Сколько континентов в модели семи континентов?,number,7,0
-w07-en,w07,en,world_geography_history,How many continents are in the seven-continent model?,number,7,0
-w08-kk,w08,kk,world_geography_history,Мачу-Пикчу қай елде орналасқан?,short,Перу,0
-w08-ru,w08,ru,world_geography_history,В какой стране находится Мачу-Пикчу?,short,Перу,0
-w08-en,w08,en,world_geography_history,Which country is home to Machu Picchu?,short,Peru,0
-w09-kk,w09,kk,world_geography_history,Солтүстік пен оңтүстік жарты шарды қандай сызық бөледі?,short,экватор,0
-w09-ru,w09,ru,world_geography_history,Какая линия разделяет Северное и Южное полушария?,short,экватор,0
-w09-en,w09,en,world_geography_history,What line divides the Northern and Southern Hemispheres?,short,equator,0
-w10-kk,w10,kk,world_geography_history,Италияның астанасы қай қала?,short,Рим,0
-w10-ru,w10,ru,world_geography_history,Какой город является столицей Италии?,short,Рим,0
-w10-en,w10,en,world_geography_history,What city is the capital of Italy?,short,Rome,0
-k01-kk,k01,kk,kazakhstan_history_culture,Екі ішекті дәстүрлі қазақ аспабы қалай аталады?,short,домбыра,0
-k01-ru,k01,ru,kazakhstan_history_culture,Как называется традиционный казахский инструмент с двумя струнами?,short,домбра,0
-k01-en,k01,en,kazakhstan_history_culture,What is the traditional Kazakh two-string instrument called?,short,dombra,0
-k02-kk,k02,kk,kazakhstan_history_culture,Дәстүрлі көшпелі баспана қалай аталады?,short,киіз үй,0
-k02-ru,k02,ru,kazakhstan_history_culture,Как называется традиционное переносное жилище?,short,юрта,0
-k02-en,k02,en,kazakhstan_history_culture,What is the traditional portable dwelling called?,short,yurt,0
-k03-kk,k03,kk,kazakhstan_history_culture,Көктемде тойланатын дәстүрлі мереке қалай аталады?,short,Наурыз,0
-k03-ru,k03,ru,kazakhstan_history_culture,Как называется традиционный весенний праздник?,short,Наурыз,0
-k03-en,k03,en,kazakhstan_history_culture,What is the traditional spring holiday called?,short,Nauryz,0
-k04-kk,k04,kk,kazakhstan_history_culture,Бие сүтінен ашытылатын дәстүрлі сусын қалай аталады?,short,қымыз,0
-k04-ru,k04,ru,kazakhstan_history_culture,Как называется традиционный напиток из кобыльего молока?,short,кумыс,0
-k04-en,k04,en,kazakhstan_history_culture,What is the traditional drink made from fermented mare's milk called?,short,kumis,0
-k05-kk,k05,kk,kazakhstan_history_culture,Ет пен қамырдан жасалатын дәстүрлі тағам қалай аталады?,short,бешбармақ,0
-k05-ru,k05,ru,kazakhstan_history_culture,Как называется традиционное блюдо из мяса и теста?,short,бешбармак,0
-k05-en,k05,en,kazakhstan_history_culture,What is the traditional dish made with meat and dough called?,short,beshbarmak,0
-k06-kk,k06,kk,kazakhstan_history_culture,Қазақстанның астанасы қай қала?,short,Астана,0
-k06-ru,k06,ru,kazakhstan_history_culture,Какой город является столицей Казахстана?,short,Астана,0
-k06-en,k06,en,kazakhstan_history_culture,What city is the capital of Kazakhstan?,short,Astana,0
-k07-kk,k07,kk,kazakhstan_history_culture,Қазақстанның ұлттық валютасы қалай аталады?,short,теңге,0
-k07-ru,k07,ru,kazakhstan_history_culture,Как называется валюта Казахстана?,short,тенге,0
-k07-en,k07,en,kazakhstan_history_culture,What is the currency of Kazakhstan called?,short,tenge,0
-k08-kk,k08,kk,kazakhstan_history_culture,Далада дәстүрлі түрде мінетін жануар қандай?,short,жылқы,0
-k08-ru,k08,ru,kazakhstan_history_culture,На каком животном традиционно ездили по степи?,short,лошадь,0
-k08-en,k08,en,kazakhstan_history_culture,Which animal was traditionally ridden across the steppe?,short,horse,0
-k09-kk,k09,kk,kazakhstan_history_culture,Киіз үйдің төбесіндегі дөңгелек бөлік қалай аталады?,short,шаңырақ,0
-k09-ru,k09,ru,kazakhstan_history_culture,Как называется круглая верхняя часть юрты?,short,шанырак,0
-k09-en,k09,en,kazakhstan_history_culture,What is the circular crown at the top of a yurt called?,short,shanyrak,0
-k10-kk,k10,kk,kazakhstan_history_culture,Түйе сүтінен ашытылатын дәстүрлі сусын қалай аталады?,short,шұбат,0
-k10-ru,k10,ru,kazakhstan_history_culture,Как называется традиционный напиток из верблюжьего молока?,short,шубат,0
-k10-en,k10,en,kazakhstan_history_culture,What is the traditional drink made from fermented camel's milk called?,short,shubat,0
-e01-kk,e01,kk,everyday_situations,3 алмаға тағы 2 алма қоссақ неше алма болады?,number,5,0
-e01-ru,e01,ru,everyday_situations,Сколько яблок будет если к 3 яблокам добавить ещё 2?,number,5,0
-e01-en,e01,en,everyday_situations,How many apples are there if you add 2 to 3 apples?,number,5,0
-e02-kk,e02,kk,everyday_situations,Бір сағатта неше минут бар?,number,60,0
-e02-ru,e02,ru,everyday_situations,Сколько минут в одном часе?,number,60,0
-e02-en,e02,en,everyday_situations,How many minutes are in one hour?,number,60,0
-e03-kk,e03,kk,everyday_situations,Әр бумада 4 қарындаш болса 3 бумада неше қарындаш бар?,number,12,0
-e03-ru,e03,ru,everyday_situations,Сколько карандашей в 3 пачках если в каждой по 4?,number,12,0
-e03-en,e03,en,everyday_situations,How many pencils are in 3 packs with 4 pencils in each?,number,12,0
-e04-kk,e04,kk,everyday_situations,10 печеньені 2 адамға тең бөлсе әрқайсысына нешеу тиеді?,number,5,0
-e04-ru,e04,ru,everyday_situations,Сколько печений получит каждый если 10 печений разделить поровну между 2 людьми?,number,5,0
-e04-en,e04,en,everyday_situations,How many cookies does each person get when 10 are shared equally by 2 people?,number,5,0
-e05-kk,e05,kk,everyday_situations,Автобус 09:15-те шығып жолға 10 минут жұмсаса қай уақытта келеді?,short,09:25,0
-e05-ru,e05,ru,everyday_situations,Если автобус отправился в 09:15 и ехал 10 минут во сколько он прибудет?,short,09:25,0
-e05-en,e05,en,everyday_situations,If a bus leaves at 09:15 and travels for 10 minutes what time does it arrive?,short,09:25,0
-e06-kk,e06,kk,everyday_situations,Бір литр судың жартысы неше литр болады?,number,0.5,0
-e06-ru,e06,ru,everyday_situations,Сколько литров составляет половина литра воды?,number,0.5,0
-e06-en,e06,en,everyday_situations,How many liters is half of one liter of water?,number,0.5,0
-e07-kk,e07,kk,everyday_situations,Кәдімгі велосипедте неше дөңгелек бар?,number,2,0
-e07-ru,e07,ru,everyday_situations,Сколько колёс у обычного велосипеда?,number,2,0
-e07-en,e07,en,everyday_situations,How many wheels does a standard bicycle have?,number,2,0
-e08-kk,e08,kk,everyday_situations,Температура 20 градустан 5 градусқа көтерілсе неше градус болады?,number,25,0
-e08-ru,e08,ru,everyday_situations,Если температура вырастет с 20 на 5 градусов сколько будет?,number,25,0
-e08-en,e08,en,everyday_situations,If the temperature rises by 5 degrees from 20 what is it?,number,25,0
-e09-kk,e09,kk,everyday_situations,Хат жазу үшін қандай құрал қолдануға болады?,short,қалам,0
-e09-ru,e09,ru,everyday_situations,Какой предмет можно использовать чтобы написать письмо?,short,ручка,0
-e09-en,e09,en,everyday_situations,What tool can you use to write a letter?,short,pen,0
-e10-kk,e10,kk,everyday_situations,Жаңбыр жауады деген болжам болса қолшатыр пайдалы ма? A) Иә B) Жоқ,mcq,A,0
-e10-ru,e10,ru,everyday_situations,Полезен ли зонт если прогноз обещает дождь? A) Да B) Нет,mcq,A,0
-e10-en,e10,en,everyday_situations,Is an umbrella useful when rain is forecast? A) Yes B) No,mcq,A,0
-h01-kk,h01,kk,health_education_basics,Адамда неше өкпе бар?,number,2,0
-h01-ru,h01,ru,health_education_basics,Сколько лёгких у человека?,number,2,0
-h01-en,h01,en,health_education_basics,How many lungs does a person have?,number,2,0
-h02-kk,h02,kk,health_education_basics,Қанды айдайтын мүше қалай аталады?,short,жүрек,0
-h02-ru,h02,ru,health_education_basics,Как называется орган который перекачивает кровь?,short,сердце,0
-h02-en,h02,en,health_education_basics,What organ pumps blood?,short,heart,0
-h03-kk,h03,kk,health_education_basics,Қолды сабындап жуу үшін дененің қай бөлігін жуу керек?,short,қол,0
-h03-ru,h03,ru,health_education_basics,Какую часть тела нужно мыть водой с мылом?,short,руки,0
-h03-en,h03,en,health_education_basics,Which body part should you wash with soap and water?,short,hands,0
-h04-kk,h04,kk,health_education_basics,Адам жүрегінде неше камера бар?,number,4,0
-h04-ru,h04,ru,health_education_basics,Сколько камер в человеческом сердце?,number,4,0
-h04-en,h04,en,health_education_basics,How many chambers does the human heart have?,number,4,0
-h05-kk,h05,kk,health_education_basics,Күн сәулесі теріде түзілуіне көмектесетін дәрумен қайсы?,short,D,0
-h05-ru,h05,ru,health_education_basics,Какой витамин помогает образовываться в коже под действием солнца?,short,D,0
-h05-en,h05,en,health_education_basics,Which vitamin can the skin make with sunlight?,short,D,0
-h06-kk,h06,kk,health_education_basics,Дыбысты естуге қай сезім көмектеседі?,short,есту,0
-h06-ru,h06,ru,health_education_basics,Какое чувство помогает воспринимать звук?,short,слух,0
-h06-en,h06,en,health_education_basics,Which sense lets people hear sound?,short,hearing,0
-h07-kk,h07,kk,health_education_basics,Бір жылда неше ай бар?,number,12,0
-h07-ru,h07,ru,health_education_basics,Сколько месяцев в одном году?,number,12,0
-h07-en,h07,en,health_education_basics,How many months are in one year?,number,12,0
-h08-kk,h08,kk,health_education_basics,Температураны өлшейтін құрал қалай аталады?,short,термометр,0
-h08-ru,h08,ru,health_education_basics,Как называется прибор для измерения температуры?,short,термометр,0
-h08-en,h08,en,health_education_basics,What tool measures temperature?,short,thermometer,0
-h09-kk,h09,kk,health_education_basics,Ағылшын әліпбиінде неше әріп бар?,number,26,0
-h09-ru,h09,ru,health_education_basics,Сколько букв в английском алфавите?,number,26,0
-h09-en,h09,en,health_education_basics,How many letters are in the English alphabet?,number,26,0
-h10-kk,h10,kk,health_education_basics,99 санынан кейін қандай сан келеді?,number,100,0
-h10-ru,h10,ru,health_education_basics,Какое число идёт после 99?,number,100,0
-h10-en,h10,en,health_education_basics,What number comes after 99?,number,100,0
+q_001-ru,q_001,ru,math_logic,Сколько будет 15% от 240? Введите только число.,number,36,0
+q_001-kk,q_001,kk,math_logic,240 санының 15%-ы нешеге тең? Тек санды жазыңыз.,number,36,0
+q_001-en,q_001,en,math_logic,What is 15% of 240? Enter only the number.,number,36,0
+q_002-ru,q_002,ru,math_logic,"Продолжите числовой ряд: 2, 4, 8, 16, 32, ... Введите следующее число.",number,64,0
+q_002-kk,q_002,kk,math_logic,"Сандар қатарын жалғастырыңыз: 2, 4, 8, 16, 32, ... Келесі санды жазыңыз.",number,64,0
+q_002-en,q_002,en,math_logic,"Continue the number sequence: 2, 4, 8, 16, 32, ... Enter the next number.",number,64,0
+q_003-ru,q_003,ru,math_logic,Чему равна сумма внутренних углов треугольника в градусах? Введите только число.,number,180,0
+q_003-kk,q_003,kk,math_logic,Үшбұрыштың ішкі бұрыштарының қосындысы неше градусқа тең? Тек санды жазыңыз.,number,180,0
+q_003-en,q_003,en,math_logic,What is the sum of the interior angles of a triangle in degrees? Enter only the number.,number,180,0
+q_004-ru,q_004,ru,math_logic,"Если 3 одинаковых блокнота стоят 450 тенге, сколько тенге стоят 5 таких блокнотов? Введите только число.",number,750,0
+q_004-kk,q_004,kk,math_logic,"Егер 3 бірдей дәптер 450 теңге тұрса, осындай 5 дәптер неше теңге тұрады? Тек санды жазыңыз.",number,750,0
+q_004-en,q_004,en,math_logic,"If 3 identical notebooks cost 450 tenge, how many tenge do 5 such notebooks cost? Enter only the number.",number,750,0
+q_005-ru,q_005,ru,math_logic,Чему равен квадратный корень из 144? Введите только число.,number,12,0
+q_005-kk,q_005,kk,math_logic,144 санының квадрат түбірі нешеге тең? Тек санды жазыңыз.,number,12,0
+q_005-en,q_005,en,math_logic,What is the square root of 144? Enter only the number.,number,12,0
+q_006-ru,q_006,ru,math_logic,Найдите периметр прямоугольника со сторонами 7 см и 5 см (в сантиметрах). Введите только число.,number,24,0
+q_006-kk,q_006,kk,math_logic,Қабырғалары 7 см және 5 см болатын тіктөртбұрыштың периметрін табыңыз (сантиметрмен). Тек санды жазыңыз.,number,24,0
+q_006-en,q_006,en,math_logic,Find the perimeter of a rectangle with sides of 7 cm and 5 cm (in centimeters). Enter only the number.,number,24,0
+q_007-ru,q_007,ru,math_logic,"Какое число пропущено в последовательности: 5, 10, 20, 40, ..., 160? Введите только число.",number,80,0
+q_007-kk,q_007,kk,math_logic,"Тізбекте қандай сан түсіп қалған: 5, 10, 20, 40, ..., 160? Тек санды жазыңыз.",number,80,0
+q_007-en,q_007,en,math_logic,"What number is missing in the sequence: 5, 10, 20, 40, ..., 160? Enter only the number.",number,80,0
+q_008-ru,q_008,ru,math_logic,Решите уравнение: 3x + 7 = 28. Чему равен x? Введите только число.,number,7,0
+q_008-kk,q_008,kk,math_logic,Теңдеуді шешіңіз: 3x + 7 = 28. x нешеге тең? Тек санды жазыңыз.,number,7,0
+q_008-en,q_008,en,math_logic,Solve the equation: 3x + 7 = 28. What is x? Enter only the number.,number,7,0
+q_009-ru,q_009,ru,math_logic,"Чему равно среднее арифметическое чисел 10, 20 и 30? Введите только число.",number,20,0
+q_009-kk,q_009,kk,math_logic,"10, 20 және 30 сандарының арифметикалық ортасы нешеге тең? Тек санды жазыңыз.",number,20,0
+q_009-en,q_009,en,math_logic,"What is the arithmetic mean of the numbers 10, 20, and 30? Enter only the number.",number,20,0
+q_010-ru,q_010,ru,math_logic,В корзине 12 красных и 8 зелёных яблок. Сколько всего яблок в корзине? Введите только число.,number,20,0
+q_010-kk,q_010,kk,math_logic,Себетте 12 қызыл және 8 жасыл алма бар. Себетте барлығы неше алма бар? Тек санды жазыңыз.,number,20,0
+q_010-en,q_010,en,math_logic,There are 12 red apples and 8 green apples in a basket. How many apples are in the basket in total? Enter only the number.,number,20,0
+q_011-ru,q_011,ru,science,"Какая планета Солнечной системы находится ближе всего к Солнцу?
+A) Меркурий
+B) Венера
+C) Земля
+D) Марс
+Введите только букву: A, B, C или D.",mcq,A,0
+q_011-kk,q_011,kk,science,"Күн жүйесіндегі қай ғаламшар Күнге ең жақын орналасқан?
+A) Меркурий
+B) Шолпан
+C) Жер
+D) Марс
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,A,0
+q_011-en,q_011,en,science,"Which planet in the Solar System is closest to the Sun?
+A) Mercury
+B) Venus
+C) Earth
+D) Mars
+Enter only the letter: A, B, C, or D.",mcq,A,0
+q_012-ru,q_012,ru,science,"При какой температуре по шкале Цельсия кипит чистая вода при нормальном атмосферном давлении?
+A) 50 °C
+B) 90 °C
+C) 100 °C
+D) 120 °C
+Введите только букву: A, B, C или D.",mcq,C,0
+q_012-kk,q_012,kk,science,"Қалыпты атмосфералық қысымда таза су Цельсий шкаласы бойынша неше градуста қайнайды?
+A) 50 °C
+B) 90 °C
+C) 100 °C
+D) 120 °C
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,C,0
+q_012-en,q_012,en,science,"At what temperature on the Celsius scale does pure water boil at standard atmospheric pressure?
+A) 50 °C
+B) 90 °C
+C) 100 °C
+D) 120 °C
+Enter only the letter: A, B, C, or D.",mcq,C,0
+q_013-ru,q_013,ru,science,"Какой газ растения поглощают из воздуха в процессе фотосинтеза?
+A) Азот
+B) Гелий
+C) Углекислый газ
+D) Водород
+Введите только букву: A, B, C или D.",mcq,C,0
+q_013-kk,q_013,kk,science,"Фотосинтез процесінде өсімдіктер ауадан қандай газды сіңіреді?
+A) Азот
+B) Гелий
+C) Көмірқышқыл газы
+D) Сутек
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,C,0
+q_013-en,q_013,en,science,"Which gas do plants absorb from the air during photosynthesis?
+A) Nitrogen
+B) Helium
+C) Carbon dioxide
+D) Hydrogen
+Enter only the letter: A, B, C, or D.",mcq,C,0
+q_014-ru,q_014,ru,science,"Какой химический элемент обозначается символом O в периодической таблице?
+A) Кислород
+B) Олово
+C) Золото
+D) Осмий
+Введите только букву: A, B, C или D.",mcq,A,0
+q_014-kk,q_014,kk,science,"Периодтық жүйеде O символымен қандай химиялық элемент белгіленеді?
+A) Оттек
+B) Қалайы
+C) Алтын
+D) Осмий
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,A,0
+q_014-en,q_014,en,science,"Which chemical element is represented by the symbol O in the periodic table?
+A) Oxygen
+B) Tin
+C) Gold
+D) Osmium
+Enter only the letter: A, B, C, or D.",mcq,A,0
+q_015-ru,q_015,ru,science,"Какой орган человека перекачивает кровь по кровеносным сосудам?
+A) Желудок
+B) Лёгкие
+C) Печень
+D) Сердце
+Введите только букву: A, B, C или D.",mcq,D,0
+q_015-kk,q_015,kk,science,"Адамның қай мүшесі қан тамырлары арқылы қанды айдайды?
+A) Асқазан
+B) Өкпе
+C) Бауыр
+D) Жүрек
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,D,0
+q_015-en,q_015,en,science,"Which human organ pumps blood through the blood vessels?
+A) Stomach
+B) Lungs
+C) Liver
+D) Heart
+Enter only the letter: A, B, C, or D.",mcq,D,0
+q_016-ru,q_016,ru,science,"Сколько ног у взрослого паука?
+A) 6
+B) 8
+C) 10
+D) 12
+Введите только букву: A, B, C или D.",mcq,B,0
+q_016-kk,q_016,kk,science,"Ересек өрмекшінің неше аяғы бар?
+A) 6
+B) 8
+C) 10
+D) 12
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,B,0
+q_016-en,q_016,en,science,"How many legs does an adult spider have?
+A) 6
+B) 8
+C) 10
+D) 12
+Enter only the letter: A, B, C, or D.",mcq,B,0
+q_017-ru,q_017,ru,science,"Какая единица используется в системе СИ для измерения электрического сопротивления?
+A) Вольт
+B) Ом
+C) Ампер
+D) Ватт
+Введите только букву: A, B, C или D.",mcq,B,0
+q_017-kk,q_017,kk,science,"ХБЖ (СИ) жүйесінде электр кедергісін өлшеу үшін қандай өлшем бірлігі қолданылады?
+A) Вольт
+B) Ом
+C) Ампер
+D) Ватт
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,B,0
+q_017-en,q_017,en,science,"Which SI unit is used to measure electrical resistance?
+A) Volt
+B) Ohm
+C) Ampere
+D) Watt
+Enter only the letter: A, B, C, or D.",mcq,B,0
+q_018-ru,q_018,ru,science,"Какая планета является самой большой по размеру в Солнечной системе?
+A) Юпитер
+B) Уран
+C) Сатурн
+D) Нептун
+Введите только букву: A, B, C или D.",mcq,A,0
+q_018-kk,q_018,kk,science,"Күн жүйесіндегі өлшемі бойынша ең үлкен ғаламшар қайсысы?
+A) Юпитер
+B) Уран
+C) Сатурн
+D) Нептун
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,A,0
+q_018-en,q_018,en,science,"Which planet is the largest by size in the Solar System?
+A) Jupiter
+B) Uranus
+C) Saturn
+D) Neptune
+Enter only the letter: A, B, C, or D.",mcq,A,0
+q_019-ru,q_019,ru,science,"Как называется переход вещества из твёрдого состояния непосредственно в газообразное, минуя жидкое?
+A) Кристаллизация
+B) Конденсация
+C) Сублимация
+D) Плавление
+Введите только букву: A, B, C или D.",mcq,C,0
+q_019-kk,q_019,kk,science,"Заттың сұйық күйге өтпей, қатты күйден тікелей газ күйіне ауысуы қалай аталады?
+A) Кристалдану
+B) Конденсация
+C) Сублимация
+D) Балқу
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,C,0
+q_019-en,q_019,en,science,"What is the transition of a substance directly from a solid to a gas without passing through the liquid state called?
+A) Crystallization
+B) Condensation
+C) Sublimation
+D) Melting
+Enter only the letter: A, B, C, or D.",mcq,C,0
+q_020-ru,q_020,ru,science,"Из каких двух химических элементов состоит молекула чистой воды (H2O)?
+A) Водород и кислород
+B) Водород и азот
+C) Гелий и кислород
+D) Углерод и кислород
+Введите только букву: A, B, C или D.",mcq,A,0
+q_020-kk,q_020,kk,science,"Таза судың (H2O) молекуласы қандай екі химиялық элементтен тұрады?
+A) Сутек және оттек
+B) Сутек және азот
+C) Гелий және оттек
+D) Көміртек және оттек
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,A,0
+q_020-en,q_020,en,science,"Which two chemical elements make up a molecule of pure water (H2O)?
+A) Hydrogen and oxygen
+B) Hydrogen and nitrogen
+C) Helium and oxygen
+D) Carbon and oxygen
+Enter only the letter: A, B, C, or D.",mcq,A,0
+q_021-ru,q_021,ru,world_geography_history,"Какой город является столицей Франции?
+A) Марсель
+B) Лион
+C) Ницца
+D) Париж
+Введите только букву: A, B, C или D.",mcq,D,0
+q_021-kk,q_021,kk,world_geography_history,"Францияның астанасы қай қала?
+A) Марсель
+B) Лион
+C) Ницца
+D) Париж
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,D,0
+q_021-en,q_021,en,world_geography_history,"Which city is the capital of France?
+A) Marseille
+B) Lyon
+C) Nice
+D) Paris
+Enter only the letter: A, B, C, or D.",mcq,D,0
+q_022-ru,q_022,ru,world_geography_history,"На каком континенте протекает река Амазонка?
+A) Австралия
+B) Африка
+C) Евразия
+D) Южная Америка
+Введите только букву: A, B, C или D.",mcq,D,0
+q_022-kk,q_022,kk,world_geography_history,"Амазонка өзені қай материкте ағады?
+A) Аустралия
+B) Африка
+C) Еуразия
+D) Оңтүстік Америка
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,D,0
+q_022-en,q_022,en,world_geography_history,"On which continent does the Amazon River flow?
+A) Australia
+B) Africa
+C) Eurasia
+D) South America
+Enter only the letter: A, B, C, or D.",mcq,D,0
+q_023-ru,q_023,ru,world_geography_history,"В каком веке Иоганн Гутенберг изобрел европейский печатный станок с подвижными литерами?
+A) XIII век
+B) XV век
+C) XVII век
+D) XIX век
+Введите только букву: A, B, C или D.",mcq,B,0
+q_023-kk,q_023,kk,world_geography_history,"Иоганн Гутенберг жылжымалы қаріпті еуропалық баспа станогын қай ғасырда ойлап тапты?
+A) XIII ғасыр
+B) XV ғасыр
+C) XVII ғасыр
+D) XIX ғасыр
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,B,0
+q_023-en,q_023,en,world_geography_history,"In which century did Johannes Gutenberg invent the European movable-type printing press?
+A) 13th century
+B) 15th century
+C) 17th century
+D) 19th century
+Enter only the letter: A, B, C, or D.",mcq,B,0
+q_024-ru,q_024,ru,world_geography_history,"Какой океан является самым большим по площади на Земле?
+A) Атлантический
+B) Индийский
+C) Северный Ледовитый
+D) Тихий
+Введите только букву: A, B, C или D.",mcq,D,0
+q_024-kk,q_024,kk,world_geography_history,"Жер бетіндегі ауданы бойынша ең үлкен мұхит қайсысы?
+A) Атлант мұхиты
+B) Үнді мұхиты
+C) Солтүстік Мұзды мұхит
+D) Тынық мұхиты
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,D,0
+q_024-en,q_024,en,world_geography_history,"Which ocean is the largest by surface area on Earth?
+A) Atlantic Ocean
+B) Indian Ocean
+C) Arctic Ocean
+D) Pacific Ocean
+Enter only the letter: A, B, C, or D.",mcq,D,0
+q_025-ru,q_025,ru,world_geography_history,"Какой город является столицей Японии?
+A) Токио
+B) Осака
+C) Саппоро
+D) Киото
+Введите только букву: A, B, C или D.",mcq,A,0
+q_025-kk,q_025,kk,world_geography_history,"Жапонияның астанасы қай қала?
+A) Токио
+B) Осака
+C) Саппоро
+D) Киото
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,A,0
+q_025-en,q_025,en,world_geography_history,"Which city is the capital of Japan?
+A) Tokyo
+B) Osaka
+C) Sapporo
+D) Kyoto
+Enter only the letter: A, B, C, or D.",mcq,A,0
+q_026-ru,q_026,ru,world_geography_history,"На каком континенте расположена пустыня Сахара?
+A) Африка
+B) Австралия
+C) Азия
+D) Северная Америка
+Введите только букву: A, B, C или D.",mcq,A,0
+q_026-kk,q_026,kk,world_geography_history,"Сахара шөлі қай материкте орналасқан?
+A) Африка
+B) Аустралия
+C) Азия
+D) Солтүстік Америка
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,A,0
+q_026-en,q_026,en,world_geography_history,"On which continent is the Sahara Desert located?
+A) Africa
+B) Australia
+C) Asia
+D) North America
+Enter only the letter: A, B, C, or D.",mcq,A,0
+q_027-ru,q_027,ru,world_geography_history,"В каком году человек впервые совершил полёт в космос (полёт Юрия Гагарина)?
+A) 1957
+B) 1961
+C) 1969
+D) 1975
+Введите только букву: A, B, C или D.",mcq,B,0
+q_027-kk,q_027,kk,world_geography_history,"Адам ғарышқа алғаш рет қай жылы ұшты (Юрий Гагариннің ұшуы)?
+A) 1957
+B) 1961
+C) 1969
+D) 1975
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,B,0
+q_027-en,q_027,en,world_geography_history,"In what year did the first human spaceflight (Yuri Gagarin's flight) take place?
+A) 1957
+B) 1961
+C) 1969
+D) 1975
+Enter only the letter: A, B, C, or D.",mcq,B,0
+q_028-ru,q_028,ru,world_geography_history,"Как называется самая высокая горная вершина Земли над уровнем моря?
+A) Монблан
+B) Джомолунгма (Эверест)
+C) Эльбрус
+D) Килиманджаро
+Введите только букву: A, B, C или D.",mcq,B,0
+q_028-kk,q_028,kk,world_geography_history,"Жер шарындағы теңіз деңгейінен ең биік тау шыңы қалай аталады?
+A) Монблан
+B) Джомолунгма (Эверест)
+C) Эльбрус
+D) Килиманджаро
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,B,0
+q_028-en,q_028,en,world_geography_history,"What is the name of Earth's highest mountain peak above sea level?
+A) Mont Blanc
+B) Mount Everest (Chomolungma)
+C) Elbrus
+D) Kilimanjaro
+Enter only the letter: A, B, C, or D.",mcq,B,0
+q_029-ru,q_029,ru,world_geography_history,"В какой древней стране были построены пирамиды в Гизе?
+A) Древний Египет
+B) Древняя Греция
+C) Месопотамия
+D) Древний Рим
+Введите только букву: A, B, C или D.",mcq,A,0
+q_029-kk,q_029,kk,world_geography_history,"Гиза пирамидалары қай ежелгі елде салынған?
+A) Ежелгі Мысыр
+B) Ежелгі Грекия
+C) Месопотамия
+D) Ежелгі Рим
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,A,0
+q_029-en,q_029,en,world_geography_history,"In which ancient country were the Pyramids of Giza built?
+A) Ancient Egypt
+B) Ancient Greece
+C) Mesopotamia
+D) Ancient Rome
+Enter only the letter: A, B, C, or D.",mcq,A,0
+q_030-ru,q_030,ru,world_geography_history,"Какая страна имеет самую большую площадь территории в мире?
+A) Канада
+B) США
+C) Китай
+D) Россия
+Введите только букву: A, B, C или D.",mcq,D,0
+q_030-kk,q_030,kk,world_geography_history,"Әлемде жер аумағы бойынша ең үлкен ел қайсысы?
+A) Канада
+B) АҚШ
+C) Қытай
+D) Ресей
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,D,0
+q_030-en,q_030,en,world_geography_history,"Which country has the largest land area in the world?
+A) Canada
+B) United States
+C) China
+D) Russia
+Enter only the letter: A, B, C, or D.",mcq,D,0
+q_031-ru,q_031,ru,kazakhstan_history_culture,"Какой город является столицей Республики Казахстан?
+A) Астана
+B) Шымкент
+C) Алматы
+D) Караганда
+Введите только букву: A, B, C или D.",mcq,A,0
+q_031-kk,q_031,kk,kazakhstan_history_culture,"Қазақстан Республикасының астанасы қай қала?
+A) Астана
+B) Шымкент
+C) Алматы
+D) Қарағанды
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,A,0
+q_031-en,q_031,en,kazakhstan_history_culture,"Which city is the capital of the Republic of Kazakhstan?
+A) Astana
+B) Shymkent
+C) Almaty
+D) Karaganda
+Enter only the letter: A, B, C, or D.",mcq,A,0
+q_032-ru,q_032,ru,kazakhstan_history_culture,"Какой традиционный казахский щипковый музыкальный инструмент обычно имеет две струны?
+A) Жетыген
+B) Домбра
+C) Кобыз
+D) Сыбызгы
+Введите только букву: A, B, C или D.",mcq,B,0
+q_032-kk,q_032,kk,kazakhstan_history_culture,"Қазақтың дәстүрлі шертпелі музыкалық аспабының қайсысы әдетте екі ішекті болады?
+A) Жетіген
+B) Домбыра
+C) Қобыз
+D) Сыбызғы
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,B,0
+q_032-en,q_032,en,kazakhstan_history_culture,"Which traditional Kazakh plucked string instrument usually has two strings?
+A) Zhetygen
+B) Dombra
+C) Kobyz
+D) Sybyzgy
+Enter only the letter: A, B, C, or D.",mcq,B,0
+q_033-ru,q_033,ru,kazakhstan_history_culture,"Какое озеро в Казахстане известно тем, что его западная часть пресная, а восточная — солоноватая?
+A) Зайсан
+B) Алаколь
+C) Маркаколь
+D) Балхаш
+Введите только букву: A, B, C или D.",mcq,D,0
+q_033-kk,q_033,kk,kazakhstan_history_culture,"Қазақстандағы батыс бөлігі тұщы, ал шығыс бөлігі ащы болып келетін көл қалай аталады?
+A) Зайсан
+B) Алакөл
+C) Марқакөл
+D) Балқаш
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,D,0
+q_033-en,q_033,en,kazakhstan_history_culture,"Which lake in Kazakhstan is known for having freshwater in its western half and brackish water in its eastern half?
+A) Zaysan
+B) Alakol
+C) Markakol
+D) Balkhash
+Enter only the letter: A, B, C, or D.",mcq,D,0
+q_034-ru,q_034,ru,kazakhstan_history_culture,"В каком месяце в Казахстане отмечают праздник весеннего обновления Наурыз мейрамы?
+A) Апрель
+B) Февраль
+C) Май
+D) Март
+Введите только букву: A, B, C или D.",mcq,D,0
+q_034-kk,q_034,kk,kazakhstan_history_culture,"Қазақстанда көктемгі жаңару мерекесі — Наурыз мейрамы қай айда тойланады?
+A) Сәуір
+B) Ақпан
+C) Мамыр
+D) Наурыз
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,D,0
+q_034-en,q_034,en,kazakhstan_history_culture,"In which month is the spring renewal holiday Nauryz Meyramy celebrated in Kazakhstan?
+A) April
+B) February
+C) May
+D) March
+Enter only the letter: A, B, C, or D.",mcq,D,0
+q_035-ru,q_035,ru,kazakhstan_history_culture,"Как называется традиционное казахское переносное жилище с войлочным покрытием?
+A) Иглу
+B) Сакля
+C) Вигвам
+D) Юрта
+Введите только букву: A, B, C или D.",mcq,D,0
+q_035-kk,q_035,kk,kazakhstan_history_culture,"Қазақтың киізбен жабылатын дәстүрлі жиналмалы баспанасы қалай аталады?
+A) Иглу
+B) Сакля
+C) Вигвам
+D) Киіз үй
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,D,0
+q_035-en,q_035,en,kazakhstan_history_culture,"What is the traditional Kazakh portable dwelling covered with felt called?
+A) Igloo
+B) Saklia
+C) Wigwam
+D) Yurt
+Enter only the letter: A, B, C, or D.",mcq,D,0
+q_036-ru,q_036,ru,kazakhstan_history_culture,"Какая река протекает через столицу Казахстана Астану?
+A) Или
+B) Сырдарья
+C) Ишим (Есиль)
+D) Урал (Жайык)
+Введите только букву: A, B, C или D.",mcq,C,0
+q_036-kk,q_036,kk,kazakhstan_history_culture,"Қазақстанның астанасы Астана қаласының ортасынан қай өзен ағып өтеді?
+A) Іле
+B) Сырдария
+C) Есіл
+D) Жайық
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,C,0
+q_036-en,q_036,en,kazakhstan_history_culture,"Which river flows through Astana, the capital of Kazakhstan?
+A) Ili
+B) Syr Darya
+C) Ishim (Esil)
+D) Ural (Zhayik)
+Enter only the letter: A, B, C, or D.",mcq,C,0
+q_037-ru,q_037,ru,kazakhstan_history_culture,"Какой цвет является основным фоном Государственного флага Республики Казахстан?
+A) Белый
+B) Зелёный
+C) Красный
+D) Небесно-голубой
+Введите только букву: A, B, C или D.",mcq,D,0
+q_037-kk,q_037,kk,kazakhstan_history_culture,"Қазақстан Республикасы Мемлекеттік туының негізгі түсі қандай?
+A) Ақ
+B) Жасыл
+C) Қызыл
+D) Аспан көк
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,D,0
+q_037-en,q_037,en,kazakhstan_history_culture,"What is the main background color of the State Flag of the Republic of Kazakhstan?
+A) White
+B) Green
+C) Red
+D) Sky blue
+Enter only the letter: A, B, C, or D.",mcq,D,0
+q_038-ru,q_038,ru,kazakhstan_history_culture,"Как называется круглый деревянный обод в верхней части купола юрты, служащий для света и выхода дыма?
+A) Шанырак
+B) Уык
+C) Сыкырлауык
+D) Кереге
+Введите только букву: A, B, C или D.",mcq,A,0
+q_038-kk,q_038,kk,kazakhstan_history_culture,"Киіз үй күмбезінің ең жоғарғы бөлігіндегі жарық түсетін әрі түтін шығатын дөңгелек шеңбер қалай аталады?
+A) Шаңырақ
+B) Уық
+C) Сықырлауық
+D) Кереге
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,A,0
+q_038-en,q_038,en,kazakhstan_history_culture,"What is the circular wooden crown at the top of a yurt's dome that lets in light and vents smoke called?
+A) Shanyrak
+B) Uyk
+C) Sykyrlauyk
+D) Kerege
+Enter only the letter: A, B, C, or D.",mcq,A,0
+q_039-ru,q_039,ru,kazakhstan_history_culture,"Как называется традиционное казахское блюдо из кусочков теста, обжаренных в кипящем масле?
+A) Жент
+B) Шубат
+C) Баурсак
+D) Курт
+Введите только букву: A, B, C или D.",mcq,C,0
+q_039-kk,q_039,kk,kazakhstan_history_culture,"Қайнап тұрған майға қуырылып пісірілетін қазақтың дәстүрлі нан тағамы қалай аталады?
+A) Жент
+B) Шұбат
+C) Бауырсақ
+D) Құрт
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,C,0
+q_039-en,q_039,en,kazakhstan_history_culture,"What is the traditional Kazakh food made of pieces of dough deep-fried in boiling oil called?
+A) Zhent
+B) Shubat
+C) Baursak
+D) Kurt
+Enter only the letter: A, B, C, or D.",mcq,C,0
+q_040-ru,q_040,ru,kazakhstan_history_culture,"К бассейну какого моря относится река Иртыш (Ертис), протекающая по территории Казахстана?
+A) Чёрного моря
+B) Аральского моря
+C) Карского моря (Северный Ледовитый океан)
+D) Каспийского моря
+Введите только букву: A, B, C или D.",mcq,C,0
+q_040-kk,q_040,kk,kazakhstan_history_culture,"Қазақстан аумағы арқылы ағатын Ертіс өзені қай теңіздің алабына жатады?
+A) Қара теңіз
+B) Арал теңізі
+C) Кар теңізі (Солтүстік Мұзды мұхит)
+D) Каспий теңізі
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,C,0
+q_040-en,q_040,en,kazakhstan_history_culture,"To which sea's drainage basin does the Irtysh (Ertis) River flowing through Kazakhstan belong?
+A) Black Sea
+B) Aral Sea
+C) Kara Sea (Arctic Ocean)
+D) Caspian Sea
+Enter only the letter: A, B, C, or D.",mcq,C,0
+q_041-ru,q_041,ru,everyday_situations,"Сколько минут содержится в одном часе с половиной (1,5 часа)? Введите только число.",number,90,0
+q_041-kk,q_041,kk,everyday_situations,"Бір жарым сағатта (1,5 сағат) неше минут бар? Тек санды жазыңыз.",number,90,0
+q_041-en,q_041,en,everyday_situations,How many minutes are there in one and a half hours (1.5 hours)? Enter only the number.,number,90,0
+q_042-ru,q_042,ru,everyday_situations,"Что должен сделать пешеход перед тем, как перейти дорогу по нерегулируемому пешеходному переходу?
+A) Идти, не глядя на дорогу, глядя в телефон
+B) Перебежать дорогу как можно быстрее
+C) Остановиться, посмотреть по сторонам и убедиться, что транспорт пропускает
+D) Подать рукой сигнал водителям остановиться
+Введите только букву: A, B, C или D.",mcq,C,0
+q_042-kk,q_042,kk,everyday_situations,"Реттелмейтін жаяу жүргіншілер өткелінен өтпес бұрын жаяу жүргінші не істеуі керек?
+A) Жолға қарамай, телефонға қарап жүру
+B) Жолды барынша тез жүгіріп өту
+C) Тоқтап, жан-жағына қарап, көліктердің жол бергеніне көз жеткізу
+D) Жүргізушілерге тоқтау туралы қолмен белгі беру
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,C,0
+q_042-en,q_042,en,everyday_situations,"What should a pedestrian do before crossing the street at an uncontrolled crosswalk?
+A) Walk without looking at the road while looking at a phone
+B) Run across the road as fast as possible
+C) Stop, look both ways, and make sure vehicles are yielding
+D) Signal drivers with a hand to stop
+Enter only the letter: A, B, C, or D.",mcq,C,0
+q_043-ru,q_043,ru,everyday_situations,Поезд отправляется в 14:20 и прибывает в пункт назначения в 17:05 в тот же день. Сколько минут длится поездка? Введите только число.,number,165,0
+q_043-kk,q_043,kk,everyday_situations,"Пойыз сағат 14:20-да жолға шығып, сол күні сағат 17:05-те межелі жерге жетеді. Сапар неше минутқа созылады? Тек санды жазыңыз.",number,165,0
+q_043-en,q_043,en,everyday_situations,A train departs at 14:20 and arrives at its destination at 17:05 on the same day. How many minutes does the trip take? Enter only the number.,number,165,0
+q_044-ru,q_044,ru,everyday_situations,"Какой сигнал пешеходного светофора разрешает переход проезжей части?
+A) Красный
+B) Жёлтый
+C) Зелёный
+D) Синий
+Введите только букву: A, B, C или D.",mcq,C,0
+q_044-kk,q_044,kk,everyday_situations,"Жаяу жүргіншілер бағдаршамының қай түсі жолдан өтуге рұқсат береді?
+A) Қызыл
+B) Сары
+C) Жасыл
+D) Көк
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,C,0
+q_044-en,q_044,en,everyday_situations,"Which pedestrian traffic light signal permits crossing the road?
+A) Red
+B) Yellow
+C) Green
+D) Blue
+Enter only the letter: A, B, C, or D.",mcq,C,0
+q_045-ru,q_045,ru,everyday_situations,"Сколько граммов содержится в 2,5 килограммах? Введите только число.",number,2500,0
+q_045-kk,q_045,kk,everyday_situations,"2,5 килограмда неше грамм бар? Тек санды жазыңыз.",number,2500,0
+q_045-en,q_045,en,everyday_situations,How many grams are in 2.5 kilograms? Enter only the number.,number,2500,0
+q_046-ru,q_046,ru,everyday_situations,"Какой единый номер вызова экстренных оперативных служб действует в Казахстане?
+A) 911
+B) 112
+C) 999
+D) 110
+Введите только букву: A, B, C или D.",mcq,B,0
+q_046-kk,q_046,kk,everyday_situations,"Қазақстанда шұғыл жедел қызметтерді шақырудың бірыңғай нөмірі қандай?
+A) 911
+B) 112
+C) 999
+D) 110
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,B,0
+q_046-en,q_046,en,everyday_situations,"What is the single emergency services telephone number operating in Kazakhstan?
+A) 911
+B) 112
+C) 999
+D) 110
+Enter only the letter: A, B, C, or D.",mcq,B,0
+q_047-ru,q_047,ru,everyday_situations,"Если покупка стоит 1350 тенге, а покупатель дал кассиру купюру 2000 тенге, сколько тенге сдачи он должен получить? Введите только число.",number,650,0
+q_047-kk,q_047,kk,everyday_situations,"Егер сатып алынған тауар 1350 теңге тұрса және сатып алушы кассирге 2000 теңгелік купюра берсе, ол неше теңге қайтарым алуы керек? Тек санды жазыңыз.",number,650,0
+q_047-en,q_047,en,everyday_situations,"If a purchase costs 1350 tenge and the customer gives the cashier a 2000-tenge banknote, how many tenge in change should they receive? Enter only the number.",number,650,0
+q_048-ru,q_048,ru,everyday_situations,Сколько часов длится одна неделя? Введите только число.,number,168,0
+q_048-kk,q_048,kk,everyday_situations,Бір аптада неше сағат бар? Тек санды жазыңыз.,number,168,0
+q_048-en,q_048,en,everyday_situations,How many hours are there in one week? Enter only the number.,number,168,0
+q_049-ru,q_049,ru,everyday_situations,"Что нужно сделать в первую очередь при обнаружении запаха бытового газа в квартире?
+A) Включить свет в комнате
+B) Зажечь спичку для проверки утечки
+C) Перекрыть газовый кран, открыть окна и выйти из помещения
+D) Включить электрический чайник
+Введите только букву: A, B, C или D.",mcq,C,0
+q_049-kk,q_049,kk,everyday_situations,"Пәтерде тұрмыстық газдың иісі сезілгенде ең алдымен не істеу керек?
+A) Бөлмедегі жарықты қосу
+B) Газдың шыққан жерін тексеру үшін сіріңке жағу
+C) Газ кранын жауып, терезелерді ашып, үй-жайдан шығу
+D) Электр шәйнекті қосу
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,C,0
+q_049-en,q_049,en,everyday_situations,"What should you do first if you smell domestic gas in an apartment?
+A) Turn on the light in the room
+B) Light a match to check for a leak
+C) Turn off the gas valve, open the windows, and leave the premises
+D) Turn on an electric kettle
+Enter only the letter: A, B, C, or D.",mcq,C,0
+q_050-ru,q_050,ru,everyday_situations,"В расписании автобусов указано, что автобусы ходят каждые 15 минут начиная с 08:00. Во сколько отправится четвёртый по счёту автобус?
+A) 08:30
+B) 08:45
+C) 09:00
+D) 09:15
+Введите только букву: A, B, C или D.",mcq,B,0
+q_050-kk,q_050,kk,everyday_situations,"Автобус кестесінде автобустар сағат 08:00-ден бастап әр 15 минут сайын жүретіні көрсетілген. Төртінші автобус сағат нешеде жолға шығады?
+A) 08:30
+B) 08:45
+C) 09:00
+D) 09:15
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,B,0
+q_050-en,q_050,en,everyday_situations,"A bus schedule states that buses run every 15 minutes starting at 08:00. At what time will the fourth bus depart?
+A) 08:30
+B) 08:45
+C) 09:00
+D) 09:15
+Enter only the letter: A, B, C, or D.",mcq,B,0
+q_051-ru,q_051,ru,health_education_basics,"Сколько часов ночного сна в сутки обычно рекомендуют детям школьного возраста (6–13 лет) медицинские организации?
+A) 4–5 часов
+B) 6–7 часов
+C) 9–11 часов
+D) 14–16 часов
+Введите только букву: A, B, C или D.",mcq,C,0
+q_051-kk,q_051,kk,health_education_basics,"Медициналық ұйымдар мектеп жасындағы балаларға (6–13 жас) тәулігіне әдетте неше сағат түнгі ұйқыны ұсынады?
+A) 4–5 сағат
+B) 6–7 сағат
+C) 9–11 сағат
+D) 14–16 сағат
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,C,0
+q_051-en,q_051,en,health_education_basics,"How many hours of nightly sleep per day do health organizations generally recommend for school-aged children (6–13 years)?
+A) 4–5 hours
+B) 6–7 hours
+C) 9–11 hours
+D) 14–16 hours
+Enter only the letter: A, B, C, or D.",mcq,C,0
+q_052-ru,q_052,ru,health_education_basics,"Какое действие выполняется первым при вычислении значения выражения 10 + 4 × (6 - 2)?
+A) Сложение 10 + 4
+B) Умножение 4 × 6
+C) Вычитание в скобках (6 - 2)
+D) Вычитание 10 - 2
+Введите только букву: A, B, C или D.",mcq,C,0
+q_052-kk,q_052,kk,health_education_basics,"10 + 4 × (6 - 2) өрнегінің мәнін есептегенде ең бірінші қай амал орындалады?
+A) 10 + 4 қосу амалы
+B) 4 × 6 көбейту амалы
+C) Жақша ішіндегі (6 - 2) азайту амалы
+D) 10 - 2 азайту амалы
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,C,0
+q_052-en,q_052,en,health_education_basics,"Which operation is performed first when evaluating the expression 10 + 4 × (6 - 2)?
+A) Addition 10 + 4
+B) Multiplication 4 × 6
+C) Subtraction inside parentheses (6 - 2)
+D) Subtraction 10 - 2
+Enter only the letter: A, B, C, or D.",mcq,C,0
+q_053-ru,q_053,ru,health_education_basics,"Сколько раз в день стоматологи рекомендуют чистить зубы для профилактики кариеса?
+A) 1 раз в неделю
+B) Только после сладкого
+C) 1 раз в три дня
+D) 2 раза в день
+Введите только букву: A, B, C или D.",mcq,D,0
+q_053-kk,q_053,kk,health_education_basics,"Тісжегінің алдын алу үшін тіс дәрігерлері тісті күніне неше рет тазалауды ұсынады?
+A) Аптасына 1 рет
+B) Тек тәтті жегеннен кейін
+C) Үш күнде 1 рет
+D) Күніне 2 рет
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,D,0
+q_053-en,q_053,en,health_education_basics,"How many times a day do dentists recommend brushing your teeth to prevent cavities?
+A) Once a week
+B) Only after eating sweets
+C) Once every three days
+D) Twice a day
+Enter only the letter: A, B, C, or D.",mcq,D,0
+q_054-ru,q_054,ru,health_education_basics,"Какая нормальная температура тела здорового человека при измерении в подмышечной впадине?
+A) 34,5 °C
+B) 36,6 °C
+C) 38,5 °C
+D) 40,0 °C
+Введите только букву: A, B, C или D.",mcq,B,0
+q_054-kk,q_054,kk,health_education_basics,"Дені сау адамның қолтық астынан өлшенетін қалыпты дене температурасы қандай?
+A) 34,5 °C
+B) 36,6 °C
+C) 38,5 °C
+D) 40,0 °C
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,B,0
+q_054-en,q_054,en,health_education_basics,"What is the normal body temperature of a healthy human measured under the arm?
+A) 34.5 °C
+B) 36.6 °C
+C) 38.5 °C
+D) 40.0 °C
+Enter only the letter: A, B, C, or D.",mcq,B,0
+q_055-ru,q_055,ru,health_education_basics,"Выработка какого витамина в коже человека стимулируется под воздействием солнечного ультрафиолетового света?
+A) Витамин D
+B) Витамин C
+C) Витамин K
+D) Витамин B12
+Введите только букву: A, B, C или D.",mcq,A,0
+q_055-kk,q_055,kk,health_education_basics,"Күннің ультракүлгін сәулесінің әсерінен адам терісінде қай дәруменнің түзілуі ынталандырылады?
+A) D дәрумені
+B) C дәрумені
+C) K дәрумені
+D) B12 дәрумені
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,A,0
+q_055-en,q_055,en,health_education_basics,"The production of which vitamin in human skin is stimulated by exposure to solar ultraviolet light?
+A) Vitamin D
+B) Vitamin C
+C) Vitamin K
+D) Vitamin B12
+Enter only the letter: A, B, C, or D.",mcq,A,0
+q_056-ru,q_056,ru,health_education_basics,"Сколько минимум секунд рекомендует Всемирная организация здравоохранения мыть руки с мылом для эффективной гигиены?
+A) 3 секунды
+B) 20 секунд
+C) 5 минут
+D) 10 минут
+Введите только букву: A, B, C или D.",mcq,B,0
+q_056-kk,q_056,kk,health_education_basics,"Дүниежүзілік денсаулық сақтау ұйымы тиімді гигиена үшін қолды сабынмен кемінде неше секунд жууды ұсынады?
+A) 3 секунд
+B) 20 секунд
+C) 5 минут
+D) 10 минут
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,B,0
+q_056-en,q_056,en,health_education_basics,"For how many seconds at minimum does the World Health Organization recommend washing hands with soap for effective hygiene?
+A) 3 seconds
+B) 20 seconds
+C) 5 minutes
+D) 10 minutes
+Enter only the letter: A, B, C, or D.",mcq,B,0
+q_057-ru,q_057,ru,health_education_basics,"Какой предмет изучает строение и функции живых организмов?
+A) Биология
+B) Физика
+C) Астрономия
+D) Геология
+Введите только букву: A, B, C или D.",mcq,A,0
+q_057-kk,q_057,kk,health_education_basics,"Тірі ағзалардың құрылысы мен қызметін қай пән зерттейді?
+A) Биология
+B) Физика
+C) Астрономия
+D) Геология
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,A,0
+q_057-en,q_057,en,health_education_basics,"Which subject studies the structure and functions of living organisms?
+A) Biology
+B) Physics
+C) Astronomy
+D) Geology
+Enter only the letter: A, B, C, or D.",mcq,A,0
+q_058-ru,q_058,ru,health_education_basics,"Какая часть речи обозначает действие или состояние предмета?
+A) Имя существительное
+B) Глагол
+C) Имя прилагательное
+D) Числительное
+Введите только букву: A, B, C или D.",mcq,B,0
+q_058-kk,q_058,kk,health_education_basics,"Заттың қимылы мен іс-әрекетін білдіретін сөз табы қалай аталады?
+A) Зат есім
+B) Етістік
+C) Сын есім
+D) Сан есім
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,B,0
+q_058-en,q_058,en,health_education_basics,"Which part of speech denotes an action or state of being?
+A) Noun
+B) Verb
+C) Adjective
+D) Numeral
+Enter only the letter: A, B, C, or D.",mcq,B,0
+q_059-ru,q_059,ru,health_education_basics,"Какой минерал необходим организму человека в первую очередь для укрепления костей и зубной эмали?
+A) Свинец
+B) Алюминий
+C) Ртуть
+D) Кальций
+Введите только букву: A, B, C или D.",mcq,D,0
+q_059-kk,q_059,kk,health_education_basics,"Адам ағзасына сүйектер мен тіс эмалін нығайту үшін ең алдымен қандай минерал қажет?
+A) Қорғасын
+B) Алюминий
+C) Сынап
+D) Кальций
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,D,0
+q_059-en,q_059,en,health_education_basics,"Which mineral is primarily needed by the human body to strengthen bones and tooth enamel?
+A) Lead
+B) Aluminum
+C) Mercury
+D) Calcium
+Enter only the letter: A, B, C, or D.",mcq,D,0
+q_060-ru,q_060,ru,health_education_basics,"Какое из следующих действий нужно выполнить перед началом интенсивной физической тренировки?
+A) Провести разминку
+B) Плотно пообедать
+C) Сразу поднять максимальный вес без подготовки
+D) Выпить два литра ледяной воды
+Введите только букву: A, B, C или D.",mcq,A,0
+q_060-kk,q_060,kk,health_education_basics,"Қарқынды дене жаттығуын бастамас бұрын төмендегі әрекеттердің қайсысын орындау керек?
+A) Дене қыздыру жасау
+B) Тойып тамақтану
+C) Дайындықсыз бірден ең ауыр салмақты көтеру
+D) Екі литр мұздай су ішу
+Тек әріпті жазыңыз: A, B, C немесе D.",mcq,A,0
+q_060-en,q_060,en,health_education_basics,"Which of the following actions should be done before starting an intense physical workout?
+A) Do a warm-up
+B) Eat a heavy meal
+C) Immediately lift the maximum weight without preparation
+D) Drink two liters of ice water
+Enter only the letter: A, B, C, or D.",mcq,A,0

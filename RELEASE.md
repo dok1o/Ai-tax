@@ -1,11 +1,55 @@
-# Release status after T-013
+# Release status
+
+## Round 5 integration, 2026-11-27
+
+By human decision Claude Code acts as Astra for this sprint.
+
+| Merge order | Submission | Checks on the integrated tree |
+| --- | --- | --- |
+| 1 | Schema v2.1 `9e000c9` | `python run.py check` passed, 179 tests. The metrics enum adds `accuracy_strict` and `accuracy_parsed`. `src/common/schema.py` and `tests/test_schema.py` validate metric names in data/metrics.csv and its fixture. |
+| 2 | T-004 `55fc27a` | `python run.py check` passed, 192 tests. 1,080 responses from three Ollama models, 360 each, with `data_source=external`. The nine `accuracy_strict` and nine `accuracy_parsed` rows now fit the contract. |
+| 3 | T-017 `662b18c` | `python run.py check` passed, 192 tests. q_038-ru now uses the masculine participle. The report notes that six responses used the earlier wording. |
+
+All diffs stayed within Codex paths plus HANDOFF.md and STATUS.md. The scan found no credential files or common key signatures. The changed source adds no network calls. All 180 prompt rows keep `verified_by_native=0`.
+
+T-016 `1a01017` was not merged. Its STATUS row is still blocked and the branch has no regression test for zero network requests on a corrupt tokenizer cache.
+
+The release checker in `src/done_check.py` still reads only `accuracy`, so `python run.py done` will reject the v2.1 metrics until Codex updates it.
+
+## Round 4 review, 2026-11-27
+
+The three submissions are pending in the approved order. The root Streamlit configuration matches the theme in T-016. On the dev baseline with that configuration, `python run.py check` passed Ruff, 174 tests and validation of 60 questions across 180 prompt rows. The review results below refer to the submitted snapshots.
+
+| Submission | Decision and evidence |
+| --- | --- |
+| T-016 `1a01017` | Returned to ARENA. In a fresh Python process with a temporary cache, the empty cache triggered zero HTTP requests. Placing truncated bytes at the expected cl100k_base cache key triggered one HTTP request in `load_backends()`. The probe intercepted the request before transmission. Require a regression test that exercises the damaged cache and disables the backend with zero requests. |
+| T-017 `9aadb18` | Held behind T-016. The diff changes three localized prompt texts and regenerates their token data. All 180 native verification flags remain zero. The revised q_038-ru also needs masculine agreement between the noun for “rim” and its participle. Preserve the exact wording used for previously collected observations. |
+| T-004 `55fc27a` | Returned to Codex. The 1,080 distinct responses cover three Ollama model IDs, 360 each. All 1,080 grades match the v2 labels header, keys, prompt metadata and parse-status rules. The v2 metrics enum admits `accuracy` and `mcnemar_exact`. Nine `accuracy_strict` and nine `accuracy_parsed` rows fall outside it. Restore `accuracy` for strict grading in the canonical output and place parsed-only estimates in a supplemental output. The release checker reads `accuracy`. |
+
+The reviewed changes stay within the respective app, data, analysis, test and handoff paths. The credential scan found no common key signatures or credential filenames in the changes. The cost, risk and router fixture manifests retain their provenance flags. The model IDs in the submitted responses are `gemma2:2b`, `llama3.2:3b` and `qwen2.5:3b`.
+
+## Round 3 integration, 2026-11-26
+
+| Merge order | Reviewed submission | Checks on the integrated tree |
+| --- | --- | --- |
+| 1 | ARENA Sol `8548911` | `python run.py check` passed, 158 tests. The human approved review without a separate STATUS row. |
+| 2 | T-014 `55d343c` | `python run.py check` passed, 163 tests. The 360 measured token rows cover all 180 prompt IDs across two tokenizers. |
+| 3 | T-015 `c5a013e` | `python run.py check` passed, 174 tests. The provider tests use mocks. |
+
+Each check passed Ruff and validated 60 questions in three languages. All 180 imported rows have `verified_by_native=0`. The ARENA merge ends at the approved commit. T-016 remains pending.
+
+Astra reviewed the changed paths and approved the T-015 addition of `google-genai` to the shared requirements. The changed paths and diffs contained no tracked credential files or common key signatures.
+
+With external connections and DNS blocked, the collector ran each of its three provider selections without `--live` on all 180 prompts. Each run recorded fixture provenance and made zero connection attempts. The dashboard displayed its example-data banner with the integrated inputs. The router manifest carries `fixture: true`. Live model collection still requires human approval.
+
+## T-013 integration
 
 The integration includes T-001 through T-012. T-009 was already on dev. The fetched ARENA tip `dfaf97d` contains its original T-005 through T-008 work, subsequent fixes and T-011. The runner, native-review export and human-only import now use the integrated contracts. The v2 migration changed the encoding of existing marks without verifying any answers.
 
 ## Remaining work
 
-- A native speaker must review the 60 Kazakh questions and golds. Four former yes/no questions now have explicit A/B options. Reconcile any earlier worksheet against the current text before human import.
-- T-001 still needs a cold-cache offline guard and a measured run over all production prompts. Its saved sample counts and ratios are under data/demo/. T-003 caches answers with missing usage, but overlapping live collectors still need duplicate-call protection. Keep live collection single-process until that review is complete.
+- The saved native-review worksheet shares zero question IDs with the T-014 dataset. Preserve the old worksheet and export a fresh one for a native speaker to review all 60 Kazakh questions and gold answers before human import.
+- T-001 still needs a cold-cache offline guard. A round 3 probe blocked a DNS attempt during tokenizer initialization with an empty tiktoken cache. T-014 supplies the measured production counts in data/tokens.csv and data/tokens_ratio.csv. T-003 caches answers with missing usage, but overlapping live collectors still need duplicate-call protection. Keep live collection single-process until that review is complete.
 - Supply credentials and model versions locally, approve a budget, collect real observations and record all query metadata. Rebuild labels, metrics, cost/risk models and router comparisons from real data. Fixture observations and trained fixture artifacts only support the demo.
 - Reconcile the paired test with DONE.md before reporting live significance. The merged stats fix compares per-question mean correctness across repetitions. DONE.md specifies one prespecified matched repetition.
 - Smoke-test and time the offline T-011 dashboard with the release inputs on the demo laptop. Confirm data provenance and all thresholds. Record the fresh-clone rebuild, history and citation checks, poster/pitch traceability, rehearsal, human diff review and release tag.

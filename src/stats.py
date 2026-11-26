@@ -56,6 +56,14 @@ def _is_correct(value: str) -> bool:
     return value == "true"
 
 
+def _majority_outcome(values: Sequence[bool]) -> bool | None:
+    """Aggregate repetitions per question, retaining ties as unknown."""
+    correct = sum(values)
+    if correct * 2 == len(values):
+        return None
+    return correct * 2 > len(values)
+
+
 def _bootstrap_accuracy(
     per_question: Mapping[str, Sequence[bool]],
     rng: np.random.Generator,
@@ -82,13 +90,17 @@ def compute_metrics(
 ) -> list[dict[str, str | int | float]]:
     """Compute accuracy and exact paired comparisons of question-level correct shares.
 
-    Each shared question contributes one direction to the binomial test.
-    Tied shares contribute to the pair count and effect size only.
+    Repetitions are majority-aggregated per question for exact McNemar tests.
+    Tied question outcomes stay in pair counts and effect sizes, but not in
+    the discordant binary pairs used by the test.
     """
     if bootstrap_samples < 1:
         raise ValueError("bootstrap_samples must be positive")
     seen: set[tuple[str, str, str, int]] = set()
     per_question: dict[tuple[str, str], dict[str, list[bool]]] = defaultdict(
+        lambda: defaultdict(list)
+    )
+    parsed_per_question: dict[tuple[str, str], dict[str, list[bool]]] = defaultdict(
         lambda: defaultdict(list)
     )
     for row in labels:
@@ -102,13 +114,22 @@ def compute_metrics(
         if key in seen:
             raise ValueError(f"Duplicate model/language/question/repetition {key}.")
         correct = _is_correct(row["is_correct"])
+        parse_status = row.get("parse_status")
+        if parse_status not in {"graded", "unparsed"}:
+            raise ValueError(f"Invalid parse_status value {parse_status!r}.")
         seen.add(key)
         per_question[group][q_id].append(correct)
+        if parse_status == "graded":
+            parsed_per_question[group][q_id].append(correct)
 
     rng = np.random.default_rng(seed)
     metrics: list[dict[str, str | int | float]] = []
     question_accuracy = {
         group: {q_id: sum(values) / len(values) for q_id, values in questions.items()}
+        for group, questions in per_question.items()
+    }
+    question_outcomes = {
+        group: {q_id: _majority_outcome(values) for q_id, values in questions.items()}
         for group, questions in per_question.items()
     }
     models = sorted({model for model, _ in per_question})
@@ -118,32 +139,42 @@ def compute_metrics(
             question_values = per_question.get(group)
             if not question_values:
                 continue
-            values = [value for q_values in question_values.values() for value in q_values]
-            ci_low, ci_high = _bootstrap_accuracy(
-                question_values, rng, bootstrap_samples
-            )
-            n_questions = len(question_values)
-            metrics.append(
-                {
-                    "metric": "accuracy",
-                    "model": model,
-                    "lang": lang,
-                    "lang_a": "",
-                    "lang_b": "",
-                    "accuracy": float(np.mean(values)),
-                    "ci_low": ci_low,
-                    "ci_high": ci_high,
-                    "n": len(values),
-                    "n_questions": n_questions,
-                    "effect_size": "",
-                    "p_value": "",
-                    "p_value_holm": "",
-                    "preliminary": "true" if n_questions < 30 else "false",
-                    "data_source": "fixture" if model.startswith("fixture/") else "external",
-                }
-            )
+            for metric_name, question_subset in (
+                ("accuracy_strict", question_values),
+                ("accuracy_parsed", parsed_per_question.get(group, {})),
+            ):
+                if not question_subset:
+                    continue
+                values = [
+                    value for q_values in question_subset.values() for value in q_values
+                ]
+                ci_low, ci_high = _bootstrap_accuracy(
+                    question_subset, rng, bootstrap_samples
+                )
+                n_questions = len(question_subset)
+                metrics.append(
+                    {
+                        "metric": metric_name,
+                        "model": model,
+                        "lang": lang,
+                        "lang_a": "",
+                        "lang_b": "",
+                        "accuracy": float(np.mean(values)),
+                        "ci_low": ci_low,
+                        "ci_high": ci_high,
+                        "n": len(values),
+                        "n_questions": n_questions,
+                        "effect_size": "",
+                        "p_value": "",
+                        "p_value_holm": "",
+                        "preliminary": "true" if n_questions < 30 else "false",
+                        "data_source": "fixture"
+                        if model.startswith("fixture/")
+                        else "external",
+                    }
+                )
 
-    comparisons: list[int] = []
+    comparisons_by_model: dict[str, list[int]] = defaultdict(list)
     for model in models:
         for index, lang_a in enumerate(LANGS):
             for lang_b in LANGS[index + 1 :]:
@@ -153,8 +184,15 @@ def compute_metrics(
                 if not paired_q_ids:
                     continue
                 differences = [values_a[q_id] - values_b[q_id] for q_id in paired_q_ids]
-                a_higher = sum(diff > 0 for diff in differences)
-                b_higher = sum(diff < 0 for diff in differences)
+                outcomes_a = question_outcomes[(model, lang_a)]
+                outcomes_b = question_outcomes[(model, lang_b)]
+                binary_pairs = [
+                    (outcomes_a[q_id], outcomes_b[q_id])
+                    for q_id in paired_q_ids
+                    if outcomes_a[q_id] is not None and outcomes_b[q_id] is not None
+                ]
+                a_higher = sum(value_a and not value_b for value_a, value_b in binary_pairs)
+                b_higher = sum(value_b and not value_a for value_a, value_b in binary_pairs)
                 discordant = a_higher + b_higher
                 p_value = (
                     float(binomtest(min(a_higher, b_higher), discordant, 0.5).pvalue)
@@ -162,7 +200,7 @@ def compute_metrics(
                     else 1.0
                 )
                 q_count = len(paired_q_ids)
-                comparisons.append(len(metrics))
+                comparisons_by_model[model].append(len(metrics))
                 metrics.append(
                     {
                         "metric": "mcnemar_exact",
@@ -183,9 +221,10 @@ def compute_metrics(
                     }
                 )
 
-    adjusted = holm_adjust([float(metrics[index]["p_value"]) for index in comparisons])
-    for index, value in zip(comparisons, adjusted):
-        metrics[index]["p_value_holm"] = value
+    for indices in comparisons_by_model.values():
+        adjusted = holm_adjust([float(metrics[index]["p_value"]) for index in indices])
+        for index, value in zip(indices, adjusted):
+            metrics[index]["p_value_holm"] = value
     return metrics
 
 
@@ -220,7 +259,7 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--output", type=Path, default=METRICS_PATH)
     args = parser.parse_args(argv)
     metrics = run_stats(args.labels, args.output)
-    print(f"Wrote {len(metrics)} fixture-labelled metric rows.")
+    print(f"Wrote {len(metrics)} metric rows.")
 
 
 if __name__ == "__main__":

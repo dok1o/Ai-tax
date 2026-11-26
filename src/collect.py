@@ -1,4 +1,7 @@
-"""Collect cached model responses; fake mode is the safe default."""
+"""Collect cached model responses; fake mode is the safe default.
+
+Ollama input_tokens include the model's constant chat-template overhead.
+"""
 
 from __future__ import annotations
 
@@ -12,7 +15,7 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from time import perf_counter
-from typing import Protocol
+from typing import Any, Protocol
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
@@ -34,8 +37,11 @@ RESPONSE_COLUMNS = (
     "usage_available",
 )
 DEFAULT_MODELS = ("fixture/model-a", "fixture/model-b")
+DEFAULT_TEMPERATURE = 0.5
+MAX_OUTPUT_TOKENS = 48
+OLLAMA_BASE_URL = "http://localhost:11434"
 MAX_ATTEMPTS = 3
-BASE_BACKOFF_SECONDS = 0.1
+BASE_BACKOFF_SECONDS = 1.0
 Key = tuple[str, str, str, int]
 
 
@@ -45,6 +51,7 @@ class Completion:
     model_version: str = "unknown"
     input_tokens: int | None = None
     output_tokens: int | None = None
+    thinking_tokens: int | None = None
 
 
 class ClientFailure(Exception):
@@ -163,6 +170,223 @@ class RealClient:
         return Completion(content, model_version, input_tokens, output_tokens)
 
 
+def _nonnegative_int(value: object) -> int | None:
+    return value if type(value) is int and value >= 0 else None
+
+
+class OllamaClient:
+    """Non-streaming Ollama REST client for explicit live collection only."""
+
+    def __init__(self, base_url: str = OLLAMA_BASE_URL) -> None:
+        self.base_url = base_url.rstrip("/")
+        self._digests: dict[str, str] = {}
+
+    def _model_digest(self, model: str) -> str:
+        if model in self._digests:
+            return self._digests[model]
+        digest = "unknown"
+        request = Request(f"{self.base_url}/api/tags", method="GET")
+        try:
+            with urlopen(request, timeout=10) as response:
+                payload = json.load(response)
+        except (HTTPError, URLError, TimeoutError, OSError, ValueError, UnicodeDecodeError):
+            self._digests[model] = digest
+            return digest
+        tags = payload.get("models", []) if isinstance(payload, dict) else []
+        if isinstance(tags, list):
+            for tag in tags:
+                if not isinstance(tag, dict):
+                    continue
+                if model in {tag.get("name"), tag.get("model")}:
+                    value = tag.get("digest")
+                    if isinstance(value, str) and value:
+                        digest = value
+                    break
+        self._digests[model] = digest
+        return digest
+
+    def complete(
+        self, model: str, prompt: Mapping[str, str], temperature: float
+    ) -> Completion:
+        body = json.dumps(
+            {
+                "model": model,
+                "messages": [{"role": "user", "content": prompt["prompt"]}],
+                "stream": False,
+                "options": {
+                    "temperature": temperature,
+                    "seed": int(prompt.get("rep", "0")),
+                    "num_predict": MAX_OUTPUT_TOKENS,
+                },
+            }
+        ).encode("utf-8")
+        request = Request(
+            f"{self.base_url}/api/chat",
+            data=body,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        try:
+            with urlopen(request, timeout=120) as response:
+                payload = json.load(response)
+        except HTTPError as error:
+            raise ClientFailure(
+                f"Ollama HTTP status {error.code}",
+                error.code == 429 or error.code >= 500,
+            ) from None
+        except (URLError, TimeoutError, OSError):
+            raise ClientFailure("Ollama connection failed", True) from None
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            raise ClientFailure("Ollama returned invalid JSON", False) from None
+
+        try:
+            content = payload["message"]["content"]
+            if not isinstance(content, str):
+                raise TypeError
+            input_tokens = _nonnegative_int(payload.get("prompt_eval_count"))
+            output_tokens = _nonnegative_int(payload.get("eval_count"))
+        except (KeyError, TypeError):
+            raise ClientFailure("Ollama response is missing message content", False) from None
+        return Completion(
+            content,
+            self._model_digest(model),
+            input_tokens,
+            output_tokens,
+        )
+
+
+class GeminiClient:
+    """Google Gen AI client; requires explicit live mode and a GEMINI_API_KEY."""
+
+    def __init__(
+        self,
+        rpm: int = 8,
+        *,
+        client: Any | None = None,
+        types_module: Any | None = None,
+        sleeper: Callable[[float], None] = time.sleep,
+        clock: Callable[[], float] = time.monotonic,
+        api_error_type: type[Exception] | tuple[type[Exception], ...] | None = None,
+    ) -> None:
+        if rpm < 1:
+            raise ValueError("rpm must be at least 1")
+        self._interval = 60.0 / rpm
+        self._sleeper = sleeper
+        self._clock = clock
+        self._last_call: float | None = None
+        self._api_error_type = api_error_type or Exception
+
+        if client is not None and types_module is not None:
+            self._client = client
+            self._types = types_module
+            return
+        api_key = os.environ.get("GEMINI_API_KEY", "").strip()
+        if not api_key:
+            raise ValueError("Gemini live mode requires GEMINI_API_KEY.")
+        try:
+            from google import genai
+            from google.genai import types
+            from google.genai.errors import APIError
+        except ImportError:
+            raise RuntimeError("Install google-genai for Gemini live mode.") from None
+        self._client = client or genai.Client(api_key=api_key)
+        self._types = types_module or types
+        self._api_error_type = api_error_type or APIError
+
+    def _wait_for_slot(self) -> None:
+        now = self._clock()
+        if self._last_call is not None:
+            delay = self._interval - (now - self._last_call)
+            if delay > 0:
+                self._sleeper(delay)
+                now = self._clock()
+        self._last_call = now
+
+    def _thinking_config(self, model: str) -> Any | None:
+        config_type = getattr(self._types, "ThinkingConfig", None)
+        if config_type is None:
+            return None
+        model_id = model.lower()
+        if model_id.startswith("gemini-2.5-"):
+            try:
+                return config_type(thinking_budget=0)
+            except (TypeError, ValueError):
+                return None
+        levels = (
+            ("gemini-3.8-flash", "LOW"),
+            ("gemini-3.7-flash", "LOW"),
+            ("gemini-3.6-flash", "MINIMAL"),
+            ("gemini-3.5-flash-lite", "MINIMAL"),
+            ("gemini-3.5-flash", "MINIMAL"),
+            ("gemini-3.1-flash-lite", "MINIMAL"),
+            ("gemini-3.1-pro", "LOW"),
+            ("gemini-3-flash", "MINIMAL"),
+            ("gemini-3-pro", "LOW"),
+        )
+        for prefix, level in levels:
+            if model_id.startswith(prefix):
+                enum = getattr(self._types, "ThinkingLevel", None)
+                value = getattr(enum, level, level.lower()) if enum else level.lower()
+                try:
+                    return config_type(thinking_level=value)
+                except (TypeError, ValueError):
+                    return None
+        return None
+
+    @staticmethod
+    def _status_code(error: Exception) -> int | None:
+        response = getattr(error, "response", None)
+        for source in (error, response):
+            if source is None:
+                continue
+            for name in ("code", "status_code"):
+                value = getattr(source, name, None)
+                if isinstance(value, int) and not isinstance(value, bool):
+                    return value
+                if isinstance(value, str) and value.isdigit():
+                    return int(value)
+        return None
+
+    def complete(
+        self, model: str, prompt: Mapping[str, str], temperature: float
+    ) -> Completion:
+        self._wait_for_slot()
+        config_values: dict[str, object] = {
+            "temperature": temperature,
+            "seed": int(prompt.get("rep", "0")),
+            "max_output_tokens": MAX_OUTPUT_TOKENS,
+        }
+        thinking_config = self._thinking_config(model)
+        if thinking_config is not None:
+            config_values["thinking_config"] = thinking_config
+        config = self._types.GenerateContentConfig(**config_values)
+        try:
+            result = self._client.models.generate_content(
+                model=model,
+                contents=prompt["prompt"],
+                config=config,
+            )
+        except self._api_error_type as error:
+            status = self._status_code(error)
+            retryable = status == 429 or (status is not None and status >= 500)
+            reason = f"Gemini HTTP status {status}" if status else "Gemini request failed"
+            raise ClientFailure(reason, retryable) from None
+
+        usage = getattr(result, "usage_metadata", None)
+        try:
+            content = result.text
+        except (AttributeError, ValueError):
+            content = None
+        return Completion(
+            content if isinstance(content, str) else "",
+            getattr(result, "model_version", None) or "unknown",
+            _nonnegative_int(getattr(usage, "prompt_token_count", None)),
+            _nonnegative_int(getattr(usage, "candidates_token_count", None)),
+            _nonnegative_int(getattr(usage, "thoughts_token_count", None)),
+        )
+
+
+
 def _utc_now() -> str:
     return datetime.now(UTC).isoformat(timespec="milliseconds").replace(
         "+00:00", "Z"
@@ -218,7 +442,7 @@ def run_collection(
     models: Sequence[str] = DEFAULT_MODELS,
     *,
     repeats: int = 1,
-    temperature: float = 0.0,
+    temperature: float = DEFAULT_TEMPERATURE,
     raw_dir: Path = RAW_DIR,
     responses_path: Path = RESPONSES_PATH,
     sleeper: Callable[[float], None] = time.sleep,
@@ -266,6 +490,7 @@ def run_collection(
                                 "temperature": temperature,
                                 "input_tokens": None,
                                 "output_tokens": None,
+                                "thinking_tokens": None,
                                 "usage_status": "unavailable",
                                 "latency_ms": latency,
                                 "outcome": "retry" if retry else "failed",
@@ -299,6 +524,7 @@ def run_collection(
                         "temperature": temperature,
                         "input_tokens": completion.input_tokens,
                         "output_tokens": completion.output_tokens,
+                        "thinking_tokens": completion.thinking_tokens,
                         "usage_available": "true" if usage_known else "false",
                         "usage_status": "reported" if usage_known else "unavailable",
                         "latency_ms": latency,
@@ -337,11 +563,32 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--output", type=Path)
     parser.add_argument("--raw-dir", type=Path)
     parser.add_argument("--repeats", type=int, default=1)
-    parser.add_argument("--temperature", type=float, default=0.0)
+    parser.add_argument("--temperature", type=float, default=DEFAULT_TEMPERATURE)
     parser.add_argument("--live", action="store_true")
+    parser.add_argument(
+        "--provider",
+        choices=("ollama", "gemini", "openai-compatible"),
+        default="ollama",
+    )
+    parser.add_argument("--models", nargs="+", help="Model identifiers to collect")
+    parser.add_argument("--rpm", type=int, default=8, help="Gemini requests per minute")
     args = parser.parse_args(argv)
-    client: Client = RealClient() if args.live else FakeClient()
-    models = _models_for_live() if args.live else DEFAULT_MODELS
+    if args.live and args.provider != "openai-compatible" and not args.models:
+        parser.error("--live requires --models for Ollama and Gemini.")
+    if args.provider == "gemini" and args.rpm < 1:
+        parser.error("--rpm must be at least 1.")
+    if not args.live:
+        client: Client = FakeClient()
+        models = tuple(args.models or DEFAULT_MODELS)
+    elif args.provider == "ollama":
+        client = OllamaClient()
+        models = tuple(args.models or ())
+    elif args.provider == "gemini":
+        client = GeminiClient(rpm=args.rpm)
+        models = tuple(args.models or ())
+    else:
+        client = RealClient()
+        models = tuple(args.models or _models_for_live())
     records = run_collection(
         load_prompts(args.input),
         client,
