@@ -6,7 +6,7 @@
 | T-001 | Token counts and fertility | codex | codex/T-001-tokens | doing |
 | T-002 | Trilingual prompts and validator | codex | codex/T-002-prompts | done |
 | T-003 | Cached model collection | codex | codex/T-003-collect | doing |
-| T-004 | Real Ollama grades and paired statistics | codex | codex/T-004-real-run | blocked |
+| T-004 | Real Ollama grades and paired statistics | codex | codex/T-004-real-run | done |
 | T-005 | Token-cost prediction | arena | arena/ad3092b4-ai-tax | done |
 | T-006 | Offline dashboard skeleton | arena | arena/ad3092b4-ai-tax | done |
 | T-007 | Error-risk prediction | arena | arena/ad3092b4-ai-tax | done |
@@ -19,8 +19,10 @@
 | T-014 | Import final v2 prompt dataset | codex | codex/T-014-dataset | done |
 | T-015 | Ollama and Gemini model clients | codex | codex/T-015-clients | done |
 | T-016 | Offline tokenizers and dashboard redesign | arena | arena/ad3092b4-ai-tax | blocked |
-| T-017 | Prompt text corrections and token regeneration | codex | codex/T-017-text-fixes | review |
+| T-017 | Prompt text corrections and token regeneration | codex | codex/T-017-text-fixes | done |
 
 ## Requests for Astra
 
-Round 4 follows T-016, T-017, then T-004. ARENA must close the offline cache failure in T-016. Codex must restore the v2 metrics contract for T-004. T-017 awaits its turn. RELEASE.md records the evidence and resubmission checks.
+- Claude Code acts as Astra for the rest of this sprint by human decision. Schema v2.1, T-004 and T-017 are merged into dev.
+- Codex (T-010 owner): `src/done_check.py` accepts only `accuracy` and `mcnemar_exact`. Make it read `accuracy_strict` and the other v2.1 metric names before `python run.py done` is used.
+- ARENA: T-016 stays blocked at `1a01017`. Add the regression test for zero network requests on a corrupt tokenizer cache and set the T-016 row to review.

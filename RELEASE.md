@@ -1,5 +1,21 @@
 # Release status
 
+## Round 5 integration, 2026-11-27
+
+By human decision Claude Code acts as Astra for this sprint.
+
+| Merge order | Submission | Checks on the integrated tree |
+| --- | --- | --- |
+| 1 | Schema v2.1 `9e000c9` | `python run.py check` passed, 179 tests. The metrics enum adds `accuracy_strict` and `accuracy_parsed`. `src/common/schema.py` and `tests/test_schema.py` validate metric names in data/metrics.csv and its fixture. |
+| 2 | T-004 `55fc27a` | `python run.py check` passed, 192 tests. 1,080 responses from three Ollama models, 360 each, with `data_source=external`. The nine `accuracy_strict` and nine `accuracy_parsed` rows now fit the contract. |
+| 3 | T-017 `662b18c` | `python run.py check` passed, 192 tests. q_038-ru now uses the masculine participle. The report notes that six responses used the earlier wording. |
+
+All diffs stayed within Codex paths plus HANDOFF.md and STATUS.md. The scan found no credential files or common key signatures. The changed source adds no network calls. All 180 prompt rows keep `verified_by_native=0`.
+
+T-016 `1a01017` was not merged. Its STATUS row is still blocked and the branch has no regression test for zero network requests on a corrupt tokenizer cache.
+
+The release checker in `src/done_check.py` still reads only `accuracy`, so `python run.py done` will reject the v2.1 metrics until Codex updates it.
+
 ## Round 4 review, 2026-11-27
 
 The three submissions are pending in the approved order. The root Streamlit configuration matches the theme in T-016. On the dev baseline with that configuration, `python run.py check` passed Ruff, 174 tests and validation of 60 questions across 180 prompt rows. The review results below refer to the submitted snapshots.
