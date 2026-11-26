@@ -608,7 +608,7 @@ llama3.2:3b,q_041-ru,ru,1,q_041,graded,external
 llama3.2:3b,q_042-en,en,0,q_042,graded,external
 llama3.2:3b,q_042-en,en,1,q_042,graded,external
 llama3.2:3b,q_042-kk,kk,0,q_042,graded,external
-llama3.2:3b,q_042-kk,kk,1,q_042,unparsed,external
+llama3.2:3b,q_042-kk,kk,1,q_042,graded,external
 llama3.2:3b,q_042-ru,ru,0,q_042,graded,external
 llama3.2:3b,q_042-ru,ru,1,q_042,graded,external
 llama3.2:3b,q_043-en,en,0,q_043,graded,external

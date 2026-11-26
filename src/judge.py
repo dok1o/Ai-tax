@@ -67,9 +67,15 @@ def normalize_text(value: str) -> str:
 
 
 def extract_choice(value: str) -> str | None:
-    cyrillic_choice = CYRILLIC_CHOICE_PATTERN.match(value)
-    if cyrillic_choice:
-        return CYRILLIC_CHOICE_MAP[cyrillic_choice.group(1).casefold()]
+    cyrillic_choices = [
+        match.group(1).casefold()
+        for line in value.splitlines()
+        if (match := CYRILLIC_CHOICE_PATTERN.match(line))
+    ]
+    if cyrillic_choices:
+        if len(cyrillic_choices) != 1:
+            return None
+        return CYRILLIC_CHOICE_MAP[cyrillic_choices[0]]
     choices = {match.upper() for match in CHOICE_PATTERN.findall(value)}
     return next(iter(choices)) if len(choices) == 1 else None
 

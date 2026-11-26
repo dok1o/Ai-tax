@@ -88,24 +88,24 @@ The judge sanity check exposed two parsing gaps: numeric explanations with the r
 | Model | kk unparsed | ru unparsed | en unparsed |
 | --- | ---: | ---: | ---: |
 | gemma2:2b | 29/120 (24.2%) | 1/120 (0.8%) | 3/120 (2.5%) |
-| llama3.2:3b | 65/120 (54.2%) | 4/120 (3.3%) | 2/120 (1.7%) |
+| llama3.2:3b | 64/120 (53.3%) | 4/120 (3.3%) | 2/120 (1.7%) |
 | qwen2.5:3b | 13/120 (10.8%) | 1/120 (0.8%) | 5/120 (4.2%) |
 
-Unparsed rows are counted incorrect in accuracy. The under-5% target is missed for all three Kazakh cells. Most remaining unparsed rows are Kazakh numeric explanations or invalid/unrelated answers; the llama3.2:3b Kazakh cell also has 52 unparsed MCQ rows. No rows were dropped to improve accuracy.
+Unparsed rows are counted incorrect in strict accuracy. The under-5% target is missed for all three Kazakh cells. Most remaining unparsed rows are Kazakh numeric explanations or invalid/unrelated answers; the llama3.2:3b Kazakh cell has 51 unparsed MCQ rows. One formerly unparsed response contained a single Cyrillic choice marker after a repeated question and is now graded; an incomplete option list remains unparsed. No rows were dropped to improve accuracy.
 
-| Model | Language | Accuracy (95% q_id bootstrap CI) | n responses / q_id |
-| --- | --- | ---: | ---: |
-| gemma2:2b | kk | 0.325 (0.233–0.417) | 120 / 60 |
-| gemma2:2b | ru | 0.775 (0.667–0.867) | 120 / 60 |
-| gemma2:2b | en | 0.783 (0.683–0.875) | 120 / 60 |
-| llama3.2:3b | kk | 0.183 (0.108–0.267) | 120 / 60 |
-| llama3.2:3b | ru | 0.592 (0.483–0.692) | 120 / 60 |
-| llama3.2:3b | en | 0.808 (0.708–0.892) | 120 / 60 |
-| qwen2.5:3b | kk | 0.450 (0.342–0.558) | 120 / 60 |
-| qwen2.5:3b | ru | 0.817 (0.717–0.908) | 120 / 60 |
-| qwen2.5:3b | en | 0.833 (0.733–0.917) | 120 / 60 |
+| Model | Language | Strict accuracy (95% q_id CI; unparsed = wrong) | Parsed-only accuracy (95% q_id CI) | n total / parsed / parsed q_id |
+| --- | --- | ---: | ---: | ---: |
+| gemma2:2b | kk | 0.325 (0.233–0.417) | 0.429 (0.319–0.540) | 120 / 91 / 53 |
+| gemma2:2b | ru | 0.775 (0.683–0.867) | 0.782 (0.684–0.875) | 120 / 119 / 60 |
+| gemma2:2b | en | 0.783 (0.683–0.875) | 0.803 (0.709–0.897) | 120 / 117 / 59 |
+| llama3.2:3b | kk | 0.183 (0.108–0.258) | 0.393 (0.254–0.544) | 120 / 56 / 40 |
+| llama3.2:3b | ru | 0.592 (0.492–0.692) | 0.612 (0.513–0.709) | 120 / 116 / 60 |
+| llama3.2:3b | en | 0.808 (0.708–0.900) | 0.822 (0.729–0.907) | 120 / 118 / 59 |
+| qwen2.5:3b | kk | 0.450 (0.333–0.567) | 0.505 (0.398–0.620) | 120 / 107 / 55 |
+| qwen2.5:3b | ru | 0.817 (0.725–0.900) | 0.824 (0.731–0.908) | 120 / 119 / 60 |
+| qwen2.5:3b | en | 0.833 (0.733–0.909) | 0.870 (0.775–0.940) | 120 / 115 / 60 |
 
-Accuracy intervals use 1,000 bootstrap draws of q_id clusters (seed 42). Repetitions stay together within each sampled question. No model/language cell reached ceiling accuracy; the highest was 0.833.
+`data/metrics.csv` stores these as `accuracy_strict` and `accuracy_parsed` rows. Parsed-only includes only `parse_status=graded`; its n and q_id values show the retained response and question counts. Both intervals use 1,000 bootstrap draws of q_id clusters (seed 42), keeping repetitions together within sampled questions. No model/language cell reached ceiling strict accuracy; the highest was 0.833.
 
 | Model | Pair (A–B) | Mean Δ accuracy | Exact McNemar p | Holm p (within model) | n paired q_id |
 | --- | --- | ---: | ---: | ---: | ---: |
@@ -136,4 +136,4 @@ For each model, the exact McNemar test uses majority-aggregated repetition outco
 
 The sample contains 10 deterministic random parse-success rows (seed 42), selected before comparing label values. Single-letter answers occurred only for MCQ rows (0 non-MCQ single-letter rows). One Gemma Kazakh response ends with a Russian “не знаю, как перевести” after giving a conversion; this is an isolated language-mismatch/refusal-like response, not a cell-wide refusal. `llama3.2:3b` rows have `model_version=unknown`; the other two models have recorded versions.
 
-Verification: targeted judge/statistics tests — 29 passed; Ruff passed. Full `run.py check` passed Ruff, then pytest made no further progress after seven test dots for ~10 minutes; it was interrupted with no assertion failure reported. Auto-review rejected push because it could not verify `origin` as the authorized destination. After the human confirms that destination, the command is `git push -u origin codex/T-004-real-run`.
+Verification: this follow-up regraded 1,080 saved responses (122 unparsed), wrote 27 metric rows, passed 33 targeted judge/statistics tests and Ruff, and made no API calls. The earlier full `run.py check` stalled after seven test dots and was interrupted without an assertion failure. Push was previously rejected by auto-review because it could not verify `origin` as the authorized destination; no push was attempted for this follow-up.

@@ -100,6 +100,9 @@ def compute_metrics(
     per_question: dict[tuple[str, str], dict[str, list[bool]]] = defaultdict(
         lambda: defaultdict(list)
     )
+    parsed_per_question: dict[tuple[str, str], dict[str, list[bool]]] = defaultdict(
+        lambda: defaultdict(list)
+    )
     for row in labels:
         model = row["model"]
         lang = row["lang"]
@@ -111,8 +114,13 @@ def compute_metrics(
         if key in seen:
             raise ValueError(f"Duplicate model/language/question/repetition {key}.")
         correct = _is_correct(row["is_correct"])
+        parse_status = row.get("parse_status")
+        if parse_status not in {"graded", "unparsed"}:
+            raise ValueError(f"Invalid parse_status value {parse_status!r}.")
         seen.add(key)
         per_question[group][q_id].append(correct)
+        if parse_status == "graded":
+            parsed_per_question[group][q_id].append(correct)
 
     rng = np.random.default_rng(seed)
     metrics: list[dict[str, str | int | float]] = []
@@ -131,30 +139,40 @@ def compute_metrics(
             question_values = per_question.get(group)
             if not question_values:
                 continue
-            values = [value for q_values in question_values.values() for value in q_values]
-            ci_low, ci_high = _bootstrap_accuracy(
-                question_values, rng, bootstrap_samples
-            )
-            n_questions = len(question_values)
-            metrics.append(
-                {
-                    "metric": "accuracy",
-                    "model": model,
-                    "lang": lang,
-                    "lang_a": "",
-                    "lang_b": "",
-                    "accuracy": float(np.mean(values)),
-                    "ci_low": ci_low,
-                    "ci_high": ci_high,
-                    "n": len(values),
-                    "n_questions": n_questions,
-                    "effect_size": "",
-                    "p_value": "",
-                    "p_value_holm": "",
-                    "preliminary": "true" if n_questions < 30 else "false",
-                    "data_source": "fixture" if model.startswith("fixture/") else "external",
-                }
-            )
+            for metric_name, question_subset in (
+                ("accuracy_strict", question_values),
+                ("accuracy_parsed", parsed_per_question.get(group, {})),
+            ):
+                if not question_subset:
+                    continue
+                values = [
+                    value for q_values in question_subset.values() for value in q_values
+                ]
+                ci_low, ci_high = _bootstrap_accuracy(
+                    question_subset, rng, bootstrap_samples
+                )
+                n_questions = len(question_subset)
+                metrics.append(
+                    {
+                        "metric": metric_name,
+                        "model": model,
+                        "lang": lang,
+                        "lang_a": "",
+                        "lang_b": "",
+                        "accuracy": float(np.mean(values)),
+                        "ci_low": ci_low,
+                        "ci_high": ci_high,
+                        "n": len(values),
+                        "n_questions": n_questions,
+                        "effect_size": "",
+                        "p_value": "",
+                        "p_value_holm": "",
+                        "preliminary": "true" if n_questions < 30 else "false",
+                        "data_source": "fixture"
+                        if model.startswith("fixture/")
+                        else "external",
+                    }
+                )
 
     comparisons_by_model: dict[str, list[int]] = defaultdict(list)
     for model in models:
