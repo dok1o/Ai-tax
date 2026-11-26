@@ -26,7 +26,7 @@ START_TIME = time.perf_counter()
 import pandas as pd
 import streamlit as st
 
-from app import charts, logic, text, tokenizers
+from app import charts, logic, text, token_backends
 from src.features import LANGS
 
 TABS = ("Playground", "3D views", "Results", "Method")
@@ -68,6 +68,7 @@ p, li, label, .stCaption { color: #D5DDE5; }
 .chip { display: inline-block; margin: 2px; padding: 2px 9px; border-radius: 10px;
         border: 1px solid; background: #0E1116; font-size: .95rem; }
 .chip-empty { color: #9DA7B3; }
+.chip-bytes { font-family: monospace; font-size: .8rem; border-style: dashed; }
 [data-testid="stMetric"] { background: #161B22; border: 1px solid #2B323B;
                           border-radius: 12px; padding: 10px 14px; }
 [data-testid="stMetricLabel"] { color: #9DA7B3; }
@@ -83,9 +84,9 @@ def cached_state() -> logic.AppState:
 
 
 @st.cache_resource(show_spinner=False)
-def cached_backends() -> tokenizers.BackendReport:
+def cached_backends() -> token_backends.BackendReport:
     """Real tokenizer backends, discovered once and never downloaded."""
-    return tokenizers.load_backends()
+    return token_backends.load_backends()
 
 
 @st.cache_resource(show_spinner=False)
@@ -165,7 +166,7 @@ def playground_phrases() -> dict[str, str]:
 
 
 def measure_phrases(
-    phrases: dict[str, str], backend: tokenizers.Backend | None, diagnostic: bool
+    phrases: dict[str, str], backend: token_backends.Backend | None, diagnostic: bool
 ) -> tuple[dict[str, list[text.Chip]], dict[str, int | None], dict[str, float | None]]:
     """Chips, token counts and tokens_vs_en for the three phrases, one timing."""
     slowest = 0.0
@@ -220,6 +221,8 @@ def chip_card(
         )
         st.text_area(f"{lang} text", key=TEXT_KEY.format(lang=lang), height=96)
         st.markdown(text.chips_html(chips), unsafe_allow_html=True)
+        if any(chip.raw for chip in chips):
+            st.caption(text.BYTE_CAPTION)
         st.caption(
             f"tokens_vs_en {text.format_ratio(ratio)} | fertility "
             f"{text.format_ratio(text.fertility(count, text.word_count(phrase)))} | "
@@ -244,8 +247,8 @@ def translate_into(focus: str) -> None:
 
 
 def render_sidebar(
-    state: logic.AppState, report: tokenizers.BackendReport
-) -> tuple[tokenizers.Backend | None, bool, str | None]:
+    state: logic.AppState, report: token_backends.BackendReport
+) -> tuple[token_backends.Backend | None, bool, str | None]:
     """Tokenizer choice, dataset tokenizer, provenance and the recorded timings."""
     st.sidebar.header("Tokenizers")
     identifiers = report.identifiers
@@ -263,7 +266,7 @@ def render_sidebar(
         st.sidebar.toggle(name, value=False, disabled=True)
         st.sidebar.caption(reason)
     diagnostic = st.sidebar.toggle(
-        f"Word split ({tokenizers.WORD_SPLIT_LABEL})",
+        f"Word split ({token_backends.WORD_SPLIT_LABEL})",
         value=False,
         help=DIAGNOSTIC_HELP,
         key="diagnostic_split",
@@ -386,24 +389,24 @@ def render_models(phrase: str, lang: str, category: str, state: logic.AppState) 
 
 def render_playground(
     state: logic.AppState,
-    backend: tokenizers.Backend | None,
+    backend: token_backends.Backend | None,
     diagnostic: bool,
 ) -> None:
     """Summary cards, the bar chart beside them, chip cards and the model row."""
     phrases = playground_phrases()
     chips, counts, ratios = measure_phrases(phrases, backend, diagnostic)
     words = backend is None
-    identifier = tokenizers.WORD_SPLIT_ID if words else backend.identifier
+    identifier = token_backends.WORD_SPLIT_ID if words else backend.identifier
     if words and not diagnostic:
         st.info(
             "No real tokenizer is available offline, so nothing is tokenized. Enable "
             "the word-split diagnostic in the sidebar to see "
-            f"{tokenizers.WORD_SPLIT_LABEL}."
+            f"{token_backends.WORD_SPLIT_LABEL}."
         )
     elif words:
         st.warning(
             f"Word-split diagnostic active: every count below is "
-            f"{tokenizers.WORD_SPLIT_LABEL} and no chip carries a model token id."
+            f"{token_backends.WORD_SPLIT_LABEL} and no chip carries a model token id."
         )
 
     top = st.columns([1, 1, 1, 1.7])
@@ -559,7 +562,7 @@ def render_results(state: logic.AppState, chart_tokenizer: str | None) -> None:
     )
 
 
-def render_method(state: logic.AppState, report: tokenizers.BackendReport) -> None:
+def render_method(state: logic.AppState, report: token_backends.BackendReport) -> None:
     """Provenance, tokenizer status, versions, n, verified share, limitations."""
     tables = logic.method_tables(state)
     st.subheader("Tokenizers")

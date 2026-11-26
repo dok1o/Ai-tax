@@ -1,3 +1,10 @@
+# Sol fix/T-016-shadowing handoff
+done: app/tokenizers.py shadowed the Hugging Face `tokenizers` package when Streamlit put app/ first on sys.path (reproduced: ImportError on `Encoding`). Renamed to app/token_backends.py, imports updated; tests/arena/test_tokenizers.py renamed to test_token_backends.py. Tokens whose bytes are not a complete UTF-8 character now render as muted lowercase hex byte chips with a hover note and the caption "byte-level BPE splits one letter into several tokens"; counts unchanged. Dashboard on the warm machine: both tokenizers enabled, Kazakh example phrase 54 tokens (cl100k_base, 16 byte chips) and 43 (Qwen). `python run.py check`: Ruff clean, 231 passed, validator 60 questions / 180 rows.
+next: none for this fix.
+blockers: none.
+files touched: app/token_backends.py (renamed); app/text.py; app/main.py; app/TIMINGS.md; tests/arena/test_token_backends.py (renamed); tests/arena/test_app.py; tests/arena/test_playground_text.py; tests/arena/test_real_run.py; STATUS.md; RELEASE.md; HANDOFF.md.
+resume command: python run.py test tests/arena/test_token_backends.py tests/arena/test_playground_text.py
+
 # T-017 handoff
 done: Corrected the three requested prompt cells; q_038-ru agreement fixed ("служащий", agrees with "обод"); validator passed; token files regenerated (only q_038-ru Qwen count changed, 84 -> 83); REPORT.md notes 6 responses used the earlier wording; Ruff and targeted tests passed.
 next: Astra reviews codex/T-017-text-fixes and merges it into dev after acceptance.

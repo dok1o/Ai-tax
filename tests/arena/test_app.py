@@ -11,7 +11,7 @@ import pytest
 import streamlit
 from streamlit.testing.v1 import AppTest
 
-from app import charts, logic, text, tokenizers
+from app import charts, logic, text, token_backends
 from src.common.config import MODELS_DIR
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -116,7 +116,7 @@ def test_empty_state_message_names_the_input() -> None:
 
 
 FAKE_ID = "fake/cl100k"
-ABSENT = tokenizers.BackendReport(
+ABSENT = token_backends.BackendReport(
     backends={},
     problems={
         "cl100k_base": "the cl100k_base BPE file is not in /tmp/data-gym-cache",
@@ -126,21 +126,21 @@ ABSENT = tokenizers.BackendReport(
 )
 
 
-def fake_report() -> tokenizers.BackendReport:
+def fake_report() -> token_backends.BackendReport:
     """A backend that needs no network: one id per whitespace word."""
 
     def encode(phrase: str) -> list[tuple[int, str]]:
         return [(700 + index, piece) for index, piece in enumerate(phrase.split())]
 
-    return tokenizers.BackendReport(
-        backends={FAKE_ID: tokenizers.Backend(FAKE_ID, encode)}, problems={}
+    return token_backends.BackendReport(
+        backends={FAKE_ID: token_backends.Backend(FAKE_ID, encode)}, problems={}
     )
 
 
 def run_app(
     monkeypatch: pytest.MonkeyPatch,
     force_empty: bool,
-    report: tokenizers.BackendReport | None = None,
+    report: token_backends.BackendReport | None = None,
     diagnostic: bool = False,
 ) -> AppTest:
     """Run the page in Streamlit's test harness with cleared caches."""
@@ -150,7 +150,7 @@ def run_app(
     else:
         monkeypatch.setenv(logic.FORCE_EXAMPLE_ENV, "1")
     monkeypatch.setattr(
-        tokenizers, "load_backends", lambda: ABSENT if report is None else report
+        token_backends, "load_backends", lambda: ABSENT if report is None else report
     )
     test = AppTest.from_file(str(APP), default_timeout=180)
     test.run()
@@ -231,7 +231,7 @@ def test_real_backend_chips_carry_token_ids_and_no_word_label(
     assert not test.exception
     assert chip_blocks(test), "a loaded backend must tokenize the three phrases"
     assert 'title="position 0 | token id 700 | fake/cl100k"' in chip_blocks(test)[0]
-    assert tokenizers.WORD_SPLIT_LABEL not in all_text(test)
+    assert token_backends.WORD_SPLIT_LABEL not in all_text(test)
     assert not test.warning
     box = test.sidebar.selectbox[0]
     assert box.options == [FAKE_ID] and box.disabled is False
@@ -273,9 +273,10 @@ def test_word_split_diagnostic_is_labelled_words_not_tokens(
     test = run_app(monkeypatch, force_empty=False, diagnostic=True)
     assert not test.exception
     assert chip_blocks(test)
-    assert f"position 0 | {tokenizers.WORD_SPLIT_LABEL}" in chip_blocks(test)[0]
+    assert f"position 0 | {token_backends.WORD_SPLIT_LABEL}" in chip_blocks(test)[0]
     assert all("token id" not in block for block in chip_blocks(test))
-    assert any(tokenizers.WORD_SPLIT_LABEL in item.value for item in test.warning), (
+    label = token_backends.WORD_SPLIT_LABEL
+    assert any(label in item.value for item in test.warning), (
         "the diagnostic must announce itself"
     )
     corners = [
@@ -386,8 +387,8 @@ def test_sidebar_timing_caption_reports_the_run_that_measured_it(
         time.sleep(0.005)
         return [(700 + index, piece) for index, piece in enumerate(phrase.split())]
 
-    report = tokenizers.BackendReport(
-        backends={FAKE_ID: tokenizers.Backend(FAKE_ID, slow_encode)}, problems={}
+    report = token_backends.BackendReport(
+        backends={FAKE_ID: token_backends.Backend(FAKE_ID, slow_encode)}, problems={}
     )
     test = run_app(monkeypatch, force_empty=False, report=report)
     assert not test.exception

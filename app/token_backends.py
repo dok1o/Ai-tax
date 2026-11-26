@@ -16,7 +16,7 @@ before the library is called.
 
 The pinned identifiers are read from ``src/tokens.py`` with ``ast`` rather than
 imported: importing that module pulls in ``transformers``, which costs seconds of
-cold start and is optional at runtime. ``tests/arena/test_tokenizers.py`` pins the
+cold start and is optional at runtime. ``tests/arena/test_token_backends.py`` pins the
 extracted values against the real module.
 """
 
@@ -49,10 +49,15 @@ HF_TOKENIZER_FILES = ("tokenizer.json", "tokenizer_config.json")
 
 @dataclass(frozen=True)
 class Backend:
-    """One usable tokenizer: an identifier and a text -> (id, piece) encoder."""
+    """One usable tokenizer: an identifier and a text -> (id, piece) encoder.
+
+    ``token_bytes`` returns the raw bytes of one id, so a chip can show a token
+    that holds only part of a multi-byte letter as bytes instead of "�".
+    """
 
     identifier: str
     encode: Callable[[str], list[tuple[int, str]]]
+    token_bytes: Callable[[int], bytes] | None = None
 
     def pieces(self, text: str) -> list[tuple[int, str]]:
         """Token ids with the decoded string of each id, in reading order."""
@@ -251,6 +256,26 @@ def hf_cache_state(repo: str, revision: str, identifier: str) -> CacheCheck:
     )
 
 
+def _byte_level_decoder() -> dict[str, int]:
+    """Inverse of the GPT-2 byte-to-unicode table of byte-level BPE vocabularies."""
+    printable = [
+        *range(ord("!"), ord("~") + 1),
+        *range(ord("¡"), ord("¬") + 1),
+        *range(ord("®"), ord("ÿ") + 1),
+    ]
+    codes = list(printable)
+    extra = 0
+    for byte in range(256):
+        if byte not in printable:
+            printable.append(byte)
+            codes.append(256 + extra)
+            extra += 1
+    return {chr(code): byte for byte, code in zip(printable, codes, strict=True)}
+
+
+BYTE_LEVEL_DECODER = _byte_level_decoder()
+
+
 def _refuse_download(*_args: object, **_kwargs: object) -> bytes:
     """Tripwire: every tiktoken download ends here instead of on a socket."""
     raise OfflineCacheError("the cache is unusable and the app never downloads")
@@ -307,7 +332,10 @@ def _tiktoken_backend(encoding: str) -> Backend:
         # byte-level BPE: show the replacement character instead of raising.
         return [(int(token), handle.decode([token], errors="replace")) for token in ids]
 
-    return Backend(identifier=encoding, encode=encode)
+    def token_bytes(token: int) -> bytes:
+        return handle.decode_single_token_bytes(token)
+
+    return Backend(identifier=encoding, encode=encode, token_bytes=token_bytes)
 
 
 def _subword_backend(
@@ -334,7 +362,11 @@ def _subword_backend(
         ids = handle.encode(text, add_special_tokens=False)
         return [(int(token), handle.decode([token])) for token in ids]
 
-    return Backend(identifier=identifier, encode=encode)
+    def token_bytes(token: int) -> bytes:
+        piece = handle.convert_ids_to_tokens(token)
+        return bytes(BYTE_LEVEL_DECODER[char] for char in piece)
+
+    return Backend(identifier=identifier, encode=encode, token_bytes=token_bytes)
 
 
 def load_backends() -> BackendReport:

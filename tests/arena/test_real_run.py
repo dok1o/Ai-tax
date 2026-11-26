@@ -390,12 +390,12 @@ def test_the_page_shows_the_real_badge_and_the_real_panels(
     import streamlit
     from streamlit.testing.v1 import AppTest
 
-    from app import tokenizers
+    from app import token_backends
 
     monkeypatch.delenv("LT_FORCE_EXAMPLE", raising=False)
     monkeypatch.delenv("LT_FORCE_EMPTY", raising=False)
     monkeypatch.setattr(
-        tokenizers, "load_backends", lambda: tokenizers.BackendReport({}, {})
+        token_backends, "load_backends", lambda: token_backends.BackendReport({}, {})
     )
     streamlit.cache_resource.clear()
     test = AppTest.from_file(

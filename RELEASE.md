@@ -1,5 +1,16 @@
 # Release status
 
+## Round 9 fix, 2026-11-27
+
+By human decision (Codex limit exhausted) Claude Code acted as Sol, then as Astra. The human allowed edits to ARENA files in app/ and tests/arena/ and waived the same-session review rule: this session wrote, reviewed and merged Sol `fix/T-016-shadowing` `f4e260b` into dev with --no-ff.
+
+| Check | Result |
+| --- | --- |
+| Shadowing | `app/tokenizers.py` renamed to `app/token_backends.py`; a subprocess test puts app/ first on sys.path and requires the real `tokenizers` package and an offline Qwen load. |
+| Byte chips | Partial UTF-8 tokens render as muted lowercase hex chips with a hover note and a caption; counts unchanged. |
+| Dashboard, warm caches | Both tokenizers enabled, no sidebar error. Kazakh example phrase: 54 tokens (cl100k_base), 43 (Qwen/Qwen2.5-0.5B). |
+| `python run.py check` | Ruff clean, 231 passed, validator 60 questions / 180 rows. |
+
 ## Round 8 integration, 2026-11-27
 
 By human decision Claude Code acts as Astra. The human also waived the same-session review rule for Sol `7eaabe4`, which this session wrote.

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pytest
 
-from app import text, tokenizers
+from app import text, token_backends
 from src.features import KAZAKH_SPECIFIC
 
 KAZAKH = "Қазақстанның ең биік шыңы қалай аталады?"
@@ -16,13 +16,13 @@ RUSSIAN = "Как называется самая высокая вершина 
 ENGLISH = "What is the highest peak of Kazakhstan?"
 
 
-def fake_backend() -> tokenizers.Backend:
+def fake_backend() -> token_backends.Backend:
     """A backend that needs no network: one id per whitespace word."""
 
     def encode(phrase: str) -> list[tuple[int, str]]:
         return [(700 + index, piece) for index, piece in enumerate(phrase.split())]
 
-    return tokenizers.Backend(identifier="fake/cl100k", encode=encode)
+    return token_backends.Backend(identifier="fake/cl100k", encode=encode)
 
 
 def test_tokenize_without_a_backend_yields_nothing() -> None:
@@ -47,9 +47,9 @@ def test_chips_from_a_real_backend_carry_model_token_ids() -> None:
 def test_diagnostic_chips_are_labelled_as_words_not_tokens() -> None:
     chips = text.token_chips(KAZAKH, "kk", diagnostic=True)
     assert [chip.token_id for chip in chips] == [None] * len(chips)
-    assert chips[0].tokenizer == tokenizers.WORD_SPLIT_ID
-    assert chips[0].title == f"position 0 | {tokenizers.WORD_SPLIT_LABEL}"
-    assert tokenizers.WORD_SPLIT_LABEL == "words, not tokens"
+    assert chips[0].tokenizer == token_backends.WORD_SPLIT_ID
+    assert chips[0].title == f"position 0 | {token_backends.WORD_SPLIT_LABEL}"
+    assert token_backends.WORD_SPLIT_LABEL == "words, not tokens"
 
 
 def test_chips_html_escapes_text_and_puts_the_id_on_hover() -> None:
@@ -147,3 +147,28 @@ def test_default_translation_calls_the_network_only_with_an_endpoint() -> None:
     with pytest.raises(PermissionError, match=text.TRANSLATE_ENDPOINT_ENV):
         text.translate_text(KAZAKH, "en", environ)
     assert text.TRANSLATE_LABEL == "machine translation, not verified"
+
+
+def byte_level_backend() -> token_backends.Backend:
+    """Fake byte-level BPE: the first letter split into its two UTF-8 bytes."""
+    table = {1: "П".encode()[:1], 2: "П".encode()[1:], 3: "ривет мир".encode()}
+
+    def encode(_text: str) -> list[tuple[int, str]]:
+        return [
+            (key, raw.decode("utf-8", errors="replace")) for key, raw in table.items()
+        ]
+
+    return token_backends.Backend("fake-bpe", encode, token_bytes=table.__getitem__)
+
+
+def test_partial_utf8_tokens_render_as_muted_byte_chips() -> None:
+    chips = text.token_chips("Привет мир", "ru", byte_level_backend())
+    assert len(chips) == 3, "byte chips never change the token count"
+    assert [chip.label for chip in chips] == ["d0", "9f", "ривет мир"]
+    assert chips[0].raw == b"\xd0" and chips[2].raw is None
+    assert text.BYTE_NOTE in chips[0].title and text.BYTE_NOTE not in chips[2].title
+    rendered = text.chips_html(chips)
+    assert "�" not in rendered
+    assert rendered.count("chip chip-bytes") == 2
+    assert text.BYTE_CHIP_COLOR in rendered
+    assert text.BYTE_CAPTION == "byte-level BPE splits one letter into several tokens"

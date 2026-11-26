@@ -3,7 +3,7 @@
 Pure functions only, so every rule the card asks for is unit-testable without
 Streamlit. Nothing here calls a network service: the machine-translation gate is
 off unless the operator passes an explicit live flag *and* a key. Tokenizer
-backends live in :mod:`app.tokenizers`; this module only renders what they give.
+backends live in :mod:`app.token_backends`; this module only renders what they give.
 """
 
 from __future__ import annotations
@@ -14,7 +14,12 @@ import urllib.request
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 
-from app.tokenizers import WORD_SPLIT_ID, WORD_SPLIT_LABEL, Backend, word_split_pieces
+from app.token_backends import (
+    WORD_SPLIT_ID,
+    WORD_SPLIT_LABEL,
+    Backend,
+    word_split_pieces,
+)
 from src.features import KAZAKH_SPECIFIC, LANGS
 
 UNAVAILABLE = "unavailable"
@@ -23,24 +28,51 @@ KEY_ENV = "LT_TRANSLATE_KEY"
 TRANSLATE_ENDPOINT_ENV = "LT_TRANSLATE_ENDPOINT"
 TRANSLATE_LABEL = "machine translation, not verified"
 LANG_COLORS: dict[str, str] = {"kk": "#00AFB9", "ru": "#E8A33D", "en": "#4C6EF5"}
+BYTE_CHIP_COLOR = "#6E7781"
+BYTE_CAPTION = "byte-level BPE splits one letter into several tokens"
+BYTE_NOTE = "bytes of a letter split across tokens, not a complete UTF-8 character"
 
 
 @dataclass(frozen=True)
 class Chip:
-    """One token chip: position, decoded text, model token id, language colour."""
+    """One token chip: position, decoded text, model token id, language colour.
+
+    ``raw`` is set only when the token's bytes are not a complete UTF-8 character.
+    """
 
     index: int
     text: str
     lang: str
     tokenizer: str
     token_id: int | None = None
+    raw: bytes | None = None
+
+    @property
+    def label(self) -> str:
+        """Visible chip text: the decoded piece, or lowercase hex bytes."""
+        if self.raw is None:
+            return self.text
+        return " ".join(f"{byte:02x}" for byte in self.raw)
 
     @property
     def title(self) -> str:
         """Hover text: the model token id, or the diagnostic label without one."""
         if self.token_id is None:
             return f"position {self.index} | {WORD_SPLIT_LABEL}"
-        return f"position {self.index} | token id {self.token_id} | {self.tokenizer}"
+        title = f"position {self.index} | token id {self.token_id} | {self.tokenizer}"
+        return title if self.raw is None else f"{title} | {BYTE_NOTE}"
+
+
+def partial_bytes(backend: Backend | None, token_id: int | None) -> bytes | None:
+    """Raw bytes of one token when they do not decode as UTF-8, else ``None``."""
+    if backend is None or backend.token_bytes is None or token_id is None:
+        return None
+    raw = backend.token_bytes(token_id)
+    try:
+        raw.decode("utf-8")
+    except UnicodeDecodeError:
+        return raw
+    return None
 
 
 def tokenize(
@@ -72,13 +104,14 @@ def token_chips(
             lang=lang,
             tokenizer=identifier,
             token_id=token_id,
+            raw=partial_bytes(backend, token_id) if "�" in piece else None,
         )
         for index, (token_id, piece) in enumerate(tokenize(text, backend, diagnostic))
     ]
 
 
 def chips_html(chips: Sequence[Chip]) -> str:
-    """Render chips as coloured spans with the token id on hover."""
+    """Render chips as coloured spans with the token id on hover; bytes muted."""
     if not chips:
         # A span, not a <p>: Streamlit's sanitizer keeps span markup verbatim.
         return (
@@ -87,11 +120,12 @@ def chips_html(chips: Sequence[Chip]) -> str:
         )
     parts = []
     for chip in chips:
-        color = LANG_COLORS.get(chip.lang, "#868E96")
+        color = BYTE_CHIP_COLOR if chip.raw else LANG_COLORS.get(chip.lang, "#868E96")
+        kind = "chip chip-bytes" if chip.raw else "chip"
         parts.append(
-            f'<span class="chip" title="{html.escape(chip.title)}" '
+            f'<span class="{kind}" title="{html.escape(chip.title)}" '
             f'style="border-color:{color};color:{color}">'
-            f"{html.escape(chip.text)}</span>"
+            f"{html.escape(chip.label)}</span>"
         )
     return f'<div class="chips">{"".join(parts)}</div>'
 
