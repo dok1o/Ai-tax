@@ -19,6 +19,7 @@ def main() -> None:
     test.add_argument("paths", nargs="*", help="Test paths or pytest node IDs")
     commands.add_parser("tokens", help="Compute token counts and fertility")
     commands.add_parser("dashboard", help="Start the offline Streamlit dashboard")
+    commands.add_parser("done", help="Check the read-only release evidence gates")
     args = parser.parse_args()
 
     if args.command == "check":
@@ -37,6 +38,8 @@ def main() -> None:
         if not dashboard.stat().st_size:
             sys.exit("The offline dashboard is pending T-006.")
         run_module("streamlit", "run", str(dashboard))
+    elif args.command == "done":
+        run_module("src.done_check")
 
 
 if __name__ == "__main__":

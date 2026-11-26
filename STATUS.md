@@ -12,7 +12,7 @@
 | T-007 | Error-risk prediction | arena | arena/T-007-error-predictor | doing |
 | T-008 | Routing evaluation | arena | arena/T-008-router | doing |
 | T-009 | PowerShell-compatible Python commands | codex | codex/T-009-runner | done |
-| T-010 | Automate project Definition of Done | codex | codex/T-010-done-check | todo |
+| T-010 | Automate project Definition of Done | codex | codex/T-010-done-check | review |
 | T-011 | Offline trilingual Streamlit dashboard | arena | arena/T-011-ui | todo |
 | T-012 | Native review worksheet and human import | codex | codex/T-012-native-review | todo |
 
