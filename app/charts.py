@@ -8,10 +8,11 @@ labelled in the title as well as by the page banner.
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 
 import pandas as pd
 import plotly.graph_objects as go
+import plotly.io as pio
 
 FIXTURE_TAG = " — FIXTURE data, not a result"
 SURFACE_HOVER = (
@@ -322,5 +323,79 @@ def router_curve(
         ),
         xaxis_title="held-out accuracy [share correct]",
         yaxis_title="mean tokens per question [tokens]",
+    )
+    return figure
+
+
+PAGE = {
+    "background": "#0E1116",
+    "panel": "#161B22",
+    "text": "#E6EDF3",
+    "muted": "#9DA7B3",
+    "grid": "#2B323B",
+    "accent": "#00AFB9",
+}
+
+
+def theme_template() -> go.layout.Template:
+    """Dark Plotly template that matches the page theme and the language colours."""
+    layout = go.Layout(
+        template="plotly_dark",
+        paper_bgcolor=PAGE["panel"],
+        plot_bgcolor=PAGE["panel"],
+        font={
+            "color": PAGE["text"],
+            "size": 14,
+            "family": "Source Sans Pro, sans-serif",
+        },
+        title={"font": {"size": 18, "color": PAGE["text"]}},
+        colorway=[LANG_COLORS[lang] for lang in LANG_ORDER],
+        xaxis={"gridcolor": PAGE["grid"], "zerolinecolor": PAGE["grid"]},
+        yaxis={"gridcolor": PAGE["grid"], "zerolinecolor": PAGE["grid"]},
+        legend={"bgcolor": "rgba(0,0,0,0)", "font": {"size": 13}},
+        margin={"l": 60, "r": 24, "t": 64, "b": 48},
+    )
+    return go.layout.Template(layout=layout)
+
+
+def apply_theme() -> None:
+    """Install the dark template as the default for every figure on the page."""
+    pio.templates["arena_dark"] = theme_template()
+    pio.templates.default = "arena_dark"
+
+
+def phrase_bars(
+    counts: Mapping[str, int | None],
+    ratios: Mapping[str, float | None],
+    tokenizer: str,
+    words: bool = False,
+) -> go.Figure:
+    """Token count of the three phrases in the Playground, one bar per language."""
+    langs = [lang for lang in LANG_ORDER if lang in counts]
+    values = [counts[lang] if counts[lang] is not None else 0 for lang in langs]
+    unit = "words" if words else "tokens"
+    figure = go.Figure(
+        go.Bar(
+            x=langs,
+            y=values,
+            marker_color=_lang_colors(langs),
+            name=unit,
+            text=[
+                "" if ratios.get(lang) is None else f"x{ratios[lang]:.2f}"
+                for lang in langs
+            ],
+            textposition="outside",
+            hovertemplate="lang %{x}<br>%{y} " + unit + "<extra></extra>",
+        )
+    )
+    figure.update_layout(
+        title=title_with_n(
+            f"Your phrases, {tokenizer}" + (" — words, not tokens" if words else ""),
+            sum(1 for value in counts.values() if value),
+            False,
+        ),
+        xaxis_title="language",
+        yaxis_title=f"{unit} per phrase [{unit}]",
+        showlegend=False,
     )
     return figure

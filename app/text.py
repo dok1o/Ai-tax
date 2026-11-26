@@ -1,122 +1,104 @@
-"""Playground text helpers (T-011): tokenizers, chips, ratios, language hints.
+"""Playground text helpers (T-011, T-016): chips, ratios, language hints.
 
 Pure functions only, so every rule the card asks for is unit-testable without
 Streamlit. Nothing here calls a network service: the machine-translation gate is
-off unless the operator passes an explicit live flag *and* a key.
+off unless the operator passes an explicit live flag *and* a key. Tokenizer
+backends live in :mod:`app.tokenizers`; this module only renders what they give.
 """
 
 from __future__ import annotations
 
 import html
 import os
-import re
 import urllib.request
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 
+from app.tokenizers import WORD_SPLIT_ID, WORD_SPLIT_LABEL, Backend, word_split_pieces
 from src.features import KAZAKH_SPECIFIC, LANGS
 
-FALLBACK_TOKENIZER = "whitespace-fallback"
 UNAVAILABLE = "unavailable"
 LIVE_ENV = "LT_LIVE"
 KEY_ENV = "LT_TRANSLATE_KEY"
 TRANSLATE_ENDPOINT_ENV = "LT_TRANSLATE_ENDPOINT"
 TRANSLATE_LABEL = "machine translation, not verified"
 LANG_COLORS: dict[str, str] = {"kk": "#00AFB9", "ru": "#E8A33D", "en": "#4C6EF5"}
-PIECES = re.compile(r"\w+|[^\w\s]", re.UNICODE)
 
 
 @dataclass(frozen=True)
 class Chip:
-    """One token chip: the text, a positional id and the language colour."""
+    """One token chip: position, decoded text, model token id, language colour."""
 
     index: int
     text: str
     lang: str
     tokenizer: str
+    token_id: int | None = None
 
     @property
     def title(self) -> str:
-        """Hover text with the id and the tokenizer that produced it."""
-        return f"id {self.index} | {self.tokenizer}"
-
-
-def local_tokenizers() -> dict[str, Callable[[str], list[str]]]:
-    """Tokenizers published by ``src.tokens`` (T-001) when it is usable offline.
-
-    Expected hook: ``TOKENIZER_IDS`` and ``encode_pieces(text, tokenizer_id)``.
-    Until T-001 exposes them the registry is empty and the labelled whitespace
-    fallback is the only backend, so no chip is ever presented as a model token.
-    """
-    try:
-        from src import tokens as tokens_module
-    except ImportError:
-        return {}
-    identifiers = getattr(tokens_module, "TOKENIZER_IDS", ())
-    encode = getattr(tokens_module, "encode_pieces", None)
-    if not identifiers or encode is None:
-        return {}
-    return {
-        str(name): (lambda text, name=str(name): list(encode(text, name)))
-        for name in identifiers
-    }
-
-
-def available_backends() -> list[str]:
-    """Every tokenizer the Playground can use right now, fallback last."""
-    return [*sorted(local_tokenizers()), FALLBACK_TOKENIZER]
+        """Hover text: the model token id, or the diagnostic label without one."""
+        if self.token_id is None:
+            return f"position {self.index} | {WORD_SPLIT_LABEL}"
+        return f"position {self.index} | token id {self.token_id} | {self.tokenizer}"
 
 
 def tokenize(
-    text: str,
-    tokenizer: str = FALLBACK_TOKENIZER,
-    backends: Mapping[str, Callable[[str], list[str]]] | None = None,
-) -> list[str]:
-    """Split one phrase into pieces with the selected backend.
+    text: str, backend: Backend | None = None, diagnostic: bool = False
+) -> list[tuple[int | None, str]]:
+    """Token ids with their decoded strings, or positional words in diagnostic mode.
 
-    ``backends`` lets the caller pass a registry it already built and cached, so
-    a rerun never rediscovers the local tokenizers.
+    Without a backend and without the diagnostic switch the result is empty: the
+    page must never present word counts as token counts.
     """
-    if not text.strip():
-        return []
-    registry = local_tokenizers() if backends is None else backends
-    backend = registry.get(tokenizer)
     if backend is not None:
-        return [str(piece) for piece in backend(text)]
-    if tokenizer != FALLBACK_TOKENIZER:
-        raise ValueError(f"tokenizer is not available offline: {tokenizer}")
-    return PIECES.findall(text)
+        return [(token_id, piece) for token_id, piece in backend.pieces(text)]
+    if not diagnostic:
+        return []
+    return [(None, piece) for _, piece in word_split_pieces(text)]
 
 
 def token_chips(
-    text: str,
-    lang: str,
-    tokenizer: str = FALLBACK_TOKENIZER,
-    backends: Mapping[str, Callable[[str], list[str]]] | None = None,
+    text: str, lang: str, backend: Backend | None = None, diagnostic: bool = False
 ) -> list[Chip]:
     """Chips for one phrase, numbered in reading order."""
     if lang not in LANGS:
         raise ValueError(f"unsupported language: {lang}")
-    pieces = tokenize(text, tokenizer, backends)
+    identifier = WORD_SPLIT_ID if backend is None else backend.identifier
     return [
-        Chip(index=index, text=piece, lang=lang, tokenizer=tokenizer)
-        for index, piece in enumerate(pieces)
+        Chip(
+            index=index,
+            text=piece,
+            lang=lang,
+            tokenizer=identifier,
+            token_id=token_id,
+        )
+        for index, (token_id, piece) in enumerate(tokenize(text, backend, diagnostic))
     ]
 
 
 def chips_html(chips: Sequence[Chip]) -> str:
     """Render chips as coloured spans with the token id on hover."""
     if not chips:
-        return f"<p><em>{UNAVAILABLE}: empty phrase</em></p>"
+        # A span, not a <p>: Streamlit's sanitizer keeps span markup verbatim.
+        return (
+            f'<div class="chips"><span class="chip-empty">{UNAVAILABLE}: '
+            f"nothing tokenized</span></div>"
+        )
     parts = []
     for chip in chips:
         color = LANG_COLORS.get(chip.lang, "#868E96")
         parts.append(
-            f'<span title="{html.escape(chip.title)}" style="display:inline-block;'
-            f"margin:2px;padding:2px 6px;border-radius:10px;color:white;"
-            f'background:{color}">{html.escape(chip.text)}</span>'
+            f'<span class="chip" title="{html.escape(chip.title)}" '
+            f'style="border-color:{color};color:{color}">'
+            f"{html.escape(chip.text)}</span>"
         )
-    return f'<div style="line-height:2.4">{"".join(parts)}</div>'
+    return f'<div class="chips">{"".join(parts)}</div>'
+
+
+def format_multiplier(value: float | None) -> str:
+    """tokens_vs_en as the multiplier the summary cards show."""
+    return UNAVAILABLE if value is None else f"x{value:.2f}"
 
 
 def kazakh_letter_share(text: str) -> float:
