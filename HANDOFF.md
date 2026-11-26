@@ -11,3 +11,9 @@ next: Astra reviews the checker; run.py done remains FAIL until release evidence
 blockers: Missing release evidence and approval-review block for the external push.
 files touched: run.py; src/done_check.py; tests/codex/test_done_check.py; STATUS.md; notebooks/REPORT.md.
 resume command: git switch codex/T-010-done-check
+
+done: T-014 imported and tokenized the 60-question dataset; validator adaptation, tests, report, and review status are ready on codex/T-014-dataset.
+next: Astra reviews the dataset branch and reconciles the task report.
+blockers: None for T-014; translations remain unverified by native speakers as recorded in the imported data.
+files touched: data/incoming/prompts_v2_proposed.csv; data/import_prompts_v2.py; data/prompts.csv; data/prompts_draft_old.csv; data/tokens.csv; data/tokens_ratio.csv; data/validate_prompts.py; tests/codex/test_dataset_import.py; STATUS.md; notebooks/REPORT.md.
+resume command: git switch codex/T-014-dataset
