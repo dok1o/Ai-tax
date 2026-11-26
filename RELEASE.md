@@ -1,4 +1,18 @@
-# Release status after T-013
+# Release status
+
+## Round 2 review eligibility, 2026-11-26
+
+The pipeline on dev is still the T-013 integration at `adcdc60`. All three round 2 submissions are pending. The table records the published branch lookup and the task states at the requested commits.
+
+| Submission | Reason for deferral | Action before review |
+| --- | --- | --- |
+| ARENA Sol, `8548911` | The pinned `arena/ad3092b4-ai-tax` branch is on origin. Its handoff describes the fixes, but its STATUS table has no ARENA row in `review`. | ARENA must publish a review row identifying the fixes and give Astra the updated tip. |
+| T-014 dataset, `55d343c` | The local submission is in `review`. Origin has no `codex/T-014-dataset` branch. | The branch owner must push the named branch at the submitted commit. |
+| T-015 clients, `c5a013e` | The local submission is in `review`. Origin has no `codex/T-015-clients` branch. | The branch owner must push the named branch at the submitted commit. |
+
+Once the submissions qualify, Astra can resume in the order above and check each merge. Before live collection, the human must reconcile the accepted dataset with the native speaker's worksheet, run the native import, and approve model versions and budget. Keep demo results labeled as fixtures.
+
+## T-013 integration
 
 The integration includes T-001 through T-012. T-009 was already on dev. The fetched ARENA tip `dfaf97d` contains its original T-005 through T-008 work, subsequent fixes and T-011. The runner, native-review export and human-only import now use the integrated contracts. The v2 migration changed the encoding of existing marks without verifying any answers.
 
