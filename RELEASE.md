@@ -1,5 +1,22 @@
 # Release status
 
+## Round 7 review, 2026-11-27
+
+ARENA `5cea469` (T-016 and T-005/T-007/T-008 rerun on real v2.1 data) was not merged. Reason: `python run.py check` on the owner's machine with warm tokenizer caches failed 2 of 227 tests. By human decision ARENA Sol fixes both tests on the owner's machine before resubmission.
+
+| Check | Result |
+| --- | --- |
+| Paths and secrets | Changes stay in app/, models/, src/features.py, src/router.py, tests/arena/, HANDOFF.md and STATUS.md. No credential files or key signatures; tests use a dummy key. |
+| Network | Loaders run with `local_files_only=True`, forced hub offline mode and a tiktoken download tripwire. No network path without `--live`. |
+| Labels and native marks | Fixture labels are resolved only in example mode and tests. `verified_by_native` stays 0. |
+| `python run.py check` on the trial merge | Failed: `test_the_tiktoken_loader_refuses_to_download` and `test_the_subword_loader_never_connects_on_a_cold_cache` (both DID NOT RAISE). Ruff clean; 225 passed. Trial merge aborted, dev unchanged. |
+
+Router decision: keep the null result. The router ties `always_via_english` (0 tokens, 0 accuracy difference, CI95 [0, 0], n = 180 keys, preliminary). No code change. Report it with three caveats:
+
+1. The `via_english` cost is a lower bound: `data/routes.csv` does not exist, so legs are derived and translation tokens are 0.
+2. No model prices: all costs are in tokens.
+3. 106 of 360 Kazakh answers (29%) did not parse, which lowers kk accuracy.
+
 ## Round 6 review, 2026-11-27
 
 T-016 `df87b23` was returned to ARENA and not merged. Reason: two T-016 tests assume a cold tokenizer cache; ARENA (Sol) must make them hermetic. The network guard itself works.
