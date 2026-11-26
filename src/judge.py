@@ -36,6 +36,18 @@ NUMERIC_TOLERANCE = Decimal("0.01")
 NUMBER_PATTERN = re.compile(r"[-+]?\d+(?:[.,]\d+)?")
 EQUALITY_PATTERN = re.compile(r"(?<![!<>=])=(?!=)")
 CHOICE_PATTERN = re.compile(r"(?<!\w)([a-d])(?!\w)", re.IGNORECASE)
+CYRILLIC_CHOICE_PATTERN = re.compile(
+    r"^\s*(?:(?:ответ|вариант|жауап)\s*[:\-]\s*)?([абвсд])\s*(?=[).:\-]|$)",
+    re.IGNORECASE,
+)
+CYRILLIC_CHOICE_MAP = {"а": "A", "б": "B", "в": "B", "с": "C", "д": "D"}
+RESULT_MARKER_PATTERN = re.compile(
+    r"\b(?:answer|result|equals?|is|are|becomes?|gives?|yields?|will be|"
+    r"ответ|равно|равен|равна|составляет|получается|будет|"
+    r"жауап|тең|болады)\b|等于|是",
+    re.IGNORECASE,
+)
+AMBIGUOUS_NUMBER_PATTERN = re.compile(r"\b(?:or|either|или|либо|немесе)\b", re.IGNORECASE)
 BOOLEAN_WORDS = {
     "true": True,
     "yes": True,
@@ -55,17 +67,40 @@ def normalize_text(value: str) -> str:
 
 
 def extract_choice(value: str) -> str | None:
+    cyrillic_choices = [
+        match.group(1).casefold()
+        for line in value.splitlines()
+        if (match := CYRILLIC_CHOICE_PATTERN.match(line))
+    ]
+    if cyrillic_choices:
+        if len(cyrillic_choices) != 1:
+            return None
+        return CYRILLIC_CHOICE_MAP[cyrillic_choices[0]]
     choices = {match.upper() for match in CHOICE_PATTERN.findall(value)}
     return next(iter(choices)) if len(choices) == 1 else None
 
 
 def _parse_number(value: str) -> Decimal | None:
-    """Read one number, using the result side of an equation when present."""
-    result = EQUALITY_PATTERN.split(value, maxsplit=1)[-1]
-    numbers = NUMBER_PATTERN.findall(result)
-    if len(numbers) != 1:
+    """Read a single answer, preferring the final value of an equation."""
+    if EQUALITY_PATTERN.search(value):
+        result_numbers = NUMBER_PATTERN.findall(EQUALITY_PATTERN.split(value)[-1])
+        if len(result_numbers) != 1:
+            return None
+        return Decimal(result_numbers[0].replace(",", "."))
+
+    matches = list(NUMBER_PATTERN.finditer(value))
+    if len(matches) == 1:
+        return Decimal(matches[0].group().replace(",", "."))
+    if len(matches) < 2 or AMBIGUOUS_NUMBER_PATTERN.search(value):
         return None
-    return Decimal(numbers[0].replace(",", "."))
+
+    previous, final = matches[-2:]
+    if any(
+        marker.start() > previous.end()
+        for marker in RESULT_MARKER_PATTERN.finditer(value)
+    ):
+        return Decimal(final.group().replace(",", "."))
+    return None
 
 
 def _parse_boolean(value: str) -> bool | None:

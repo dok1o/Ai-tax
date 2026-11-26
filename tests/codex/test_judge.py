@@ -14,6 +14,29 @@ def test_extracts_choice_letter_variants(answer: str, expected: str) -> None:
     assert (parsed, correct, status) == (expected, True, "graded")
 
 
+@pytest.mark.parametrize(
+    ("answer", "expected"),
+    [("А) Меркурий", "A"), ("С.", "C"), ("Д.", "D")],
+)
+def test_extracts_cyrillic_choice_labels(answer: str, expected: str) -> None:
+    assert grade_answer(answer, expected, "mcq", "ru") == (expected, True, "graded")
+
+
+def test_extracts_cyrillic_choice_after_repeated_question() -> None:
+    answer = "Қайсысы дұрыс?\n\nД) Жолдан қауіпсіз өту"
+    assert grade_answer(answer, "D", "mcq", "kk") == ("D", True, "graded")
+
+
+def test_keeps_multiple_cyrillic_choice_lines_unparsed() -> None:
+    answer = "А) Африка\nБ) Аустралия"
+    assert grade_answer(answer, "A", "mcq", "kk") == ("", False, "unparsed")
+
+
+def test_keeps_incomplete_cyrillic_choice_list_unparsed() -> None:
+    answer = "А) Африка\nБ"
+    assert grade_answer(answer, "A", "mcq", "kk") == ("", False, "unparsed")
+
+
 def test_numbers_allow_tolerance_and_units() -> None:
     parsed, correct, status = grade_answer("3.141 meters", "3.14", "decimal")
     assert (parsed, correct, status) == ("3.141", True, "graded")
@@ -24,6 +47,11 @@ def test_numbers_allow_tolerance_and_units() -> None:
     ("answer", "gold", "expected"),
     [
         ("7 + 5 = 12", "12", ("12", True, "graded")),
+        ("17 + 25 = 42.", "42", ("42", True, "graded")),
+        ("17 + 25 = 41.", "42", ("41", False, "graded")),
+        ("2 + 3 = 5 = 6.", "6", ("6", True, "graded")),
+        ("15% от 240 составляет 36.", "36", ("36", True, "graded")),
+        ("240 санының 15%-ы 36 болады.", "36", ("36", True, "graded")),
         ("12 - 1 = 11", "12", ("11", False, "graded")),
         ("12 or 14 meters", "12", ("", False, "unparsed")),
         ("7 + 5 = 12 or 14", "12", ("", False, "unparsed")),
