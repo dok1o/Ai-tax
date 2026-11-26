@@ -1,5 +1,18 @@
 # Release status
 
+## Round 6 review, 2026-11-27
+
+T-016 `df87b23` was returned to ARENA and not merged. Reason: two T-016 tests assume a cold tokenizer cache; ARENA (Sol) must make them hermetic. The network guard itself works.
+
+| Check | Result |
+| --- | --- |
+| Paths and secrets | Changes stay in app/, tests/arena/, HANDOFF.md and STATUS.md. No credential files or key signatures. Tests use a dummy key. Live translation still needs `LT_LIVE` and a key. |
+| Corrupt-cache regression test | `test_corrupt_caches_never_open_a_socket` exists and passes. |
+| Offline happy path | With sockets, `urlopen` and `requests` blocked, `load_backends()` loaded `cl100k_base` and the pinned Qwen snapshot from the warm local cache with zero network attempts. |
+| `python run.py check` on the trial merge | Failed, 2 of 215 tests. `test_the_tiktoken_loader_refuses_to_download` passes alone but fails in the full run because tiktoken keeps loaded encodings in process. `test_the_subword_loader_never_connects_on_a_cold_cache` loads the real Qwen snapshot because setting `HF_HOME` after import does not move the hub cache. |
+
+Fixture labels and `verified_by_native` are untouched; the branch changes no data/ or models/ files.
+
 ## Round 5 integration, 2026-11-27
 
 By human decision Claude Code acts as Astra for this sprint.
