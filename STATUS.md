@@ -16,6 +16,7 @@
 | T-011 | Offline trilingual Streamlit dashboard | arena | arena/ad3092b4-ai-tax | doing |
 | T-012 | Native review worksheet and human import | codex | codex/T-012-native-review | done |
 | T-013 | Consolidate local branches and CSV v2 | codex | codex/T-013-consolidation | done |
+| T-015 | Ollama and Gemini model clients | codex | codex/T-015-clients | review |
 
 ## Requests for Astra
 
