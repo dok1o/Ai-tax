@@ -6,7 +6,7 @@
 | T-001 | Token counts and fertility | codex | codex/T-001-tokens | doing |
 | T-002 | Trilingual prompts and validator | codex | codex/T-002-prompts | done |
 | T-003 | Cached model collection | codex | codex/T-003-collect | doing |
-| T-004 | Grading and paired statistics | codex | fix/T-004-stats | done |
+| T-004 | Grading and paired statistics | codex | codex/T-004-real-run | review |
 | T-005 | Token-cost prediction | arena | arena/ad3092b4-ai-tax | done |
 | T-006 | Offline dashboard skeleton | arena | arena/ad3092b4-ai-tax | done |
 | T-007 | Error-risk prediction | arena | arena/ad3092b4-ai-tax | done |
