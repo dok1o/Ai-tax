@@ -1,5 +1,30 @@
 # Release status
 
+## Round 8 integration, 2026-11-27
+
+By human decision Claude Code acts as Astra. The human also waived the same-session review rule for Sol `7eaabe4`, which this session wrote.
+
+| Merge order | Submission | Checks on the integrated tree |
+| --- | --- | --- |
+| 1 | ARENA `5cea469` (T-016 offline tokenizers and redesign; T-005/T-007/T-008 rerun on real v2.1 data) as `b9e4700` | `python run.py check`: Ruff clean, 225 passed, 2 failed (the known warm-cache tokenizer tests). STATUS.md conflict resolved with the dev side. |
+| 2 | Sol `fix/T-016-hermetic` `7eaabe4` as `c6d89fb` | `python run.py check`: Ruff clean, 227 passed, validator 60 questions / 180 rows. Changes only `app/tokenizers.py` and `tests/arena/test_tokenizers.py`, as the human allowed. |
+
+| Check | Result |
+| --- | --- |
+| Paths and secrets | ARENA changes stay in app/, models/, src/features.py, src/router.py, tests/arena/ and HANDOFF.md. No key signatures. The only URL added is tiktoken's cl100k_base blob path, used as the cache key; its download path is blocked. |
+| Network | No network path without `--live`. Tokenizers load with `local_files_only=True`, forced hub offline mode and a tiktoken download tripwire; the tests trip on sockets, `urlopen` and `requests`. |
+| Labels and native marks | Fixture labels are resolved only in example mode and tests. `verified_by_native` sums to 0 over 180 rows. |
+
+The router null result against `always_via_english` and its three caveats from round 7 stand.
+
+## Left for the human
+
+1. Update the local dev checkout: `git switch dev` and `git pull`.
+2. Start the offline demo with `python run.py dashboard` on the demo laptop (warm tokenizer caches, no network) and time it.
+3. Native verification: a Kazakh native speaker reviews the 60 kk questions and gold answers; import their marks through the human-only import. All `verified_by_native` flags are 0 now, so every result is preliminary.
+4. Poster numbers: take every figure from `models/REPORT.md`, `models/*_metrics.json` and `data/metrics.csv` only, with n and CI. Write TODO where no file backs a number.
+5. When satisfied, merge dev into main yourself.
+
 ## Round 7 review, 2026-11-27
 
 ARENA `5cea469` (T-016 and T-005/T-007/T-008 rerun on real v2.1 data) was not merged. Reason: `python run.py check` on the owner's machine with warm tokenizer caches failed 2 of 227 tests. By human decision ARENA Sol fixes both tests on the owner's machine before resubmission.
