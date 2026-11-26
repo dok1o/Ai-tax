@@ -7,7 +7,7 @@
 | T-001 | `codex/T-001-tokens` / `5b146f2` | 10 tests passed; Ruff passed. `run.py` is absent on this branch. | No; automatic approval review rejected push. | review |
 | T-002 | `codex/T-002-prompts` / `f66a762` (includes `7caa2a8`) | `run.py check`: 16 passed; validator: 60 questions, 180 rows, 6 categories. | No; automatic approval review rejected push. | review |
 | T-003 | `codex/T-003-collect` / `e2e5956` | `run.py check`: 9 passed; fake collector wrote 360 fixture responses. | No; automatic approval review rejected push. | review |
-| T-004 | `codex/T-004-real-run` | Targeted tests: 29 passed; Ruff passed; full `run.py check` stalled after seven test dots and was interrupted at ~10 minutes. | No | review |
+| T-004 | `codex/T-004-real-run` | Targeted tests: 29 passed; Ruff passed; full `run.py check` stalled after seven test dots and was interrupted at ~10 minutes. | No; auto-review rejected unverified origin | review |
 
 ## Key outputs
 
@@ -136,4 +136,4 @@ For each model, the exact McNemar test uses majority-aggregated repetition outco
 
 The sample contains 10 deterministic random parse-success rows (seed 42), selected before comparing label values. Single-letter answers occurred only for MCQ rows (0 non-MCQ single-letter rows). One Gemma Kazakh response ends with a Russian “не знаю, как перевести” after giving a conversion; this is an isolated language-mismatch/refusal-like response, not a cell-wide refusal. `llama3.2:3b` rows have `model_version=unknown`; the other two models have recorded versions.
 
-Verification: targeted judge/statistics tests — 29 passed; Ruff passed. Full `run.py check` passed Ruff, then pytest made no further progress after seven test dots for ~10 minutes; it was interrupted with no assertion failure reported. Push command: `git push -u origin codex/T-004-real-run`.
+Verification: targeted judge/statistics tests — 29 passed; Ruff passed. Full `run.py check` passed Ruff, then pytest made no further progress after seven test dots for ~10 minutes; it was interrupted with no assertion failure reported. Auto-review rejected push because it could not verify `origin` as the authorized destination. After the human confirms that destination, the command is `git push -u origin codex/T-004-real-run`.
