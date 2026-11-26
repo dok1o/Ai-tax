@@ -68,3 +68,12 @@ Review and merge T-001, T-002, T-003, then T-004. Each branch was cut independen
 - Export command: `\.venv\Scripts\python.exe -m src.native_review export` wrote 60 rows to the extra `data/native_review.csv` worksheet.
 - The human-only import command was not run. `data/prompts.csv` and its existing `verified_by_native` values were not changed. Import logic keeps SCHEMA v1 and serializes new marks as `true`; the numeric 1/0 mismatch and proposed v2 update are recorded under Requests in STATUS.md.
 - Next: a Kazakh native speaker completes the worksheet; Astra reviews this branch. Push was not retried after the prior auto-review rejection; after approval, run `git push -u origin codex/T-012-native-review`.
+
+## T-014 — Imported multilingual dataset
+
+- Source `data/incoming/prompts_v2_proposed.csv` is retained for reproducibility. Conversion added `prompt_id` and preserved source `answer_type`, `gold_answer`, and `verified_by_native=0`; output is UTF-8 without BOM in the v2 column order.
+- Category mapping: Математика и логика → `math_logic`; Повседневные ситуации → `everyday_situations`; Здоровье и образование (базовое) → `health_education_basics`; Казахстан: история и культура → `kazakhstan_history_culture`; Наука → `science`; География и история мира → `world_geography_history`.
+- Validator adaptation: `DRAFT_PATH` now points to archived `data/prompts_draft_old.csv`; no other validator checks were changed.
+- Validation command `PYTHONUTF8=1 .\.venv\Scripts\python.exe -m data.validate_prompts --input data/prompts.csv` passed: 60 questions / 180 rows, verified share 0.000. Token command `PYTHONUTF8=1 .\.venv\Scripts\python.exe -m src.tokens --input data/prompts.csv --output data/tokens.csv` used cl100k_base and pinned Qwen revision `5796c1d2033cb6257f44cdffa28957680359236d`.
+- Means of `tokens_vs_en`, real, translations not yet native-verified, n=60: cl100k_base kk=2.380282 and ru=1.614634; Qwen/Qwen2.5-0.5B@5796c1d2033cb6257f44cdffa28957680359236d kk=1.995566 and ru=1.318569.
+- Targeted test/lint commands: `run.py test tests/codex/test_dataset_import.py tests/codex/test_prompts.py tests/test_schema.py` — 22 passed; Ruff passed.

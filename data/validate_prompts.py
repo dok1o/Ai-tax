@@ -11,7 +11,7 @@ from pathlib import Path
 
 from src.common.config import DATA_DIR, PROMPTS_PATH
 
-DRAFT_PATH = DATA_DIR / "prompts_draft.csv"
+DRAFT_PATH = DATA_DIR / "prompts_draft_old.csv"
 BANNED_PATH = DATA_DIR / "banned_topics.txt"
 LANGS = ("kk", "ru", "en")
 ANSWER_TYPES = {"mcq", "number", "short"}
