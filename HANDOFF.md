@@ -1,7 +1,6 @@
-# Round 3 integration handoff
-
-- ARENA fixes through `8548911` cover router thresholds, correctness decoding and fixture input selection. T-016 is outside this review.
-- T-014 supplies the trilingual dataset and saved token counts. All 180 prompt rows await native verification.
-- T-015 adds the Ollama and Gemini collectors. Offline collection uses the fixture client. Live collection requires model selection and human authorization.
-- Export a worksheet for the imported questions before native review. RELEASE.md records the outstanding offline tokenizer and release checks.
-- Resume on dev with `python run.py check`.
+# T-017 handoff
+done: Corrected the three requested prompt cells; validator passed; token files regenerated; Ruff and targeted tests passed.
+next: Astra reviews codex/T-017-text-fixes and merges it into dev after acceptance.
+blockers: None.
+files touched: data/prompts.csv; data/tokens.csv; data/tokens_ratio.csv; STATUS.md; HANDOFF.md.
+resume command: git switch codex/T-017-text-fixes

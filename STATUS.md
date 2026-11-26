@@ -18,6 +18,7 @@
 | T-013 | Consolidate local branches and CSV v2 | codex | codex/T-013-consolidation | done |
 | T-014 | Import final v2 prompt dataset | codex | codex/T-014-dataset | done |
 | T-015 | Ollama and Gemini model clients | codex | codex/T-015-clients | done |
+| T-017 | Prompt text corrections and token regeneration | codex | codex/T-017-text-fixes | review |
 
 ## Requests for Astra
 
