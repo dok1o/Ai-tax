@@ -510,8 +510,8 @@ def train_cost(
     command: str = COST_COMMAND,
 ) -> dict[str, pd.DataFrame]:
     """Train, compare and persist the token-cost models (T-005)."""
-    prompts_path, prompts_fixture = resolve_input("prompts")
     tokens_path, tokens_fixture = resolve_input("tokens")
+    prompts_path, prompts_fixture = resolve_input("prompts", partner="tokens")
     is_fixture = prompts_fixture or tokens_fixture
     dataset = load_cost_dataset(prompts_path, tokens_path)
     results = cross_validate_cost(dataset, n_splits=n_splits, seed=seed)
@@ -586,8 +586,8 @@ def train_risk(
     command: str = RISK_COMMAND,
 ) -> dict[str, Any]:
     """Train, compare, explain and persist the error-risk models (T-007)."""
-    prompts_path, prompts_fixture = resolve_input("prompts")
     labels_path, labels_fixture = resolve_input("labels")
+    prompts_path, prompts_fixture = resolve_input("prompts", partner="labels")
     is_fixture = prompts_fixture or labels_fixture
     labels = load_labels(prompts_path, labels_path)
     labels[TARGET_RISK] = 1 - labels["is_correct"]

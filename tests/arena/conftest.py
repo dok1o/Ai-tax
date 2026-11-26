@@ -2,9 +2,14 @@
 
 Real contract CSVs are hidden for the whole session, so every resolver falls
 through to the committed fixtures in ``models/fixtures/`` and reports them as
-fixtures. Without this the suite changes behaviour as soon as codex lands real
-data in ``data/``, and mixing a real ``prompts.csv`` with fixture tokens, labels
-or routes joins on identifiers that do not exist in both files.
+fixtures. This keeps the expected sample sizes stable: the assertions in this
+suite are about the committed fixture set, not about whatever lands in ``data/``.
+
+Provenance mixing is no longer the reason for it. ``resolve_input`` now resolves
+a prompts file that matches the table it is joined with, so a real
+``data/prompts.csv`` next to fixture labels, tokens or routes can no longer break
+training; ``tests/arena/test_review_fixes.py`` pins that. The suite passes both
+with and without this pinning.
 """
 
 from __future__ import annotations

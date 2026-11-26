@@ -16,7 +16,8 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from collections.abc import Sequence
+from collections import Counter
+from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -30,6 +31,7 @@ from src.features import (
     DEFAULT_SPLITS,
     artifact_name,
     assign_folds,
+    decode_correctness,
     read_contract_csv,
     require_columns,
     resolve_artifact,
@@ -54,23 +56,6 @@ ROUTE_COLUMNS: tuple[str, ...] = (
 )
 ROUTER_COMMAND = "python -m src.router --seed 42 --n-splits 5"
 KEY = ["q_id", "lang"]
-
-
-def decode_correctness(values: pd.Series) -> pd.DataFrame:
-    """Decode contract booleans or 0/1 flags into graded 0/1 outcome columns.
-
-    ``true`` and ``1`` mean the answer was correct; ``false`` and ``0`` mean it
-    was not. Any other spelling is rejected instead of being read as false.
-    """
-    normalized = values.astype(str).str.strip().str.lower()
-    if not normalized.isin({"true", "false", "0", "1"}).all():
-        bad = sorted(set(normalized) - {"true", "false", "0", "1"})
-        raise ValueError(f"routes has non-boolean is_correct values: {bad}")
-    incorrect = normalized.isin({"false", "0"})
-    return pd.DataFrame(
-        {"is_correct": (~incorrect).astype(int), "is_incorrect": incorrect.astype(int)},
-        index=values.index,
-    )
 
 
 def prepare_routes(
@@ -403,6 +388,21 @@ def nested_decisions(
     return decisions.sort_values(KEY).reset_index(drop=True), per_fold
 
 
+def deployment_threshold(thresholds_per_fold: Mapping[int, float]) -> float:
+    """Threshold to deploy: the mode of the nested per-fold selections.
+
+    Every per-fold value was picked on the folds that were training data at that
+    point, so the deployed threshold inherits that discipline instead of being
+    re-selected on the outcomes it is judged on. Ties break towards the smaller
+    threshold, which routes more traffic through the cheaper strategies.
+    """
+    if not thresholds_per_fold:
+        raise ValueError("no per-fold thresholds to deploy")
+    counts = Counter(thresholds_per_fold.values())
+    top = max(counts.values())
+    return min(value for value, count in counts.items() if count == top)
+
+
 def threshold_grid(step: float = 0.05) -> list[float]:
     """Thresholds swept for the cost-quality curve."""
     return [round(value, 2) for value in np.arange(step, 1.0 - step / 2, step)]
@@ -482,7 +482,7 @@ def train_router(
 ) -> dict[str, Any]:
     """Evaluate the router on held-out questions and persist every artifact."""
     routes_path, routes_fixture = resolve_input("routes")
-    prompts_path, prompts_fixture = resolve_input("prompts")
+    prompts_path, prompts_fixture = resolve_input("prompts", partner="routes")
     is_fixture = routes_fixture or prompts_fixture
     routes = pd.read_csv(routes_path, dtype=str, keep_default_na=False)
     prompts = read_contract_csv(prompts_path)
@@ -508,7 +508,7 @@ def train_router(
     thresholds = threshold_grid()
     curve, _ = sweep_thresholds(data, thresholds)
     chosen, thresholds_per_fold = nested_decisions(data, folds, thresholds)
-    threshold = select_threshold(data, thresholds)
+    threshold = deployment_threshold(thresholds_per_fold)
     baselines = pd.DataFrame(
         [
             outcome_summary(baseline_decisions(data, strategy), f"always_{strategy}")
@@ -582,8 +582,8 @@ def train_router(
         "selection_rule": (
             "nested by q_id: every held-out fold is routed with the largest swept "
             "threshold whose accuracy on the other folds is not below always_direct; "
-            "deployment_threshold repeats that rule on all rows and is only "
-            "used by the app"
+            "deployment_threshold is the mode of those per-fold choices, so it is "
+            "never re-selected on the outcomes it is judged on"
         ),
         "curve": json.loads(curve.round(4).to_json(orient="records")),
         "baselines": json.loads(baselines.round(4).to_json(orient="records")),
