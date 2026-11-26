@@ -7,10 +7,10 @@
 | T-002 | Trilingual prompts and validator | codex | codex/T-002-prompts | done |
 | T-003 | Cached model collection | codex | codex/T-003-collect | doing |
 | T-004 | Real Ollama grades and paired statistics | codex | codex/T-004-real-run | done |
-| T-005 | Token-cost prediction | arena | arena/ad3092b4-ai-tax | done |
+| T-005 | Token-cost prediction | arena | arena/ad3092b4-ai-tax | review |
 | T-006 | Offline dashboard skeleton | arena | arena/ad3092b4-ai-tax | done |
-| T-007 | Error-risk prediction | arena | arena/ad3092b4-ai-tax | done |
-| T-008 | Routing evaluation | arena | arena/ad3092b4-ai-tax | done |
+| T-007 | Error-risk prediction | arena | arena/ad3092b4-ai-tax | review |
+| T-008 | Routing evaluation | arena | arena/ad3092b4-ai-tax | review |
 | T-009 | PowerShell-compatible Python commands | codex | codex/T-009-runner | done |
 | T-010 | Automate project Definition of Done | codex | codex/T-010-done-check | done |
 | T-011 | Offline trilingual Streamlit dashboard | arena | arena/ad3092b4-ai-tax | review |
@@ -23,6 +23,7 @@
 
 ## Requests for Astra
 
+- ARENA: T-005, T-007 and T-008 are rerun on the real contract v2.1 data with the same code (GroupKFold by `q_id`, 5 folds, seed 42) and their rows are set to review; `models/REPORT.md` now carries only real numbers with their n and confidence intervals. Cost: lightgbm MAE 5.7563 ± 1.3304, R² 0.9355 ± 0.0301 (Qwen tokenizer, n = 180) against the lang_mean baseline 19.3130 ± 3.2895 / 0.3257 ± 0.1069, whose per-language R² is negative. Risk: logistic pooled AUC 0.7815, Brier 0.1844, accuracy 0.7315 (n = 1080, 412 incorrect) against train_rate 0.4513 / 0.2369 / 0.6185; lightgbm is worse (0.7377 / 0.2222 / 0.6833). Router (n = 180 keys): 65.0667 tokens at 0.7667 accuracy, +19.91% cheaper than always_direct (CI95 17.48 … 22.45) and +36.39% cheaper than always_stronger_model (CI95 33.83 … 38.98), but **exactly 0 tokens and 0 accuracy against always_via_english (CI95 [0, 0])** — the deployed policy routes every Kazakh and Russian key through the English prompt, so it ties that baseline instead of beating it. Threshold selection stays nested (all five folds pick 0.95; `deployment_threshold` is their mode). Two inputs are still owed for RELEASE.md item 4: observed route legs including the translation call (`data/routes.csv` does not exist, so the legs are derived and `translation_tokens` is 0 — the via_english cost is a lower bound) and model prices per 1k tokens (all costs are in tokens). Native-verified share is 0.000. `python run.py check`: ruff clean, 227 passed, validator 60 questions / 180 rows.
 - Claude Code acts as Astra for the rest of this sprint by human decision. Schema v2.1, T-004 and T-017 are merged into dev.
 - Codex (T-010 owner): `src/done_check.py` accepts only `accuracy` and `mcnemar_exact`. Make it read `accuracy_strict` and the other v2.1 metric names before `python run.py done` is used.
 - ARENA: T-016 stays blocked at `1a01017`. Add the regression test for zero network requests on a corrupt tokenizer cache and set the T-016 row to review.

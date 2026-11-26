@@ -1,0 +1,351 @@
+{
+  "task": "token_cost",
+  "command": "/home/user/Ai-tax/src/train.py all --out models --figs models/figs",
+  "generated_at": "2026-11-26T21:05:35Z",
+  "seed": 42,
+  "n_splits": 5,
+  "group_by": "q_id",
+  "fixture": false,
+  "inputs": {
+    "prompts": "/home/user/Ai-tax/data/prompts.csv",
+    "tokens": "/home/user/Ai-tax/data/tokens.csv",
+    "n_questions": 60,
+    "n_prompts": 180,
+    "n_rows": 360,
+    "tokenizers": [
+      "Qwen/Qwen2.5-0.5B@5796c1d2033cb6257f44cdffa28957680359236d",
+      "cl100k_base"
+    ]
+  },
+  "target": "token_count",
+  "models": [
+    "lang_mean",
+    "linear",
+    "lightgbm"
+  ],
+  "results": [
+    {
+      "model": "lang_mean",
+      "tokenizer": "Qwen/Qwen2.5-0.5B@5796c1d2033cb6257f44cdffa28957680359236d",
+      "lang": "all",
+      "n": 180,
+      "n_folds": 5,
+      "mae_mean": 19.313,
+      "mae_std": 3.2895,
+      "r2_mean": 0.3257,
+      "r2_std": 0.1069
+    },
+    {
+      "model": "lightgbm",
+      "tokenizer": "Qwen/Qwen2.5-0.5B@5796c1d2033cb6257f44cdffa28957680359236d",
+      "lang": "all",
+      "n": 180,
+      "n_folds": 5,
+      "mae_mean": 5.7563,
+      "mae_std": 1.3304,
+      "r2_mean": 0.9355,
+      "r2_std": 0.0301
+    },
+    {
+      "model": "linear",
+      "tokenizer": "Qwen/Qwen2.5-0.5B@5796c1d2033cb6257f44cdffa28957680359236d",
+      "lang": "all",
+      "n": 180,
+      "n_folds": 5,
+      "mae_mean": 6.6952,
+      "mae_std": 1.0986,
+      "r2_mean": 0.9139,
+      "r2_std": 0.0339
+    },
+    {
+      "model": "lang_mean",
+      "tokenizer": "Qwen/Qwen2.5-0.5B@5796c1d2033cb6257f44cdffa28957680359236d",
+      "lang": "en",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 12.9076,
+      "mae_std": 1.6735,
+      "r2_mean": -0.0561,
+      "r2_std": 0.0494
+    },
+    {
+      "model": "lightgbm",
+      "tokenizer": "Qwen/Qwen2.5-0.5B@5796c1d2033cb6257f44cdffa28957680359236d",
+      "lang": "en",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 4.0447,
+      "mae_std": 0.8009,
+      "r2_mean": 0.8946,
+      "r2_std": 0.0511
+    },
+    {
+      "model": "linear",
+      "tokenizer": "Qwen/Qwen2.5-0.5B@5796c1d2033cb6257f44cdffa28957680359236d",
+      "lang": "en",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 5.6526,
+      "mae_std": 1.2612,
+      "r2_mean": 0.7972,
+      "r2_std": 0.0781
+    },
+    {
+      "model": "lang_mean",
+      "tokenizer": "Qwen/Qwen2.5-0.5B@5796c1d2033cb6257f44cdffa28957680359236d",
+      "lang": "kk",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 27.125,
+      "mae_std": 4.3015,
+      "r2_mean": -0.0746,
+      "r2_std": 0.0942
+    },
+    {
+      "model": "lightgbm",
+      "tokenizer": "Qwen/Qwen2.5-0.5B@5796c1d2033cb6257f44cdffa28957680359236d",
+      "lang": "kk",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 8.109,
+      "mae_std": 2.7961,
+      "r2_mean": 0.8918,
+      "r2_std": 0.0667
+    },
+    {
+      "model": "linear",
+      "tokenizer": "Qwen/Qwen2.5-0.5B@5796c1d2033cb6257f44cdffa28957680359236d",
+      "lang": "kk",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 8.7197,
+      "mae_std": 2.7416,
+      "r2_mean": 0.8743,
+      "r2_std": 0.0667
+    },
+    {
+      "model": "lang_mean",
+      "tokenizer": "Qwen/Qwen2.5-0.5B@5796c1d2033cb6257f44cdffa28957680359236d",
+      "lang": "ru",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 17.9062,
+      "mae_std": 4.0326,
+      "r2_mean": -0.1018,
+      "r2_std": 0.0874
+    },
+    {
+      "model": "lightgbm",
+      "tokenizer": "Qwen/Qwen2.5-0.5B@5796c1d2033cb6257f44cdffa28957680359236d",
+      "lang": "ru",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 5.1151,
+      "mae_std": 1.5638,
+      "r2_mean": 0.9123,
+      "r2_std": 0.0328
+    },
+    {
+      "model": "linear",
+      "tokenizer": "Qwen/Qwen2.5-0.5B@5796c1d2033cb6257f44cdffa28957680359236d",
+      "lang": "ru",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 5.7133,
+      "mae_std": 1.2442,
+      "r2_mean": 0.8721,
+      "r2_std": 0.0342
+    },
+    {
+      "model": "lang_mean",
+      "tokenizer": "cl100k_base",
+      "lang": "all",
+      "n": 180,
+      "n_folds": 5,
+      "mae_mean": 22.4894,
+      "mae_std": 2.6722,
+      "r2_mean": 0.3801,
+      "r2_std": 0.095
+    },
+    {
+      "model": "lightgbm",
+      "tokenizer": "cl100k_base",
+      "lang": "all",
+      "n": 180,
+      "n_folds": 5,
+      "mae_mean": 6.6139,
+      "mae_std": 1.2637,
+      "r2_mean": 0.9381,
+      "r2_std": 0.0319
+    },
+    {
+      "model": "linear",
+      "tokenizer": "cl100k_base",
+      "lang": "all",
+      "n": 180,
+      "n_folds": 5,
+      "mae_mean": 7.9933,
+      "mae_std": 1.3588,
+      "r2_mean": 0.9172,
+      "r2_std": 0.0359
+    },
+    {
+      "model": "lang_mean",
+      "tokenizer": "cl100k_base",
+      "lang": "en",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 12.541,
+      "mae_std": 1.2523,
+      "r2_mean": -0.0516,
+      "r2_std": 0.0382
+    },
+    {
+      "model": "lightgbm",
+      "tokenizer": "cl100k_base",
+      "lang": "en",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 3.8392,
+      "mae_std": 0.3597,
+      "r2_mean": 0.9023,
+      "r2_std": 0.0405
+    },
+    {
+      "model": "linear",
+      "tokenizer": "cl100k_base",
+      "lang": "en",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 7.2855,
+      "mae_std": 2.3659,
+      "r2_mean": 0.6302,
+      "r2_std": 0.2034
+    },
+    {
+      "model": "lang_mean",
+      "tokenizer": "cl100k_base",
+      "lang": "kk",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 32.6312,
+      "mae_std": 4.4787,
+      "r2_mean": -0.0823,
+      "r2_std": 0.1052
+    },
+    {
+      "model": "lightgbm",
+      "tokenizer": "cl100k_base",
+      "lang": "kk",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 9.5818,
+      "mae_std": 2.8101,
+      "r2_mean": 0.8894,
+      "r2_std": 0.0738
+    },
+    {
+      "model": "linear",
+      "tokenizer": "cl100k_base",
+      "lang": "kk",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 10.2792,
+      "mae_std": 2.7244,
+      "r2_mean": 0.8705,
+      "r2_std": 0.0755
+    },
+    {
+      "model": "lang_mean",
+      "tokenizer": "cl100k_base",
+      "lang": "ru",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 22.2958,
+      "mae_std": 2.5029,
+      "r2_mean": -0.0904,
+      "r2_std": 0.0813
+    },
+    {
+      "model": "lightgbm",
+      "tokenizer": "cl100k_base",
+      "lang": "ru",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 6.4206,
+      "mae_std": 0.9709,
+      "r2_mean": 0.8935,
+      "r2_std": 0.0356
+    },
+    {
+      "model": "linear",
+      "tokenizer": "cl100k_base",
+      "lang": "ru",
+      "n": 60,
+      "n_folds": 5,
+      "mae_mean": 6.4152,
+      "mae_std": 1.1785,
+      "r2_mean": 0.8955,
+      "r2_std": 0.051
+    }
+  ],
+  "fertility_diagnostic": [
+    {
+      "tokenizer": "Qwen/Qwen2.5-0.5B@5796c1d2033cb6257f44cdffa28957680359236d",
+      "lang": "en",
+      "n": 60,
+      "fertility_mean": 1.614
+    },
+    {
+      "tokenizer": "Qwen/Qwen2.5-0.5B@5796c1d2033cb6257f44cdffa28957680359236d",
+      "lang": "kk",
+      "n": 60,
+      "fertility_mean": 3.8044
+    },
+    {
+      "tokenizer": "Qwen/Qwen2.5-0.5B@5796c1d2033cb6257f44cdffa28957680359236d",
+      "lang": "ru",
+      "n": 60,
+      "fertility_mean": 2.4521
+    },
+    {
+      "tokenizer": "cl100k_base",
+      "lang": "en",
+      "n": 60,
+      "fertility_mean": 1.5604
+    },
+    {
+      "tokenizer": "cl100k_base",
+      "lang": "kk",
+      "n": 60,
+      "fertility_mean": 4.3985
+    },
+    {
+      "tokenizer": "cl100k_base",
+      "lang": "ru",
+      "n": 60,
+      "fertility_mean": 2.9115
+    }
+  ],
+  "notes": [
+    "fertility and token_count are targets or diagnostics, never features",
+    "lang_mean is the per-language training mean baseline",
+    "r2 is null for folds whose held-out target is constant"
+  ],
+  "artifacts": [
+    "cost_lang_mean__Qwen_Qwen2.5-0.5B_5796c1d2033cb6257f44cdffa28957.joblib",
+    "cost_lang_mean__cl100k_base.joblib",
+    "cost_lightgbm__Qwen_Qwen2.5-0.5B_5796c1d2033cb6257f44cdffa28957.joblib",
+    "cost_lightgbm__cl100k_base.joblib",
+    "cost_linear__Qwen_Qwen2.5-0.5B_5796c1d2033cb6257f44cdffa28957.joblib",
+    "cost_linear__cl100k_base.joblib"
+  ],
+  "versions": {
+    "python": "3.11.2",
+    "pandas": "3.1.1",
+    "numpy": "2.4.6",
+    "scikit-learn": "1.9.1",
+    "lightgbm": "4.7.0",
+    "shap": "0.51.0"
+  }
+}

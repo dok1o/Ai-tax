@@ -11,6 +11,7 @@ the cost-quality evaluation.
 
 from __future__ import annotations
 
+import os
 from collections.abc import Iterable, Sequence
 from pathlib import Path
 
@@ -23,11 +24,15 @@ from src.common.config import (
     LABELS_PATH,
     MODELS_DIR,
     PROMPTS_PATH,
+    RESPONSES_PATH,
     SEED,
     TOKENS_PATH,
 )
 
 LANGS: tuple[str, ...] = ("kk", "ru", "en")
+# Example mode: resolve the committed fixtures even after a real run has written
+# artifacts next to them. The dashboard and the hermetic test session use it.
+EXAMPLE_ENV = "LT_FORCE_EXAMPLE"
 DEFAULT_SPLITS = 5
 KAZAKH_SPECIFIC = frozenset("әғқңөұүһіӘҒҚҢӨҰҮҺІ")
 PUNCTUATION = frozenset(".,;:!?()[]{}\"'‘’“”-–—…/\\@#$%&*+=<>_|~`^")
@@ -46,6 +51,11 @@ TEXT_FEATURES: tuple[str, ...] = (
     "kk_share",
 )
 META_FEATURES: tuple[str, ...] = ("lang", "category")
+# LightGBM refuses these characters in feature names ("special JSON characters"),
+# and real model identifiers such as `gemma2:2b` carry a colon. One-hot levels are
+# translated before they become column names so every compared model sees the same
+# matrix. Dots, hyphens and `=` are accepted and stay untouched.
+JSON_UNSAFE = str.maketrans({character: "_" for character in ':[]{},"'})
 PROMPT_COLUMNS: tuple[str, ...] = (
     "prompt_id",
     "q_id",
@@ -71,6 +81,42 @@ LABEL_COLUMNS: tuple[str, ...] = (
     "is_correct",
 )
 LEAK_PREFIXES: tuple[str, ...] = ("token_count", "fertility")
+RESPONSE_COLUMNS: tuple[str, ...] = (
+    "model",
+    "prompt_id",
+    "lang",
+    "rep",
+    "q_id",
+    "input_tokens",
+    "output_tokens",
+    "usage_available",
+)
+# The router's three strategies, named here so the derived route legs and the
+# router cannot drift apart.
+STRATEGY_DIRECT = "direct"
+STRATEGY_VIA_ENGLISH = "via_english"
+STRATEGY_STRONGER = "stronger_model"
+ROUTE_STRATEGIES: tuple[str, ...] = (
+    STRATEGY_DIRECT,
+    STRATEGY_VIA_ENGLISH,
+    STRATEGY_STRONGER,
+)
+ROUTE_ROW_COLUMNS: tuple[str, ...] = (
+    "q_id",
+    "prompt_id",
+    "lang",
+    "strategy",
+    "model",
+    "input_tokens",
+    "translation_tokens",
+    "output_tokens",
+    "total_tokens",
+    "is_correct",
+    "source",
+)
+# Where the derived legs live: `data/` belongs to Codex, `models/` to ARENA.
+DERIVED_ROUTES_PATH = MODELS_DIR / "routes_derived.csv"
+DERIVED_SOURCE = "derived"
 TARGET = "token_count"
 FIXTURE_DIR = MODELS_DIR / "fixtures"
 ROUTES_PATH = DATA_DIR / "routes.csv"
@@ -152,7 +198,12 @@ def design_matrix(
     for column in meta_columns:
         values = features[column].astype(str).reset_index(drop=True)
         for level in sorted(values.unique()):
-            encoded[f"{column}={level}"] = (values == level).astype(float).tolist()
+            name = f"{column}={level}".translate(JSON_UNSAFE)
+            if name in encoded:
+                raise ValueError(
+                    f"two {column} levels share the sanitized feature name {name}"
+                )
+            encoded[name] = (values == level).astype(float).tolist()
     matrix = pd.concat([numeric, pd.DataFrame(encoded)], axis=1)
     assert_no_leakage(matrix.columns)
     return matrix
@@ -164,11 +215,19 @@ def artifact_name(base: str, suffix: str, is_fixture: bool) -> str:
 
 
 def resolve_artifact(directory: Path, base: str, suffix: str) -> tuple[Path, bool]:
-    """Return the real artifact when present, else the fixture-labelled one."""
-    for candidate, is_fixture in (
+    """Return the real artifact when present, else the fixture-labelled one.
+
+    ``LT_FORCE_EXAMPLE=1`` reverses the preference, so the example mode and the
+    test session keep resolving the committed fixtures instead of whatever the
+    last real run wrote into the same directory.
+    """
+    order = (
         (directory / f"{base}.{suffix}", False),
         (directory / f"{base}_fixture.{suffix}", True),
-    ):
+    )
+    if os.environ.get(EXAMPLE_ENV) == "1":
+        order = tuple(reversed(order))
+    for candidate, is_fixture in order:
         if candidate.exists():
             return candidate, is_fixture
     raise FileNotFoundError(f"no artifact {base}[._fixture].{suffix} in {directory}")
@@ -302,7 +361,7 @@ def resolve_input(kind: str, partner: str | None = None) -> tuple[Path, bool]:
         "routes": ROUTES_PATH,
     }[kind]
     fixture = FIXTURE_DIR / f"{kind}_fixture.csv"
-    if partner is not None and not _real_path(partner).exists() and fixture.exists():
+    if partner is not None and not _partner_is_real(partner) and fixture.exists():
         return fixture, True
     if real.exists():
         return real, False
@@ -313,14 +372,224 @@ def resolve_input(kind: str, partner: str | None = None) -> tuple[Path, bool]:
     )
 
 
+def _partner_is_real(partner: str) -> bool:
+    """Whether a partner input can be resolved from real data.
+
+    Routes count as real when the observed legs exist *or* the real observations
+    needed to derive them do, so real prompts are not pushed onto the fixture
+    table just because ``data/routes.csv`` was never published.
+    """
+    return (
+        real_routes_available() if partner == "routes" else _real_path(partner).exists()
+    )
+
+
 def _real_path(kind: str) -> Path:
     """Contract path of one input kind, whether it exists or not."""
     return {
         "prompts": PROMPTS_PATH,
         "tokens": TOKENS_PATH,
         "labels": LABELS_PATH,
+        "responses": RESPONSES_PATH,
         "routes": ROUTES_PATH,
     }[kind]
+
+
+def load_observations(responses_path: Path, labels_path: Path) -> pd.DataFrame:
+    """Graded observations with the provider's own token counts, one row each.
+
+    Nothing is imputed: a row without provider usage or without a grade is an
+    error, because the router bills exactly these numbers.
+    """
+    responses = read_contract_csv(responses_path)
+    require_columns(responses, RESPONSE_COLUMNS, responses_path.name)
+    labels = read_contract_csv(labels_path)
+    require_columns(labels, LABEL_COLUMNS, labels_path.name)
+    key = ["model", "prompt_id", "lang", "rep"]
+
+    graded = labels[list(LABEL_COLUMNS)].copy()
+    graded["is_correct"] = decode_correctness(
+        graded["is_correct"], source=labels_path.name
+    )["is_correct"]
+    if "parse_status" in labels.columns:
+        status = labels["parse_status"].astype(str).str.strip().str.lower()
+        # Contract v2.1: accuracy_strict scores an unparsed answer as wrong.
+        graded.loc[status == "unparsed", "is_correct"] = 0
+    graded["rep"] = graded["rep"].astype(int)
+
+    counts = responses[list(RESPONSE_COLUMNS)].copy()
+    available = counts["usage_available"].astype(str).str.strip().str.lower()
+    if not (available == "true").all():
+        missing = int((available != "true").sum())
+        raise ValueError(
+            f"{responses_path.name} has {missing} rows without provider usage; "
+            "refusing to invent a token cost"
+        )
+    for column in ("input_tokens", "output_tokens"):
+        counts[column] = pd.to_numeric(counts[column])
+        if counts[column].isna().any() or (counts[column] < 0).any():
+            raise ValueError(f"{responses_path.name} has unusable {column} values")
+    counts["rep"] = counts["rep"].astype(int)
+
+    data = counts.merge(
+        graded[key + ["is_correct"]], on=key, how="left", validate="one_to_one"
+    )
+    if data["is_correct"].isna().any():
+        ungraded = int(data["is_correct"].isna().sum())
+        raise ValueError(
+            f"{labels_path.name} grades {len(data) - ungraded} of {len(data)} "
+            f"observations in {responses_path.name}"
+        )
+    data["is_correct"] = data["is_correct"].astype(int)
+    data["total_tokens"] = data["input_tokens"] + data["output_tokens"]
+    return data.sort_values(key).reset_index(drop=True)
+
+
+def route_roles(observations: pd.DataFrame) -> dict[str, str]:
+    """Which observed model plays which strategy, chosen from the data.
+
+    ``direct`` is the cheapest model by mean observed total tokens. ``via_english``
+    asks the same model the English prompt of the same question. ``stronger_model``
+    is the most accurate model that is not ``direct``, so the router really has two
+    native options to choose between.
+    """
+    grouped = observations.groupby("model").agg(
+        mean_total_tokens=("total_tokens", "mean"), accuracy=("is_correct", "mean")
+    )
+    if len(grouped) < 2:
+        raise ValueError("deriving route legs needs at least two observed models")
+    direct = str(grouped["mean_total_tokens"].idxmin())
+    ranked = grouped.sort_values(
+        ["accuracy", "mean_total_tokens"], ascending=[False, True]
+    )
+    stronger = str(next(name for name in ranked.index if str(name) != direct))
+    return {
+        STRATEGY_DIRECT: direct,
+        STRATEGY_VIA_ENGLISH: direct,
+        STRATEGY_STRONGER: stronger,
+    }
+
+
+def build_route_rows(
+    observations: pd.DataFrame, prompts: pd.DataFrame, rep: int = 0
+) -> pd.DataFrame:
+    """Observed route legs: three strategies for every question and language.
+
+    Costs are the provider's own counts for one observation per key (``rep``);
+    the router's unit is the question, so a second repetition would only be
+    aggregated away again. ``translation_tokens`` is 0 because no translation
+    call was ever made: the ``via_english`` cost is therefore a lower bound and
+    is reported as one, never padded with an invented overhead.
+    """
+    require_columns(prompts, PROMPT_COLUMNS, "prompts")
+    roles = route_roles(observations)
+    block = observations[observations["rep"] == rep]
+    if block.empty:
+        raise ValueError(f"no observation with rep={rep} to derive routes from")
+    native = prompts[["q_id", "prompt_id", "lang"]].copy()
+    english = prompts.loc[prompts["lang"] == "en", ["q_id", "prompt_id"]].rename(
+        columns={"prompt_id": "en_prompt_id"}
+    )
+    native = native.merge(english, on="q_id", how="left")
+    if native["en_prompt_id"].isna().any():
+        missing = sorted(set(native.loc[native["en_prompt_id"].isna(), "q_id"]))
+        raise ValueError(f"deriving via_english needs an English prompt for {missing}")
+
+    legs = []
+    for strategy in ROUTE_STRATEGIES:
+        model = roles[strategy]
+        leg = native.copy()
+        leg["strategy"] = strategy
+        leg["model"] = model
+        leg["observed_prompt_id"] = np.where(
+            strategy == STRATEGY_VIA_ENGLISH, leg["en_prompt_id"], leg["prompt_id"]
+        )
+        used = block.loc[
+            block["model"] == model,
+            ["prompt_id", "input_tokens", "output_tokens", "is_correct"],
+        ]
+        merged = leg.merge(
+            used,
+            left_on="observed_prompt_id",
+            right_on="prompt_id",
+            how="left",
+            suffixes=("", "_obs"),
+        )
+        if merged["input_tokens"].isna().any():
+            missing = sorted(
+                set(merged.loc[merged["input_tokens"].isna(), "observed_prompt_id"])
+            )
+            raise ValueError(
+                f"{model} has no rep={rep} observation for {missing[:5]} "
+                f"({int(merged['input_tokens'].isna().sum())} rows)"
+            )
+        merged["translation_tokens"] = 0
+        merged["total_tokens"] = merged["input_tokens"] + merged["output_tokens"]
+        merged["is_correct"] = np.where(merged["is_correct"] == 1, "true", "false")
+        merged["source"] = DERIVED_SOURCE
+        legs.append(
+            merged.drop(
+                columns=["prompt_id_obs", "en_prompt_id", "observed_prompt_id"],
+                errors="ignore",
+            )[list(ROUTE_ROW_COLUMNS)]
+        )
+    return (
+        pd.concat(legs, ignore_index=True)
+        .sort_values(["q_id", "lang", "strategy"])
+        .reset_index(drop=True)
+    )
+
+
+def real_routes_available() -> bool:
+    """True when the real inputs for observed route legs can be resolved.
+
+    A committed ``routes_derived.csv`` on its own does not count: the derived
+    legs belong to the real responses and labels they were built from, so a run
+    that cannot see those inputs (the hermetic test session, the example mode of
+    the dashboard) must stay on the labelled fixture.
+    """
+    return bool(
+        _real_path("routes").exists()
+        or (
+            _real_path("responses").exists()
+            and _real_path("labels").exists()
+            and _real_path("prompts").exists()
+        )
+    )
+
+
+def derive_routes(out_path: Path | None = None) -> tuple[Path, dict[str, str]]:
+    """Write the derived route legs next to the other ARENA artifacts.
+
+    The destination is resolved when the call happens, not when the module is
+    imported, so the file that gets written is always the one the caller is told
+    about.
+    """
+    destination = DERIVED_ROUTES_PATH if out_path is None else out_path
+    observations = load_observations(RESPONSES_PATH, LABELS_PATH)
+    prompts = read_contract_csv(PROMPTS_PATH)
+    routes = build_route_rows(observations, prompts)
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    routes.to_csv(destination, index=False)
+    return destination, route_roles(observations)
+
+
+def ensure_routes() -> tuple[Path, bool, str]:
+    """Routes path, whether it is a fixture, and where the legs came from."""
+    real = _real_path("routes")
+    if real.exists():
+        return real, False, "observed"
+    if real_routes_available():
+        # Rebuild every time: the legs must match the responses on disk, not a
+        # copy that an earlier run happened to leave behind.
+        path, _roles = derive_routes()
+        return path, False, DERIVED_SOURCE
+    fixture = FIXTURE_DIR / "routes_fixture.csv"
+    if fixture.exists():
+        return fixture, True, "fixture"
+    raise FileNotFoundError(
+        f"neither {real} nor {fixture} exists; run models/fixtures/make_fixtures.py"
+    )
 
 
 def assign_folds(
