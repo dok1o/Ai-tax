@@ -7,6 +7,7 @@ touching the network.
 from __future__ import annotations
 
 import pandas as pd
+import plotly.io as pio
 import pytest
 
 from app import charts
@@ -196,3 +197,57 @@ def test_router_curve_is_plotted_against_the_two_baselines() -> None:
     assert figure.layout.xaxis.title.text == "held-out accuracy [share correct]"
     assert figure.layout.yaxis.title.text == "mean tokens per question [tokens]"
     assert "(n=180)" in figure.layout.title.text
+
+
+PHRASE_COUNTS = {"kk": 12, "ru": 9, "en": 6}
+PHRASE_RATIOS = {"kk": 2.0, "ru": 1.5, "en": 1.0}
+
+
+def test_language_colours_are_shared_by_chips_bars_and_3d() -> None:
+    """T-016 asks for one palette: kk teal, ru amber, en blue, everywhere."""
+    from app import text
+
+    assert charts.LANG_COLORS == text.LANG_COLORS
+    assert charts.LANG_COLORS["kk"].upper() == charts.PAGE["accent"].upper()
+    scatter = charts.scatter3d(PROMPTS, True)
+    stops = dict(scatter.data[0].marker.colorscale)
+    assert stops[0.0] == charts.LANG_COLORS["kk"]
+
+
+def test_phrase_bars_show_one_tokenizer_and_the_language_colours() -> None:
+    figure = charts.phrase_bars(PHRASE_COUNTS, PHRASE_RATIOS, "cl100k_base")
+    assert [trace.type for trace in figure.data] == ["bar"]
+    assert list(figure.data[0].x) == ["kk", "ru", "en"]
+    assert list(figure.data[0].y) == [12, 9, 6]
+    assert list(figure.data[0].marker.color) == [
+        charts.LANG_COLORS[lang] for lang in ("kk", "ru", "en")
+    ]
+    assert list(figure.data[0].text) == ["x2.00", "x1.50", "x1.00"]
+    assert figure.layout.title.text == "Your phrases, cl100k_base (n=3)"
+    assert figure.layout.yaxis.title.text == "tokens per phrase [tokens]"
+    assert figure.layout.xaxis.title.text == "language"
+
+
+def test_phrase_bars_label_the_word_split_diagnostic() -> None:
+    figure = charts.phrase_bars(
+        PHRASE_COUNTS, {"kk": None, "ru": None, "en": 1.0}, "word-split", words=True
+    )
+    assert list(figure.data[0].text) == ["", "", "x1.00"]
+    assert figure.layout.title.text == (
+        "Your phrases, word-split — words, not tokens (n=3)"
+    )
+    assert figure.layout.yaxis.title.text == "words per phrase [words]"
+
+
+def test_theme_template_paints_the_page_colours() -> None:
+    template = charts.theme_template()
+    assert template.layout.paper_bgcolor == charts.PAGE["panel"]
+    assert template.layout.plot_bgcolor == charts.PAGE["panel"]
+    assert template.layout.font.color == charts.PAGE["text"]
+    assert template.layout.xaxis.gridcolor == charts.PAGE["grid"]
+    assert list(template.layout.colorway) == [
+        charts.LANG_COLORS[lang] for lang in charts.LANG_ORDER
+    ]
+    charts.apply_theme()
+    assert pio.templates.default == "arena_dark"
+    assert pio.templates["arena_dark"] is not None

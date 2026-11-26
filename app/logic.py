@@ -21,6 +21,7 @@ import pandas as pd
 from src.common.config import DATA_DIR, MODELS_DIR, SEED
 from src.features import (
     DEFAULT_SPLITS,
+    EXAMPLE_ENV,
     FIXTURE_DIR,
     LANGS,
     META_FEATURES,
@@ -51,26 +52,31 @@ from src.router import (
 DEMO_DIR = DATA_DIR / "demo"
 FIGS_DIR = MODELS_DIR / "figs"
 BANNER_EXAMPLE = "EXAMPLE DATA, not real results"
-FORCE_EXAMPLE_ENV = "LT_FORCE_EXAMPLE"
+FORCE_EXAMPLE_ENV = EXAMPLE_ENV
 FORCE_EMPTY_ENV = "LT_FORCE_EMPTY"
 TABLES: tuple[str, ...] = ("prompts", "tokens", "labels", "routes")
+# Provenance labels that mean the number was measured, not synthesized.
+REAL_SOURCES: frozenset[str] = frozenset({"real", "derived"})
 METHOD_LIMITATIONS: list[str] = [
     (
-        "Model artifacts are trained on the committed fixtures until T-001 to T-004 "
-        "deliver real data."
+        "Route legs are derived from the observed responses and labels: direct is "
+        "the cheapest observed model, stronger_model the most accurate one, and "
+        "via_english the cheapest model answering the English prompt of the same "
+        "question. No translation call was observed, so translation_tokens is 0 "
+        "and the via_english cost is a lower bound."
     ),
     (
-        "No tokenizer runs in the browser: without a local T-001 backend the "
-        "Playground uses a labelled whitespace fallback, so its chips are not model "
-        "tokens."
+        "The Playground tokenizes only with a real offline tokenizer; when no cache "
+        "is present nothing is tokenized, and the sidebar's word-split diagnostic "
+        "labels its own counts as words rather than model tokens."
     ),
     (
         "Native verification share is reported as measured; zero means no Kazakh "
-        "reviewer has signed off yet."
+        "reviewer has signed off yet, so every grade is a programmatic one."
     ),
     (
         "Bootstrap intervals resample whole questions (q_id), 1000 draws, seed 42; "
-        "small n keeps every number preliminary."
+        "with 60 questions per language the intervals stay wide."
     ),
     (
         "Live machine translation stays disabled without an explicit live flag and a "
@@ -108,7 +114,7 @@ class AppState:
     @property
     def is_example(self) -> bool:
         """True when any table or manifest is synthetic or missing."""
-        return any(source != "real" for source in self.sources.values())
+        return any(source not in REAL_SOURCES for source in self.sources.values())
 
     @property
     def banner(self) -> str | None:
@@ -127,7 +133,7 @@ class AppState:
         the fixture prompts are used for joins and the banner stays on.
         """
         partners = ("tokens", "labels", "routes")
-        if any(self.sources.get(kind) != "real" for kind in partners):
+        if any(self.sources.get(kind) not in REAL_SOURCES for kind in partners):
             fixture = FIXTURE_DIR / "prompts_fixture.csv"
             if fixture.exists():
                 return read_table(fixture)
@@ -140,8 +146,15 @@ def inputs_disabled() -> bool:
 
 
 def candidate(directory: Path, base: str, suffix: str) -> Path | None:
-    """Prefer the real artifact and fall back to the fixture-labelled one."""
-    for name in (f"{base}.{suffix}", f"{base}_fixture.{suffix}"):
+    """Prefer the real artifact and fall back to the fixture-labelled one.
+
+    The example mode reverses that order so a demo or a test shows the committed
+    fixtures even after real artifacts have been written next to them.
+    """
+    names = (f"{base}.{suffix}", f"{base}_fixture.{suffix}")
+    if os.environ.get(FORCE_EXAMPLE_ENV) == "1":
+        names = tuple(reversed(names))
+    for name in names:
         path = directory / name
         if path.exists():
             return path
@@ -157,6 +170,12 @@ def resolve_table(kind: str) -> tuple[Path | None, str]:
             path = directory / f"{kind}.csv"
             if path.exists():
                 return path, source
+        if kind == "routes":
+            # No published data/routes.csv: the legs ARENA derives from the real
+            # responses and labels live with the other generated artifacts.
+            derived = MODELS_DIR / "routes_derived.csv"
+            if derived.exists():
+                return derived, "derived"
     fixture = FIXTURE_DIR / f"{kind}_fixture.csv"
     return (fixture, "fixture") if fixture.exists() else (None, "missing")
 

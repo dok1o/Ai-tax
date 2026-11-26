@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pytest
 
-from app import text
+from app import text, tokenizers
 from src.features import KAZAKH_SPECIFIC
 
 KAZAKH = "Қазақстанның ең биік шыңы қалай аталады?"
@@ -16,37 +16,55 @@ RUSSIAN = "Как называется самая высокая вершина 
 ENGLISH = "What is the highest peak of Kazakhstan?"
 
 
-def test_tokenize_falls_back_to_the_labelled_backend() -> None:
-    pieces = text.tokenize(KAZAKH)
-    assert pieces[:2] == ["Қазақстанның", "ең"]
-    assert pieces[-1] == "?"
-    assert text.tokenize("   ") == []
-    assert text.available_backends()[-1] == text.FALLBACK_TOKENIZER
+def fake_backend() -> tokenizers.Backend:
+    """A backend that needs no network: one id per whitespace word."""
+
+    def encode(phrase: str) -> list[tuple[int, str]]:
+        return [(700 + index, piece) for index, piece in enumerate(phrase.split())]
+
+    return tokenizers.Backend(identifier="fake/cl100k", encode=encode)
 
 
-def test_tokenize_refuses_a_backend_that_is_not_installed() -> None:
-    with pytest.raises(ValueError, match="not available offline"):
-        text.tokenize(KAZAKH, "tiktoken/cl100k_base")
+def test_tokenize_without_a_backend_yields_nothing() -> None:
+    assert text.tokenize(KAZAKH) == []
+    assert text.tokenize(KAZAKH, diagnostic=True)[0] == (None, "Қазақстанның")
+    assert text.tokenize("   ", diagnostic=True) == []
 
 
-def test_chips_carry_text_ids_language_and_tokenizer() -> None:
-    chips = text.token_chips(KAZAKH, "kk", "whitespace-fallback")
+def test_chips_from_a_real_backend_carry_model_token_ids() -> None:
+    backend = fake_backend()
+    chips = text.token_chips(KAZAKH, "kk", backend)
     assert [chip.index for chip in chips] == list(range(len(chips)))
-    assert [chip.text for chip in chips] == text.tokenize(KAZAKH)
+    assert [chip.text for chip in chips] == KAZAKH.split()
+    assert [chip.token_id for chip in chips] == list(range(700, 700 + len(chips)))
     assert {chip.lang for chip in chips} == {"kk"}
-    assert chips[3].title == "id 3 | whitespace-fallback"
+    assert chips[2].tokenizer == "fake/cl100k"
+    assert chips[2].title == "position 2 | token id 702 | fake/cl100k"
     with pytest.raises(ValueError, match="unsupported language"):
-        text.token_chips(KAZAKH, "de")
+        text.token_chips(KAZAKH, "de", backend)
+
+
+def test_diagnostic_chips_are_labelled_as_words_not_tokens() -> None:
+    chips = text.token_chips(KAZAKH, "kk", diagnostic=True)
+    assert [chip.token_id for chip in chips] == [None] * len(chips)
+    assert chips[0].tokenizer == tokenizers.WORD_SPLIT_ID
+    assert chips[0].title == f"position 0 | {tokenizers.WORD_SPLIT_LABEL}"
+    assert tokenizers.WORD_SPLIT_LABEL == "words, not tokens"
 
 
 def test_chips_html_escapes_text_and_puts_the_id_on_hover() -> None:
-    chips = text.token_chips("<ү> & сұрақ", "kk")
-    markup = text.chips_html(chips)
+    markup = text.chips_html(text.token_chips("<ү> & сұрақ", "kk", fake_backend()))
     assert "&lt;" in markup and "&amp;" in markup
     assert "<ү>" not in markup
-    assert 'title="id 0 | whitespace-fallback"' in markup
+    assert 'title="position 0 | token id 700 | fake/cl100k"' in markup
     assert text.LANG_COLORS["kk"] in markup
     assert text.UNAVAILABLE in text.chips_html([])
+
+
+def test_multiplier_formatting_matches_the_summary_cards() -> None:
+    assert text.format_multiplier(1.3691) == "x1.37"
+    assert text.format_multiplier(1.0) == "x1.00"
+    assert text.format_multiplier(None) == text.UNAVAILABLE
 
 
 def test_ratios_report_unavailable_denominators() -> None:

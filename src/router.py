@@ -29,9 +29,13 @@ import pandas as pd
 from src.common.config import MODELS_DIR, SEED
 from src.features import (
     DEFAULT_SPLITS,
+    STRATEGY_DIRECT,
+    STRATEGY_STRONGER,
+    STRATEGY_VIA_ENGLISH,
     artifact_name,
     assign_folds,
     decode_correctness,
+    ensure_routes,
     read_contract_csv,
     require_columns,
     resolve_artifact,
@@ -40,11 +44,24 @@ from src.features import (
 
 FIGS_DIR = MODELS_DIR / "figs"
 BOOTSTRAP_RESAMPLES = 1000
-DIRECT = "direct"
-VIA_ENGLISH = "via_english"
-STRONGER = "stronger_model"
+DIRECT = STRATEGY_DIRECT
+VIA_ENGLISH = STRATEGY_VIA_ENGLISH
+STRONGER = STRATEGY_STRONGER
 STRATEGIES: tuple[str, ...] = (DIRECT, VIA_ENGLISH, STRONGER)
 BASELINES: tuple[str, ...] = STRATEGIES
+DERIVED_ROUTE_NOTES: tuple[str, ...] = (
+    (
+        "route legs are derived from data/responses.csv and data/labels.csv (rep 0): "
+        "direct is the cheapest observed model, stronger_model the most accurate one, "
+        "via_english the cheapest model answering the English prompt of the same "
+        "question"
+    ),
+    (
+        "costs are the provider's own input_tokens + output_tokens; no translation "
+        "call was observed, so translation_tokens is 0 and the via_english cost is a "
+        "lower bound"
+    ),
+)
 ROUTE_COLUMNS: tuple[str, ...] = (
     "q_id",
     "prompt_id",
@@ -104,6 +121,15 @@ def prepare_routes(
     ]
     if risks.empty:
         raise ValueError(f"no out-of-fold risk predictions for model {risk_model}")
+    # Real labels carry two repetitions per observation, so one (prompt, answering
+    # model) pair appears twice with the same pre-call risk. Collapse to one row
+    # per pair or the merge duplicates every route leg and doubles n; refuse
+    # instead of averaging when the two rows disagree.
+    disagreeing = risks.groupby(["prompt_id", "answer_model"])["risk"].nunique()
+    if (disagreeing > 1).any():
+        bad = sorted(disagreeing[disagreeing > 1].index)[:3]
+        raise ValueError(f"risk predictions disagree within pairs: {bad}")
+    risks = risks.drop_duplicates(["prompt_id", "answer_model"])
     data = data.merge(
         risks,
         left_on=["risk_prompt_id", "model"],
@@ -481,7 +507,7 @@ def train_router(
     n_resamples: int = BOOTSTRAP_RESAMPLES,
 ) -> dict[str, Any]:
     """Evaluate the router on held-out questions and persist every artifact."""
-    routes_path, routes_fixture = resolve_input("routes")
+    routes_path, routes_fixture, routes_source = ensure_routes()
     prompts_path, prompts_fixture = resolve_input("prompts", partner="routes")
     is_fixture = routes_fixture or prompts_fixture
     routes = pd.read_csv(routes_path, dtype=str, keep_default_na=False)
@@ -551,6 +577,7 @@ def train_router(
             "cost_model": cost_model,
             "tokenizer": tokenizer,
             "risk_model": risk_model,
+            "routes_source": routes_source,
             "statistics": statistics.to_dict("records"),
             "fallback_multiplier": fallback_multiplier(data),
             "fallback_offset": fallback_offset(data),
@@ -567,6 +594,7 @@ def train_router(
         "fixture": is_fixture,
         "inputs": {
             "routes": str(routes_path),
+            "routes_source": routes_source,
             "prompts": str(prompts_path),
             "n_questions": int(data["q_id"].nunique()),
             "n_keys": int(len(data) // len(STRATEGIES)),
@@ -599,6 +627,8 @@ def train_router(
         ],
         "figure": None if figure is None else figure.name,
     }
+    if routes_source == "derived":
+        manifest["notes"].extend(DERIVED_ROUTE_NOTES)
     path = out_dir / artifact_name("router_metrics", "json", is_fixture)
     path.write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8"
