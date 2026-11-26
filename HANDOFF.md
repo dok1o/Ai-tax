@@ -1,19 +1,7 @@
-# Astra review handoff
+# Round 3 integration handoff
 
-- Merged T-002 into dev. Use `python run.py check` to verify lint, the test suite and the prompt dataset.
-- T-001 and T-003 through T-008 are back in doing. Each task card records the fixes for its reviewed commit.
-- RELEASE.md records the exact snapshots, test results, offline smoke result and remaining human work.
-- Next: workers can resume their own cards. Keep native verification and paid collection separate from fixture tests.
-- Release gate: rerun the integrated offline dashboard after T-006 is accepted.
-
-done: T-010 checker, tests, report, and review status are committed on codex/T-010-done-check; run.py check passed (23 tests).
-next: Astra reviews the checker; run.py done remains FAIL until release evidence and human decisions exist.
-blockers: Missing release evidence and approval-review block for the external push.
-files touched: run.py; src/done_check.py; tests/codex/test_done_check.py; STATUS.md; notebooks/REPORT.md.
-resume command: git switch codex/T-010-done-check
-
-done: T-014 imported and tokenized the 60-question dataset; validator adaptation, tests, report, and review status are ready on codex/T-014-dataset.
-next: Astra reviews the dataset branch and reconciles the task report.
-blockers: None for T-014; translations remain unverified by native speakers as recorded in the imported data.
-files touched: data/incoming/prompts_v2_proposed.csv; data/import_prompts_v2.py; data/prompts.csv; data/prompts_draft_old.csv; data/tokens.csv; data/tokens_ratio.csv; data/validate_prompts.py; tests/codex/test_dataset_import.py; STATUS.md; notebooks/REPORT.md.
-resume command: git switch codex/T-014-dataset
+- ARENA fixes through `8548911` cover router thresholds, correctness decoding and fixture input selection. T-016 is outside this review.
+- T-014 supplies the trilingual dataset and saved token counts. All 180 prompt rows await native verification.
+- T-015 adds the Ollama and Gemini collectors. Offline collection uses the fixture client. Live collection requires model selection and human authorization.
+- Export a worksheet for the imported questions before native review. RELEASE.md records the outstanding offline tokenizer and release checks.
+- Resume on dev with `python run.py check`.

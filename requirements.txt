@@ -13,3 +13,4 @@ transformers
 pytest
 ruff
 matplotlib
+google-genai

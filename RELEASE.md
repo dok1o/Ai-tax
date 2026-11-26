@@ -1,16 +1,18 @@
 # Release status
 
-## Round 2 review eligibility, 2026-11-26
+## Round 3 integration, 2026-11-26
 
-The pipeline on dev is still the T-013 integration at `adcdc60`. All three round 2 submissions are pending. The table records the published branch lookup and the task states at the requested commits.
-
-| Submission | Reason for deferral | Action before review |
+| Merge order | Reviewed submission | Checks on the integrated tree |
 | --- | --- | --- |
-| ARENA Sol, `8548911` | The pinned `arena/ad3092b4-ai-tax` branch is on origin. Its handoff describes the fixes, but its STATUS table has no ARENA row in `review`. | ARENA must publish a review row identifying the fixes and give Astra the updated tip. |
-| T-014 dataset, `55d343c` | The local submission is in `review`. Origin has no `codex/T-014-dataset` branch. | The branch owner must push the named branch at the submitted commit. |
-| T-015 clients, `c5a013e` | The local submission is in `review`. Origin has no `codex/T-015-clients` branch. | The branch owner must push the named branch at the submitted commit. |
+| 1 | ARENA Sol `8548911` | `python run.py check` passed, 158 tests. The human approved review without a separate STATUS row. |
+| 2 | T-014 `55d343c` | `python run.py check` passed, 163 tests. The 360 measured token rows cover all 180 prompt IDs across two tokenizers. |
+| 3 | T-015 `c5a013e` | `python run.py check` passed, 174 tests. The provider tests use mocks. |
 
-Once the submissions qualify, Astra can resume in the order above and check each merge. Before live collection, the human must reconcile the accepted dataset with the native speaker's worksheet, run the native import, and approve model versions and budget. Keep demo results labeled as fixtures.
+Each check passed Ruff and validated 60 questions in three languages. All 180 imported rows have `verified_by_native=0`. The ARENA merge ends at the approved commit. T-016 remains pending.
+
+Astra reviewed the changed paths and approved the T-015 addition of `google-genai` to the shared requirements. The changed paths and diffs contained no tracked credential files or common key signatures.
+
+With external connections and DNS blocked, the collector ran each of its three provider selections without `--live` on all 180 prompts. Each run recorded fixture provenance and made zero connection attempts. The dashboard displayed its example-data banner with the integrated inputs. The router manifest carries `fixture: true`. Live model collection still requires human approval.
 
 ## T-013 integration
 
@@ -18,8 +20,8 @@ The integration includes T-001 through T-012. T-009 was already on dev. The fetc
 
 ## Remaining work
 
-- A native speaker must review the 60 Kazakh questions and golds. Four former yes/no questions now have explicit A/B options. Reconcile any earlier worksheet against the current text before human import.
-- T-001 still needs a cold-cache offline guard and a measured run over all production prompts. Its saved sample counts and ratios are under data/demo/. T-003 caches answers with missing usage, but overlapping live collectors still need duplicate-call protection. Keep live collection single-process until that review is complete.
+- The saved native-review worksheet shares zero question IDs with the T-014 dataset. Preserve the old worksheet and export a fresh one for a native speaker to review all 60 Kazakh questions and gold answers before human import.
+- T-001 still needs a cold-cache offline guard. A round 3 probe blocked a DNS attempt during tokenizer initialization with an empty tiktoken cache. T-014 supplies the measured production counts in data/tokens.csv and data/tokens_ratio.csv. T-003 caches answers with missing usage, but overlapping live collectors still need duplicate-call protection. Keep live collection single-process until that review is complete.
 - Supply credentials and model versions locally, approve a budget, collect real observations and record all query metadata. Rebuild labels, metrics, cost/risk models and router comparisons from real data. Fixture observations and trained fixture artifacts only support the demo.
 - Reconcile the paired test with DONE.md before reporting live significance. The merged stats fix compares per-question mean correctness across repetitions. DONE.md specifies one prespecified matched repetition.
 - Smoke-test and time the offline T-011 dashboard with the release inputs on the demo laptop. Confirm data provenance and all thresholds. Record the fresh-clone rebuild, history and citation checks, poster/pitch traceability, rehearsal, human diff review and release tag.
