@@ -1,0 +1,13 @@
+prompt_id,q_id,lang,text,is_example
+ex-01-kk,ex-01,kk,Ашық күні аспан қандай түсті?,true
+ex-01-ru,ex-01,ru,Какого цвета небо в ясный день?,true
+ex-01-en,ex-01,en,What color is the sky on a clear day?,true
+ex-02-kk,ex-02,kk,Бір аптада неше күн бар?,true
+ex-02-ru,ex-02,ru,Сколько дней в неделе?,true
+ex-02-en,ex-02,en,How many days are in a week?,true
+ex-03-kk,ex-03,kk,Көктемнен кейін қай мезгіл келеді?,true
+ex-03-ru,ex-03,ru,Какое время года наступает после весны?,true
+ex-03-en,ex-03,en,Which season comes after spring?,true
+ex-04-kk,ex-04,kk,Аралар гүл шырынынан не жасайды?,true
+ex-04-ru,ex-04,ru,Что пчёлы делают из цветочного нектара?,true
+ex-04-en,ex-04,en,What do bees make from flower nectar?,true

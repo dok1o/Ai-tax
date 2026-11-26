@@ -1,0 +1,359 @@
+{
+  "task": "router",
+  "command": "/home/user/Ai-tax/src/router.py",
+  "generated_at": "2026-11-26T17:27:26Z",
+  "seed": 42,
+  "n_splits": 5,
+  "group_by": "q_id",
+  "fixture": true,
+  "inputs": {
+    "routes": "/home/user/Ai-tax/models/fixtures/routes_fixture.csv",
+    "prompts": "/home/user/Ai-tax/models/fixtures/prompts_fixture.csv",
+    "n_questions": 60,
+    "n_keys": 180,
+    "n_route_rows": 540,
+    "cost_model": "lightgbm",
+    "tokenizer": "hf-tokenizers/BAAI/bge-m3@a1b2c3d",
+    "risk_model": "logistic"
+  },
+  "deployment_threshold": 0.95,
+  "thresholds_per_fold": {
+    "0": 0.95,
+    "1": 0.95,
+    "2": 0.95,
+    "3": 0.95,
+    "4": 0.95
+  },
+  "selection_rule": "nested by q_id: every held-out fold is routed with the largest swept threshold whose accuracy on the other folds is not below always_direct; deployment_threshold is the mode of those per-fold choices, so it is never re-selected on the outcomes it is judged on",
+  "curve": [
+    {
+      "policy": "router@0.05",
+      "n": 180,
+      "cost_tokens_mean": 106.8667,
+      "cost_hat_mean": 110.0911,
+      "accuracy": 0.7833,
+      "expected_accuracy": 0.8168,
+      "threshold": 0.05,
+      "share_direct": 0.0,
+      "share_via_english": 0.1444,
+      "share_stronger_model": 0.8556
+    },
+    {
+      "policy": "router@0.10",
+      "n": 180,
+      "cost_tokens_mean": 106.8667,
+      "cost_hat_mean": 110.0911,
+      "accuracy": 0.7833,
+      "expected_accuracy": 0.8168,
+      "threshold": 0.1,
+      "share_direct": 0.0,
+      "share_via_english": 0.1444,
+      "share_stronger_model": 0.8556
+    },
+    {
+      "policy": "router@0.15",
+      "n": 180,
+      "cost_tokens_mean": 105.3556,
+      "cost_hat_mean": 108.4022,
+      "accuracy": 0.7889,
+      "expected_accuracy": 0.8143,
+      "threshold": 0.15,
+      "share_direct": 0.0222,
+      "share_via_english": 0.1222,
+      "share_stronger_model": 0.8556
+    },
+    {
+      "policy": "router@0.20",
+      "n": 180,
+      "cost_tokens_mean": 102.6778,
+      "cost_hat_mean": 105.2561,
+      "accuracy": 0.7778,
+      "expected_accuracy": 0.8042,
+      "threshold": 0.2,
+      "share_direct": 0.1,
+      "share_via_english": 0.0778,
+      "share_stronger_model": 0.8222
+    },
+    {
+      "policy": "router@0.25",
+      "n": 180,
+      "cost_tokens_mean": 100.0167,
+      "cost_hat_mean": 103.0121,
+      "accuracy": 0.7444,
+      "expected_accuracy": 0.7911,
+      "threshold": 0.25,
+      "share_direct": 0.2222,
+      "share_via_english": 0.0556,
+      "share_stronger_model": 0.7222
+    },
+    {
+      "policy": "router@0.30",
+      "n": 180,
+      "cost_tokens_mean": 99.3667,
+      "cost_hat_mean": 101.8793,
+      "accuracy": 0.7444,
+      "expected_accuracy": 0.7781,
+      "threshold": 0.3,
+      "share_direct": 0.3222,
+      "share_via_english": 0.0444,
+      "share_stronger_model": 0.6333
+    },
+    {
+      "policy": "router@0.35",
+      "n": 180,
+      "cost_tokens_mean": 98.6778,
+      "cost_hat_mean": 100.7713,
+      "accuracy": 0.7389,
+      "expected_accuracy": 0.7664,
+      "threshold": 0.35,
+      "share_direct": 0.4111,
+      "share_via_english": 0.0333,
+      "share_stronger_model": 0.5556
+    },
+    {
+      "policy": "router@0.40",
+      "n": 180,
+      "cost_tokens_mean": 97.3667,
+      "cost_hat_mean": 99.2513,
+      "accuracy": 0.7444,
+      "expected_accuracy": 0.7582,
+      "threshold": 0.4,
+      "share_direct": 0.4667,
+      "share_via_english": 0.0111,
+      "share_stronger_model": 0.5222
+    },
+    {
+      "policy": "router@0.45",
+      "n": 180,
+      "cost_tokens_mean": 97.2667,
+      "cost_hat_mean": 99.0553,
+      "accuracy": 0.7444,
+      "expected_accuracy": 0.7517,
+      "threshold": 0.45,
+      "share_direct": 0.5111,
+      "share_via_english": 0.0111,
+      "share_stronger_model": 0.4778
+    },
+    {
+      "policy": "router@0.50",
+      "n": 180,
+      "cost_tokens_mean": 96.3167,
+      "cost_hat_mean": 98.4325,
+      "accuracy": 0.7389,
+      "expected_accuracy": 0.7498,
+      "threshold": 0.5,
+      "share_direct": 0.5222,
+      "share_via_english": 0.0,
+      "share_stronger_model": 0.4778
+    },
+    {
+      "policy": "router@0.55",
+      "n": 180,
+      "cost_tokens_mean": 96.05,
+      "cost_hat_mean": 98.385,
+      "accuracy": 0.7333,
+      "expected_accuracy": 0.7477,
+      "threshold": 0.55,
+      "share_direct": 0.5333,
+      "share_via_english": 0.0,
+      "share_stronger_model": 0.4667
+    },
+    {
+      "policy": "router@0.60",
+      "n": 180,
+      "cost_tokens_mean": 96.05,
+      "cost_hat_mean": 98.385,
+      "accuracy": 0.7333,
+      "expected_accuracy": 0.7477,
+      "threshold": 0.6,
+      "share_direct": 0.5333,
+      "share_via_english": 0.0,
+      "share_stronger_model": 0.4667
+    },
+    {
+      "policy": "router@0.65",
+      "n": 180,
+      "cost_tokens_mean": 96.05,
+      "cost_hat_mean": 98.385,
+      "accuracy": 0.7333,
+      "expected_accuracy": 0.7477,
+      "threshold": 0.65,
+      "share_direct": 0.5333,
+      "share_via_english": 0.0,
+      "share_stronger_model": 0.4667
+    },
+    {
+      "policy": "router@0.70",
+      "n": 180,
+      "cost_tokens_mean": 96.05,
+      "cost_hat_mean": 98.385,
+      "accuracy": 0.7333,
+      "expected_accuracy": 0.7477,
+      "threshold": 0.7,
+      "share_direct": 0.5333,
+      "share_via_english": 0.0,
+      "share_stronger_model": 0.4667
+    },
+    {
+      "policy": "router@0.75",
+      "n": 180,
+      "cost_tokens_mean": 96.05,
+      "cost_hat_mean": 98.385,
+      "accuracy": 0.7333,
+      "expected_accuracy": 0.7477,
+      "threshold": 0.75,
+      "share_direct": 0.5333,
+      "share_via_english": 0.0,
+      "share_stronger_model": 0.4667
+    },
+    {
+      "policy": "router@0.80",
+      "n": 180,
+      "cost_tokens_mean": 96.05,
+      "cost_hat_mean": 98.385,
+      "accuracy": 0.7333,
+      "expected_accuracy": 0.7477,
+      "threshold": 0.8,
+      "share_direct": 0.5333,
+      "share_via_english": 0.0,
+      "share_stronger_model": 0.4667
+    },
+    {
+      "policy": "router@0.85",
+      "n": 180,
+      "cost_tokens_mean": 96.05,
+      "cost_hat_mean": 98.385,
+      "accuracy": 0.7333,
+      "expected_accuracy": 0.7477,
+      "threshold": 0.85,
+      "share_direct": 0.5333,
+      "share_via_english": 0.0,
+      "share_stronger_model": 0.4667
+    },
+    {
+      "policy": "router@0.90",
+      "n": 180,
+      "cost_tokens_mean": 96.05,
+      "cost_hat_mean": 98.385,
+      "accuracy": 0.7333,
+      "expected_accuracy": 0.7477,
+      "threshold": 0.9,
+      "share_direct": 0.5333,
+      "share_via_english": 0.0,
+      "share_stronger_model": 0.4667
+    },
+    {
+      "policy": "router@0.95",
+      "n": 180,
+      "cost_tokens_mean": 96.05,
+      "cost_hat_mean": 98.385,
+      "accuracy": 0.7333,
+      "expected_accuracy": 0.7477,
+      "threshold": 0.95,
+      "share_direct": 0.5333,
+      "share_via_english": 0.0,
+      "share_stronger_model": 0.4667
+    }
+  ],
+  "baselines": [
+    {
+      "policy": "always_direct",
+      "n": 180,
+      "cost_tokens_mean": 95.8278,
+      "cost_hat_mean": 99.5728,
+      "accuracy": 0.6278,
+      "expected_accuracy": 0.6278
+    },
+    {
+      "policy": "always_via_english",
+      "n": 180,
+      "cost_tokens_mean": 170.65,
+      "cost_hat_mean": 174.3594,
+      "accuracy": 0.75,
+      "expected_accuracy": 0.75
+    },
+    {
+      "policy": "always_stronger_model",
+      "n": 180,
+      "cost_tokens_mean": 97.0,
+      "cost_hat_mean": 100.6914,
+      "accuracy": 0.8111,
+      "expected_accuracy": 0.8111
+    }
+  ],
+  "savings": {
+    "always_direct": {
+      "baseline": "direct",
+      "n_keys": 180,
+      "n_questions": 60,
+      "resamples": 1000,
+      "seed": 42,
+      "accuracy_router": 0.7333333333333333,
+      "accuracy_baseline": 0.6277777777777778,
+      "cost_router": 96.05,
+      "cost_baseline": 95.82777777777778,
+      "saving_tokens": -0.2222222222222222,
+      "saving_tokens_ci95": [
+        -2.1281944444444445,
+        1.6944444444444444
+      ],
+      "saving_percent": -0.23189750130442344,
+      "saving_percent_ci95": [
+        -2.2310562395026112,
+        1.7764180922018362
+      ]
+    },
+    "always_via_english": {
+      "baseline": "via_english",
+      "n_keys": 180,
+      "n_questions": 60,
+      "resamples": 1000,
+      "seed": 42,
+      "accuracy_router": 0.7333333333333333,
+      "accuracy_baseline": 0.75,
+      "cost_router": 96.05,
+      "cost_baseline": 170.65,
+      "saving_tokens": 74.6,
+      "saving_tokens_ci95": [
+        68.88194444444446,
+        80.53944444444444
+      ],
+      "saving_percent": 43.715206563140924,
+      "saving_percent_ci95": [
+        42.16211591339835,
+        45.14175201303561
+      ]
+    },
+    "always_stronger_model": {
+      "baseline": "stronger_model",
+      "n_keys": 180,
+      "n_questions": 60,
+      "resamples": 1000,
+      "seed": 42,
+      "accuracy_router": 0.7333333333333333,
+      "accuracy_baseline": 0.8111111111111111,
+      "cost_router": 96.05,
+      "cost_baseline": 97.0,
+      "saving_tokens": 0.95,
+      "saving_tokens_ci95": [
+        -1.0559722222222223,
+        2.717083333333333
+      ],
+      "saving_percent": 0.979381443298969,
+      "saving_percent_ci95": [
+        -1.0842442875345109,
+        2.7738822941792574
+      ]
+    }
+  },
+  "notes": [
+    "the sweep table is descriptive; the policy uses per-fold thresholds",
+    "figures are skipped when matplotlib is absent; numbers stay in CSV/JSON",
+    "risk from T-007 out-of-fold predictions, cost from T-005 out-of-fold",
+    "via_english is scored with the English prompt of the same question",
+    "per-strategy multipliers and offsets are fitted on the other folds only",
+    "evaluation uses realized tokens and correctness of the chosen route",
+    "bootstrap resamples question ids, 1000 draws, percentile interval"
+  ],
+  "figure": "router_curve_fixture.png"
+}

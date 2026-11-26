@@ -1,0 +1,362 @@
+{
+  "task": "router",
+  "command": "/home/user/Ai-tax/src/router.py",
+  "generated_at": "2026-11-26T21:20:43Z",
+  "seed": 42,
+  "n_splits": 5,
+  "group_by": "q_id",
+  "fixture": false,
+  "inputs": {
+    "routes": "/home/user/Ai-tax/models/routes_derived.csv",
+    "routes_source": "derived",
+    "prompts": "/home/user/Ai-tax/data/prompts.csv",
+    "n_questions": 60,
+    "n_keys": 180,
+    "n_route_rows": 540,
+    "cost_model": "lightgbm",
+    "tokenizer": "Qwen/Qwen2.5-0.5B@5796c1d2033cb6257f44cdffa28957680359236d",
+    "risk_model": "logistic"
+  },
+  "deployment_threshold": 0.95,
+  "thresholds_per_fold": {
+    "0": 0.95,
+    "1": 0.95,
+    "2": 0.95,
+    "3": 0.95,
+    "4": 0.95
+  },
+  "selection_rule": "nested by q_id: every held-out fold is routed with the largest swept threshold whose accuracy on the other folds is not below always_direct; deployment_threshold is the mode of those per-fold choices, so it is never re-selected on the outcomes it is judged on",
+  "curve": [
+    {
+      "policy": "router@0.05",
+      "n": 180,
+      "cost_tokens_mean": 76.6333,
+      "cost_hat_mean": 81.1738,
+      "accuracy": 0.8,
+      "expected_accuracy": 0.8171,
+      "threshold": 0.05,
+      "share_direct": 0.1056,
+      "share_via_english": 0.3722,
+      "share_stronger_model": 0.5222
+    },
+    {
+      "policy": "router@0.10",
+      "n": 180,
+      "cost_tokens_mean": 75.2778,
+      "cost_hat_mean": 79.4056,
+      "accuracy": 0.7944,
+      "expected_accuracy": 0.8153,
+      "threshold": 0.1,
+      "share_direct": 0.1389,
+      "share_via_english": 0.3944,
+      "share_stronger_model": 0.4667
+    },
+    {
+      "policy": "router@0.15",
+      "n": 180,
+      "cost_tokens_mean": 73.05,
+      "cost_hat_mean": 75.7389,
+      "accuracy": 0.7944,
+      "expected_accuracy": 0.803,
+      "threshold": 0.15,
+      "share_direct": 0.1722,
+      "share_via_english": 0.4833,
+      "share_stronger_model": 0.3444
+    },
+    {
+      "policy": "router@0.20",
+      "n": 180,
+      "cost_tokens_mean": 71.4944,
+      "cost_hat_mean": 74.0514,
+      "accuracy": 0.7944,
+      "expected_accuracy": 0.7952,
+      "threshold": 0.2,
+      "share_direct": 0.1778,
+      "share_via_english": 0.5389,
+      "share_stronger_model": 0.2833
+    },
+    {
+      "policy": "router@0.25",
+      "n": 180,
+      "cost_tokens_mean": 70.4778,
+      "cost_hat_mean": 73.032,
+      "accuracy": 0.7944,
+      "expected_accuracy": 0.7917,
+      "threshold": 0.25,
+      "share_direct": 0.2167,
+      "share_via_english": 0.5444,
+      "share_stronger_model": 0.2389
+    },
+    {
+      "policy": "router@0.30",
+      "n": 180,
+      "cost_tokens_mean": 69.2389,
+      "cost_hat_mean": 71.4754,
+      "accuracy": 0.7833,
+      "expected_accuracy": 0.7869,
+      "threshold": 0.3,
+      "share_direct": 0.2389,
+      "share_via_english": 0.5722,
+      "share_stronger_model": 0.1889
+    },
+    {
+      "policy": "router@0.35",
+      "n": 180,
+      "cost_tokens_mean": 68.1056,
+      "cost_hat_mean": 70.4813,
+      "accuracy": 0.7778,
+      "expected_accuracy": 0.7827,
+      "threshold": 0.35,
+      "share_direct": 0.2778,
+      "share_via_english": 0.5778,
+      "share_stronger_model": 0.1444
+    },
+    {
+      "policy": "router@0.40",
+      "n": 180,
+      "cost_tokens_mean": 66.0556,
+      "cost_hat_mean": 68.3175,
+      "accuracy": 0.7667,
+      "expected_accuracy": 0.7717,
+      "threshold": 0.4,
+      "share_direct": 0.3167,
+      "share_via_english": 0.6333,
+      "share_stronger_model": 0.05
+    },
+    {
+      "policy": "router@0.45",
+      "n": 180,
+      "cost_tokens_mean": 65.4056,
+      "cost_hat_mean": 67.7501,
+      "accuracy": 0.7667,
+      "expected_accuracy": 0.7687,
+      "threshold": 0.45,
+      "share_direct": 0.3278,
+      "share_via_english": 0.6556,
+      "share_stronger_model": 0.0167
+    },
+    {
+      "policy": "router@0.50",
+      "n": 180,
+      "cost_tokens_mean": 65.0667,
+      "cost_hat_mean": 67.574,
+      "accuracy": 0.7667,
+      "expected_accuracy": 0.7667,
+      "threshold": 0.5,
+      "share_direct": 0.3333,
+      "share_via_english": 0.6667,
+      "share_stronger_model": 0.0
+    },
+    {
+      "policy": "router@0.55",
+      "n": 180,
+      "cost_tokens_mean": 65.0667,
+      "cost_hat_mean": 67.574,
+      "accuracy": 0.7667,
+      "expected_accuracy": 0.7667,
+      "threshold": 0.55,
+      "share_direct": 0.3333,
+      "share_via_english": 0.6667,
+      "share_stronger_model": 0.0
+    },
+    {
+      "policy": "router@0.60",
+      "n": 180,
+      "cost_tokens_mean": 65.0667,
+      "cost_hat_mean": 67.574,
+      "accuracy": 0.7667,
+      "expected_accuracy": 0.7667,
+      "threshold": 0.6,
+      "share_direct": 0.3333,
+      "share_via_english": 0.6667,
+      "share_stronger_model": 0.0
+    },
+    {
+      "policy": "router@0.65",
+      "n": 180,
+      "cost_tokens_mean": 65.0667,
+      "cost_hat_mean": 67.574,
+      "accuracy": 0.7667,
+      "expected_accuracy": 0.7667,
+      "threshold": 0.65,
+      "share_direct": 0.3333,
+      "share_via_english": 0.6667,
+      "share_stronger_model": 0.0
+    },
+    {
+      "policy": "router@0.70",
+      "n": 180,
+      "cost_tokens_mean": 65.0667,
+      "cost_hat_mean": 67.574,
+      "accuracy": 0.7667,
+      "expected_accuracy": 0.7667,
+      "threshold": 0.7,
+      "share_direct": 0.3333,
+      "share_via_english": 0.6667,
+      "share_stronger_model": 0.0
+    },
+    {
+      "policy": "router@0.75",
+      "n": 180,
+      "cost_tokens_mean": 65.0667,
+      "cost_hat_mean": 67.574,
+      "accuracy": 0.7667,
+      "expected_accuracy": 0.7667,
+      "threshold": 0.75,
+      "share_direct": 0.3333,
+      "share_via_english": 0.6667,
+      "share_stronger_model": 0.0
+    },
+    {
+      "policy": "router@0.80",
+      "n": 180,
+      "cost_tokens_mean": 65.0667,
+      "cost_hat_mean": 67.574,
+      "accuracy": 0.7667,
+      "expected_accuracy": 0.7667,
+      "threshold": 0.8,
+      "share_direct": 0.3333,
+      "share_via_english": 0.6667,
+      "share_stronger_model": 0.0
+    },
+    {
+      "policy": "router@0.85",
+      "n": 180,
+      "cost_tokens_mean": 65.0667,
+      "cost_hat_mean": 67.574,
+      "accuracy": 0.7667,
+      "expected_accuracy": 0.7667,
+      "threshold": 0.85,
+      "share_direct": 0.3333,
+      "share_via_english": 0.6667,
+      "share_stronger_model": 0.0
+    },
+    {
+      "policy": "router@0.90",
+      "n": 180,
+      "cost_tokens_mean": 65.0667,
+      "cost_hat_mean": 67.574,
+      "accuracy": 0.7667,
+      "expected_accuracy": 0.7667,
+      "threshold": 0.9,
+      "share_direct": 0.3333,
+      "share_via_english": 0.6667,
+      "share_stronger_model": 0.0
+    },
+    {
+      "policy": "router@0.95",
+      "n": 180,
+      "cost_tokens_mean": 65.0667,
+      "cost_hat_mean": 67.574,
+      "accuracy": 0.7667,
+      "expected_accuracy": 0.7667,
+      "threshold": 0.95,
+      "share_direct": 0.3333,
+      "share_via_english": 0.6667,
+      "share_stronger_model": 0.0
+    }
+  ],
+  "baselines": [
+    {
+      "policy": "always_direct",
+      "n": 180,
+      "cost_tokens_mean": 81.2444,
+      "cost_hat_mean": 84.9597,
+      "accuracy": 0.6389,
+      "expected_accuracy": 0.6389
+    },
+    {
+      "policy": "always_via_english",
+      "n": 180,
+      "cost_tokens_mean": 65.0667,
+      "cost_hat_mean": 67.574,
+      "accuracy": 0.7667,
+      "expected_accuracy": 0.7667
+    },
+    {
+      "policy": "always_stronger_model",
+      "n": 180,
+      "cost_tokens_mean": 102.2889,
+      "cost_hat_mean": 109.3876,
+      "accuracy": 0.7111,
+      "expected_accuracy": 0.7097
+    }
+  ],
+  "savings": {
+    "always_direct": {
+      "baseline": "direct",
+      "n_keys": 180,
+      "n_questions": 60,
+      "resamples": 1000,
+      "seed": 42,
+      "accuracy_router": 0.7666666666666667,
+      "accuracy_baseline": 0.6388888888888888,
+      "cost_router": 65.06666666666666,
+      "cost_baseline": 81.24444444444444,
+      "saving_tokens": 16.177777777777777,
+      "saving_tokens_ci95": [
+        13.966666666666667,
+        18.505833333333335
+      ],
+      "saving_percent": 19.91247264770241,
+      "saving_percent_ci95": [
+        17.482274322724866,
+        22.454120246253673
+      ]
+    },
+    "always_via_english": {
+      "baseline": "via_english",
+      "n_keys": 180,
+      "n_questions": 60,
+      "resamples": 1000,
+      "seed": 42,
+      "accuracy_router": 0.7666666666666667,
+      "accuracy_baseline": 0.7666666666666667,
+      "cost_router": 65.06666666666666,
+      "cost_baseline": 65.06666666666666,
+      "saving_tokens": 0.0,
+      "saving_tokens_ci95": [
+        0.0,
+        0.0
+      ],
+      "saving_percent": 0.0,
+      "saving_percent_ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    "always_stronger_model": {
+      "baseline": "stronger_model",
+      "n_keys": 180,
+      "n_questions": 60,
+      "resamples": 1000,
+      "seed": 42,
+      "accuracy_router": 0.7666666666666667,
+      "accuracy_baseline": 0.7111111111111111,
+      "cost_router": 65.06666666666666,
+      "cost_baseline": 102.28888888888889,
+      "saving_tokens": 37.22222222222222,
+      "saving_tokens_ci95": [
+        34.64930555555556,
+        39.766666666666666
+      ],
+      "saving_percent": 36.38931131870519,
+      "saving_percent_ci95": [
+        33.8277175705031,
+        38.97557817967328
+      ]
+    }
+  },
+  "notes": [
+    "the sweep table is descriptive; the policy uses per-fold thresholds",
+    "figures are skipped when matplotlib is absent; numbers stay in CSV/JSON",
+    "risk from T-007 out-of-fold predictions, cost from T-005 out-of-fold",
+    "via_english is scored with the English prompt of the same question",
+    "per-strategy multipliers and offsets are fitted on the other folds only",
+    "evaluation uses realized tokens and correctness of the chosen route",
+    "bootstrap resamples question ids, 1000 draws, percentile interval",
+    "route legs are derived from data/responses.csv and data/labels.csv (rep 0): direct is the cheapest observed model, stronger_model the most accurate one, via_english the cheapest model answering the English prompt of the same question",
+    "costs are the provider's own input_tokens + output_tokens; no translation call was observed, so translation_tokens is 0 and the via_english cost is a lower bound"
+  ],
+  "figure": "router_curve.png"
+}

@@ -1,0 +1,36 @@
+# Streamlit theme for the offline dashboard (T-016).
+#
+# Streamlit reads `.streamlit/config.toml` from the directory the server is
+# started in, or from `$HOME/.streamlit/config.toml`. It never reads
+# `app/.streamlit/config.toml` for the documented launch commands
+# (`python run.py dashboard` and `python -m streamlit run app/main.py`, both run
+# from the repository root). This file is therefore kept next to the page for two
+# reasons: it is the exact content to install at `<repo>/.streamlit/config.toml`
+# (see the Requests for Astra bullet in STATUS.md), and it takes effect as-is
+# when the server is started from this directory:
+#
+#     cd app && python -m streamlit run main.py
+#
+# From the repository root the same theme can be requested with environment
+# variables, which Streamlit honours regardless of the working directory:
+#
+#     STREAMLIT_THEME_BASE=dark \
+#     STREAMLIT_THEME_PRIMARY_COLOR="#00AFB9" \
+#     STREAMLIT_THEME_BACKGROUND_COLOR="#0E1116" \
+#     STREAMLIT_THEME_SECONDARY_BACKGROUND_COLOR="#161B22" \
+#     STREAMLIT_THEME_TEXT_COLOR="#E6EDF3" \
+#     python -m streamlit run app/main.py
+#
+# The page does not depend on this file: `app/main.py` paints the same colours
+# with CSS and `app/charts.apply_theme()` registers the matching Plotly
+# template, so the dark theme and the single teal accent survive without it.
+
+[theme]
+base = "dark"
+primaryColor = "#00AFB9"
+backgroundColor = "#0E1116"
+secondaryBackgroundColor = "#161B22"
+textColor = "#E6EDF3"
+
+[browser]
+gatherUsageStats = false

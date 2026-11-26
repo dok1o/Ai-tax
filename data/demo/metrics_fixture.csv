@@ -1,0 +1,13 @@
+metric,model,lang,lang_a,lang_b,accuracy,ci_low,ci_high,n,n_questions,effect_size,p_value,p_value_holm,preliminary,data_source
+accuracy,fixture/model-a,kk,,,1.0,1.0,1.0,60,60,,,,false,fixture
+accuracy,fixture/model-a,ru,,,1.0,1.0,1.0,60,60,,,,false,fixture
+accuracy,fixture/model-a,en,,,1.0,1.0,1.0,60,60,,,,false,fixture
+accuracy,fixture/model-b,kk,,,0.7,0.5833333333333334,0.8004166666666663,60,60,,,,false,fixture
+accuracy,fixture/model-b,ru,,,0.8,0.7,0.9,60,60,,,,false,fixture
+accuracy,fixture/model-b,en,,,0.9,0.8166666666666667,0.9666666666666667,60,60,,,,false,fixture
+mcnemar_exact,fixture/model-a,,kk,ru,,,,60,60,0.0,1.0,1.0,false,fixture
+mcnemar_exact,fixture/model-a,,kk,en,,,,60,60,0.0,1.0,1.0,false,fixture
+mcnemar_exact,fixture/model-a,,ru,en,,,,60,60,0.0,1.0,1.0,false,fixture
+mcnemar_exact,fixture/model-b,,kk,ru,,,,60,60,-0.1,0.36159460805356514,1.0,false,fixture
+mcnemar_exact,fixture/model-b,,kk,en,,,,60,60,-0.2,0.022655844688415527,0.13593506813049316,false,fixture
+mcnemar_exact,fixture/model-b,,ru,en,,,,60,60,-0.1,0.237884521484375,1.0,false,fixture

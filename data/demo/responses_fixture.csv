@@ -1,0 +1,361 @@
+model,prompt_id,lang,rep,q_id,model_version,called_at,temperature,input_tokens,output_tokens,latency_ms,response,usage_available
+fixture/model-a,e01-en,en,0,e01,fixture-v1,2026-11-26T17:06:51.561Z,0.0,12,1,0.010100000508828089,5,true
+fixture/model-a,e01-kk,kk,0,e01,fixture-v1,2026-11-26T17:06:51.556Z,0.0,9,1,0.008800001523923129,5,true
+fixture/model-a,e01-ru,ru,0,e01,fixture-v1,2026-11-26T17:06:51.558Z,0.0,10,1,0.01349999729427509,5,true
+fixture/model-a,e02-en,en,0,e02,fixture-v1,2026-11-26T17:06:51.566Z,0.0,7,1,0.009700001101009548,60,true
+fixture/model-a,e02-kk,kk,0,e02,fixture-v1,2026-11-26T17:06:51.562Z,0.0,5,1,0.013799999578623101,60,true
+fixture/model-a,e02-ru,ru,0,e02,fixture-v1,2026-11-26T17:06:51.564Z,0.0,5,1,0.015800000255694613,60,true
+fixture/model-a,e03-en,en,0,e03,fixture-v1,2026-11-26T17:06:51.572Z,0.0,12,1,0.010300002031726763,12,true
+fixture/model-a,e03-kk,kk,0,e03,fixture-v1,2026-11-26T17:06:51.568Z,0.0,10,1,0.013199998647905886,12,true
+fixture/model-a,e03-ru,ru,0,e03,fixture-v1,2026-11-26T17:06:51.571Z,0.0,10,1,0.011100000847363845,12,true
+fixture/model-a,e04-en,en,0,e04,fixture-v1,2026-11-26T17:06:51.577Z,0.0,15,1,0.011100000847363845,5,true
+fixture/model-a,e04-kk,kk,0,e04,fixture-v1,2026-11-26T17:06:51.574Z,0.0,9,1,0.012500000593718141,5,true
+fixture/model-a,e04-ru,ru,0,e04,fixture-v1,2026-11-26T17:06:51.576Z,0.0,12,1,0.01170000177808106,5,true
+fixture/model-a,e05-en,en,0,e05,fixture-v1,2026-11-26T17:06:51.584Z,0.0,16,1,0.014100001862971112,09:25,true
+fixture/model-a,e05-kk,kk,0,e05,fixture-v1,2026-11-26T17:06:51.580Z,0.0,10,1,0.011599997378652915,09:25,true
+fixture/model-a,e05-ru,ru,0,e05,fixture-v1,2026-11-26T17:06:51.582Z,0.0,13,1,0.013299999409355223,09:25,true
+fixture/model-a,e06-en,en,0,e06,fixture-v1,2026-11-26T17:06:51.588Z,0.0,10,1,0.009300001693191007,0.5,true
+fixture/model-a,e06-kk,kk,0,e06,fixture-v1,2026-11-26T17:06:51.585Z,0.0,7,1,0.010000003385357559,0.5,true
+fixture/model-a,e06-ru,ru,0,e06,fixture-v1,2026-11-26T17:06:51.586Z,0.0,6,1,0.008699997124494985,0.5,true
+fixture/model-a,e07-en,en,0,e07,fixture-v1,2026-11-26T17:06:51.593Z,0.0,8,1,0.009499999578110874,2,true
+fixture/model-a,e07-kk,kk,0,e07,fixture-v1,2026-11-26T17:06:51.590Z,0.0,5,1,0.009499999578110874,2,true
+fixture/model-a,e07-ru,ru,0,e07,fixture-v1,2026-11-26T17:06:51.592Z,0.0,5,1,0.010900002962443978,2,true
+fixture/model-a,e08-en,en,0,e08,fixture-v1,2026-11-26T17:06:51.600Z,0.0,12,1,0.0121000011858996,25,true
+fixture/model-a,e08-kk,kk,0,e08,fixture-v1,2026-11-26T17:06:51.596Z,0.0,9,1,0.013799999578623101,25,true
+fixture/model-a,e08-ru,ru,0,e08,fixture-v1,2026-11-26T17:06:51.598Z,0.0,10,1,0.012000000424450263,25,true
+fixture/model-a,e09-en,en,0,e09,fixture-v1,2026-11-26T17:06:51.605Z,0.0,9,1,0.007799997547408566,pen,true
+fixture/model-a,e09-kk,kk,0,e09,fixture-v1,2026-11-26T17:06:51.602Z,0.0,7,1,0.011000000085914508,қалам,true
+fixture/model-a,e09-ru,ru,0,e09,fixture-v1,2026-11-26T17:06:51.604Z,0.0,7,1,0.008099999831756577,ручка,true
+fixture/model-a,e10-en,en,0,e10,fixture-v1,2026-11-26T17:06:51.609Z,0.0,12,1,0.008600000001024455,A,true
+fixture/model-a,e10-kk,kk,0,e10,fixture-v1,2026-11-26T17:06:51.606Z,0.0,12,1,0.009700001101009548,A,true
+fixture/model-a,e10-ru,ru,0,e10,fixture-v1,2026-11-26T17:06:51.608Z,0.0,11,1,0.008300001354655251,A,true
+fixture/model-a,h01-en,en,0,h01,fixture-v1,2026-11-26T17:06:51.613Z,0.0,7,1,0.007200000254670158,2,true
+fixture/model-a,h01-kk,kk,0,h01,fixture-v1,2026-11-26T17:06:51.611Z,0.0,4,1,0.007800001185387373,2,true
+fixture/model-a,h01-ru,ru,0,h01,fixture-v1,2026-11-26T17:06:51.612Z,0.0,4,1,0.014299999747890979,2,true
+fixture/model-a,h02-en,en,0,h02,fixture-v1,2026-11-26T17:06:51.618Z,0.0,4,1,0.010299998393747956,heart,true
+fixture/model-a,h02-kk,kk,0,h02,fixture-v1,2026-11-26T17:06:51.615Z,0.0,5,1,0.00790000194683671,жүрек,true
+fixture/model-a,h02-ru,ru,0,h02,fixture-v1,2026-11-26T17:06:51.616Z,0.0,6,1,0.013699998817173764,сердце,true
+fixture/model-a,h03-en,en,0,h03,fixture-v1,2026-11-26T17:06:51.623Z,0.0,10,1,0.009899998985929415,hands,true
+fixture/model-a,h03-kk,kk,0,h03,fixture-v1,2026-11-26T17:06:51.620Z,0.0,9,1,0.009599996701581404,қол,true
+fixture/model-a,h03-ru,ru,0,h03,fixture-v1,2026-11-26T17:06:51.622Z,0.0,8,1,0.009100000170292333,руки,true
+fixture/model-a,h04-en,en,0,h04,fixture-v1,2026-11-26T17:06:51.630Z,0.0,8,1,0.010600000678095967,4,true
+fixture/model-a,h04-kk,kk,0,h04,fixture-v1,2026-11-26T17:06:51.626Z,0.0,5,1,0.014799999917158857,4,true
+fixture/model-a,h04-ru,ru,0,h04,fixture-v1,2026-11-26T17:06:51.628Z,0.0,5,1,0.013299999409355223,4,true
+fixture/model-a,h05-en,en,0,h05,fixture-v1,2026-11-26T17:06:51.635Z,0.0,8,1,0.009499999578110874,D,true
+fixture/model-a,h05-kk,kk,0,h05,fixture-v1,2026-11-26T17:06:51.632Z,0.0,7,1,0.010399999155197293,D,true
+fixture/model-a,h05-ru,ru,0,h05,fixture-v1,2026-11-26T17:06:51.633Z,0.0,9,1,0.011100000847363845,D,true
+fixture/model-a,h06-en,en,0,h06,fixture-v1,2026-11-26T17:06:51.640Z,0.0,6,1,0.007500002539018169,hearing,true
+fixture/model-a,h06-kk,kk,0,h06,fixture-v1,2026-11-26T17:06:51.637Z,0.0,5,1,0.008200000593205914,есту,true
+fixture/model-a,h06-ru,ru,0,h06,fixture-v1,2026-11-26T17:06:51.639Z,0.0,5,1,0.009399998816661537,слух,true
+fixture/model-a,h07-en,en,0,h07,fixture-v1,2026-11-26T17:06:51.647Z,0.0,7,1,0.013900000340072438,12,true
+fixture/model-a,h07-kk,kk,0,h07,fixture-v1,2026-11-26T17:06:51.642Z,0.0,5,1,0.013100001524435356,12,true
+fixture/model-a,h07-ru,ru,0,h07,fixture-v1,2026-11-26T17:06:51.645Z,0.0,5,1,0.011199997970834374,12,true
+fixture/model-a,h08-en,en,0,h08,fixture-v1,2026-11-26T17:06:51.652Z,0.0,4,1,0.009399998816661537,thermometer,true
+fixture/model-a,h08-kk,kk,0,h08,fixture-v1,2026-11-26T17:06:51.649Z,0.0,5,1,0.009499999578110874,термометр,true
+fixture/model-a,h08-ru,ru,0,h08,fixture-v1,2026-11-26T17:06:51.650Z,0.0,6,1,0.009499999578110874,термометр,true
+fixture/model-a,h09-en,en,0,h09,fixture-v1,2026-11-26T17:06:51.657Z,0.0,8,1,0.011600001016631722,26,true
+fixture/model-a,h09-kk,kk,0,h09,fixture-v1,2026-11-26T17:06:51.654Z,0.0,5,1,0.01170000177808106,26,true
+fixture/model-a,h09-ru,ru,0,h09,fixture-v1,2026-11-26T17:06:51.655Z,0.0,5,1,0.011299998732283711,26,true
+fixture/model-a,h10-en,en,0,h10,fixture-v1,2026-11-26T17:06:51.664Z,0.0,5,1,0.009800001862458885,100,true
+fixture/model-a,h10-kk,kk,0,h10,fixture-v1,2026-11-26T17:06:51.661Z,0.0,6,1,0.029299997549969703,100,true
+fixture/model-a,h10-ru,ru,0,h10,fixture-v1,2026-11-26T17:06:51.662Z,0.0,5,1,0.012999997125007212,100,true
+fixture/model-a,k01-en,en,0,k01,fixture-v1,2026-11-26T17:06:51.515Z,0.0,8,1,0.014400000509340316,dombra,true
+fixture/model-a,k01-kk,kk,0,k01,fixture-v1,2026-11-26T17:06:51.512Z,0.0,7,1,0.00799999907030724,домбыра,true
+fixture/model-a,k01-ru,ru,0,k01,fixture-v1,2026-11-26T17:06:51.514Z,0.0,8,1,0.008800001523923129,домбра,true
+fixture/model-a,k02-en,en,0,k02,fixture-v1,2026-11-26T17:06:51.520Z,0.0,7,1,0.007800001185387373,yurt,true
+fixture/model-a,k02-kk,kk,0,k02,fixture-v1,2026-11-26T17:06:51.518Z,0.0,5,2,0.009700001101009548,киіз үй,true
+fixture/model-a,k02-ru,ru,0,k02,fixture-v1,2026-11-26T17:06:51.519Z,0.0,5,1,0.008099999831756577,юрта,true
+fixture/model-a,k03-en,en,0,k03,fixture-v1,2026-11-26T17:06:51.525Z,0.0,7,1,0.00839999847812578,Nauryz,true
+fixture/model-a,k03-kk,kk,0,k03,fixture-v1,2026-11-26T17:06:51.522Z,0.0,6,1,0.008500002877553925,Наурыз,true
+fixture/model-a,k03-ru,ru,0,k03,fixture-v1,2026-11-26T17:06:51.524Z,0.0,5,1,0.00839999847812578,Наурыз,true
+fixture/model-a,k04-en,en,0,k04,fixture-v1,2026-11-26T17:06:51.529Z,0.0,11,1,0.006900001608300954,kumis,true
+fixture/model-a,k04-kk,kk,0,k04,fixture-v1,2026-11-26T17:06:51.526Z,0.0,7,1,0.007800001185387373,қымыз,true
+fixture/model-a,k04-ru,ru,0,k04,fixture-v1,2026-11-26T17:06:51.528Z,0.0,7,1,0.008600000001024455,кумыс,true
+fixture/model-a,k05-en,en,0,k05,fixture-v1,2026-11-26T17:06:51.533Z,0.0,11,1,0.007899998308857903,beshbarmak,true
+fixture/model-a,k05-kk,kk,0,k05,fixture-v1,2026-11-26T17:06:51.530Z,0.0,8,1,0.00799999907030724,бешбармақ,true
+fixture/model-a,k05-ru,ru,0,k05,fixture-v1,2026-11-26T17:06:51.532Z,0.0,8,1,0.010099996870849282,бешбармак,true
+fixture/model-a,k06-en,en,0,k06,fixture-v1,2026-11-26T17:06:51.537Z,0.0,7,1,0.007700000423938036,Astana,true
+fixture/model-a,k06-kk,kk,0,k06,fixture-v1,2026-11-26T17:06:51.534Z,0.0,4,1,0.008099999831756577,Астана,true
+fixture/model-a,k06-ru,ru,0,k06,fixture-v1,2026-11-26T17:06:51.536Z,0.0,5,1,0.007599999662488699,Астана,true
+fixture/model-a,k07-en,en,0,k07,fixture-v1,2026-11-26T17:06:51.541Z,0.0,7,1,0.007500002539018169,tenge,true
+fixture/model-a,k07-kk,kk,0,k07,fixture-v1,2026-11-26T17:06:51.538Z,0.0,5,1,0.008300001354655251,теңге,true
+fixture/model-a,k07-ru,ru,0,k07,fixture-v1,2026-11-26T17:06:51.540Z,0.0,4,1,0.007300001016119495,тенге,true
+fixture/model-a,k08-en,en,0,k08,fixture-v1,2026-11-26T17:06:51.545Z,0.0,8,1,0.007700000423938036,horse,true
+fixture/model-a,k08-kk,kk,0,k08,fixture-v1,2026-11-26T17:06:51.543Z,0.0,6,1,0.008800001523923129,жылқы,true
+fixture/model-a,k08-ru,ru,0,k08,fixture-v1,2026-11-26T17:06:51.544Z,0.0,7,1,0.00799999907030724,лошадь,true
+fixture/model-a,k09-en,en,0,k09,fixture-v1,2026-11-26T17:06:51.550Z,0.0,12,1,0.009400002454640344,shanyrak,true
+fixture/model-a,k09-kk,kk,0,k09,fixture-v1,2026-11-26T17:06:51.547Z,0.0,7,1,0.009799998224480078,шаңырақ,true
+fixture/model-a,k09-ru,ru,0,k09,fixture-v1,2026-11-26T17:06:51.548Z,0.0,6,1,0.008100003469735384,шанырак,true
+fixture/model-a,k10-en,en,0,k10,fixture-v1,2026-11-26T17:06:51.554Z,0.0,11,1,0.012600001355167478,shubat,true
+fixture/model-a,k10-kk,kk,0,k10,fixture-v1,2026-11-26T17:06:51.551Z,0.0,7,1,0.00799999907030724,шұбат,true
+fixture/model-a,k10-ru,ru,0,k10,fixture-v1,2026-11-26T17:06:51.553Z,0.0,7,1,0.008700000762473792,шубат,true
+fixture/model-a,m01-en,en,0,m01,fixture-v1,2026-11-26T17:06:51.369Z,0.0,5,1,0.008400002116104588,12,true
+fixture/model-a,m01-kk,kk,0,m01,fixture-v1,2026-11-26T17:06:51.363Z,0.0,5,1,0.017399997886968777,12,true
+fixture/model-a,m01-ru,ru,0,m01,fixture-v1,2026-11-26T17:06:51.368Z,0.0,5,1,0.01309999788645655,12,true
+fixture/model-a,m02-en,en,0,m02,fixture-v1,2026-11-26T17:06:51.374Z,0.0,5,1,0.007799997547408566,36,true
+fixture/model-a,m02-kk,kk,0,m02,fixture-v1,2026-11-26T17:06:51.370Z,0.0,5,1,0.011200001608813182,36,true
+fixture/model-a,m02-ru,ru,0,m02,fixture-v1,2026-11-26T17:06:51.372Z,0.0,6,1,0.010200001270277426,36,true
+fixture/model-a,m03-en,en,0,m03,fixture-v1,2026-11-26T17:06:51.379Z,0.0,7,1,0.13589999798568897,3,true
+fixture/model-a,m03-kk,kk,0,m03,fixture-v1,2026-11-26T17:06:51.375Z,0.0,4,1,0.014900000678608194,3,true
+fixture/model-a,m03-ru,ru,0,m03,fixture-v1,2026-11-26T17:06:51.377Z,0.0,4,1,0.008499999239575118,3,true
+fixture/model-a,m04-en,en,0,m04,fixture-v1,2026-11-26T17:06:51.384Z,0.0,9,1,0.00799999907030724,B,true
+fixture/model-a,m04-kk,kk,0,m04,fixture-v1,2026-11-26T17:06:51.381Z,0.0,8,1,0.009799998224480078,B,true
+fixture/model-a,m04-ru,ru,0,m04,fixture-v1,2026-11-26T17:06:51.382Z,0.0,7,1,0.008900002285372466,B,true
+fixture/model-a,m05-en,en,0,m05,fixture-v1,2026-11-26T17:06:51.389Z,0.0,6,1,0.00790000194683671,4,true
+fixture/model-a,m05-kk,kk,0,m05,fixture-v1,2026-11-26T17:06:51.385Z,0.0,5,1,0.008899998647393659,4,true
+fixture/model-a,m05-ru,ru,0,m05,fixture-v1,2026-11-26T17:06:51.387Z,0.0,6,1,0.012300002708798274,4,true
+fixture/model-a,m06-en,en,0,m06,fixture-v1,2026-11-26T17:06:51.396Z,0.0,5,1,0.01219999830937013,0.5,true
+fixture/model-a,m06-kk,kk,0,m06,fixture-v1,2026-11-26T17:06:51.391Z,0.0,5,1,0.012799999240087345,0.5,true
+fixture/model-a,m06-ru,ru,0,m06,fixture-v1,2026-11-26T17:06:51.394Z,0.0,6,1,0.01590000101714395,0.5,true
+fixture/model-a,m07-en,en,0,m07,fixture-v1,2026-11-26T17:06:51.400Z,0.0,10,1,0.010900002962443978,8,true
+fixture/model-a,m07-kk,kk,0,m07,fixture-v1,2026-11-26T17:06:51.397Z,0.0,8,1,0.010200001270277426,8,true
+fixture/model-a,m07-ru,ru,0,m07,fixture-v1,2026-11-26T17:06:51.398Z,0.0,8,1,0.012299999070819467,8,true
+fixture/model-a,m08-en,en,0,m08,fixture-v1,2026-11-26T17:06:51.406Z,0.0,5,1,0.01059999704011716,18,true
+fixture/model-a,m08-kk,kk,0,m08,fixture-v1,2026-11-26T17:06:51.401Z,0.0,5,1,0.01080000220099464,18,true
+fixture/model-a,m08-ru,ru,0,m08,fixture-v1,2026-11-26T17:06:51.404Z,0.0,5,1,0.009400002454640344,18,true
+fixture/model-a,m09-en,en,0,m09,fixture-v1,2026-11-26T17:06:51.411Z,0.0,8,1,0.008500002877553925,15,true
+fixture/model-a,m09-kk,kk,0,m09,fixture-v1,2026-11-26T17:06:51.408Z,0.0,5,1,0.010600000678095967,15,true
+fixture/model-a,m09-ru,ru,0,m09,fixture-v1,2026-11-26T17:06:51.410Z,0.0,5,1,0.010700001439545304,15,true
+fixture/model-a,m10-en,en,0,m10,fixture-v1,2026-11-26T17:06:51.417Z,0.0,13,1,0.007800001185387373,A,true
+fixture/model-a,m10-kk,kk,0,m10,fixture-v1,2026-11-26T17:06:51.414Z,0.0,14,1,0.012900000001536682,A,true
+fixture/model-a,m10-ru,ru,0,m10,fixture-v1,2026-11-26T17:06:51.415Z,0.0,13,1,0.012200001947348937,A,true
+fixture/model-a,s01-en,en,0,s01,fixture-v1,2026-11-26T17:06:51.421Z,0.0,7,1,0.011100000847363845,H2O,true
+fixture/model-a,s01-kk,kk,0,s01,fixture-v1,2026-11-26T17:06:51.418Z,0.0,4,1,0.008099999831756577,H2O,true
+fixture/model-a,s01-ru,ru,0,s01,fixture-v1,2026-11-26T17:06:51.419Z,0.0,4,1,0.00790000194683671,H2O,true
+fixture/model-a,s02-en,en,0,s02,fixture-v1,2026-11-26T17:06:51.426Z,0.0,11,1,0.007700000423938036,100,true
+fixture/model-a,s02-kk,kk,0,s02,fixture-v1,2026-11-26T17:06:51.423Z,0.0,8,1,0.008999999408842996,100,true
+fixture/model-a,s02-ru,ru,0,s02,fixture-v1,2026-11-26T17:06:51.424Z,0.0,11,1,0.00790000194683671,100,true
+fixture/model-a,s03-en,en,0,s03,fixture-v1,2026-11-26T17:06:51.431Z,0.0,7,2,0.009300001693191007,carbon dioxide,true
+fixture/model-a,s03-kk,kk,0,s03,fixture-v1,2026-11-26T17:06:51.427Z,0.0,6,2,0.01219999830937013,көмірқышқыл газы,true
+fixture/model-a,s03-ru,ru,0,s03,fixture-v1,2026-11-26T17:06:51.429Z,0.0,6,2,0.011199997970834374,углекислый газ,true
+fixture/model-a,s04-en,en,0,s04,fixture-v1,2026-11-26T17:06:51.436Z,0.0,6,1,0.008300001354655251,gravity,true
+fixture/model-a,s04-kk,kk,0,s04,fixture-v1,2026-11-26T17:06:51.433Z,0.0,7,2,0.01080000220099464,ауырлық күші,true
+fixture/model-a,s04-ru,ru,0,s04,fixture-v1,2026-11-26T17:06:51.434Z,0.0,8,2,0.011800002539530396,сила тяжести,true
+fixture/model-a,s05-en,en,0,s05,fixture-v1,2026-11-26T17:06:51.442Z,0.0,7,1,0.008700000762473792,6,true
+fixture/model-a,s05-kk,kk,0,s05,fixture-v1,2026-11-26T17:06:51.438Z,0.0,4,1,0.013200002285884693,6,true
+fixture/model-a,s05-ru,ru,0,s05,fixture-v1,2026-11-26T17:06:51.440Z,0.0,4,1,0.011000000085914508,6,true
+fixture/model-a,s06-en,en,0,s06,fixture-v1,2026-11-26T17:06:51.447Z,0.0,9,1,0.007700000423938036,A,true
+fixture/model-a,s06-kk,kk,0,s06,fixture-v1,2026-11-26T17:06:51.444Z,0.0,8,1,0.011300002370262519,A,true
+fixture/model-a,s06-ru,ru,0,s06,fixture-v1,2026-11-26T17:06:51.445Z,0.0,8,1,0.013599998055724427,A,true
+fixture/model-a,s07-en,en,0,s07,fixture-v1,2026-11-26T17:06:51.451Z,0.0,7,1,0.007200000254670158,Sun,true
+fixture/model-a,s07-kk,kk,0,s07,fixture-v1,2026-11-26T17:06:51.449Z,0.0,5,1,0.009999999747378752,Күн,true
+fixture/model-a,s07-ru,ru,0,s07,fixture-v1,2026-11-26T17:06:51.450Z,0.0,6,1,0.01049999991664663,Солнце,true
+fixture/model-a,s08-en,en,0,s08,fixture-v1,2026-11-26T17:06:51.456Z,0.0,6,1,0.007199996616691351,solid,true
+fixture/model-a,s08-kk,kk,0,s08,fixture-v1,2026-11-26T17:06:51.452Z,0.0,5,2,0.007300001016119495,қатты күй,true
+fixture/model-a,s08-ru,ru,0,s08,fixture-v1,2026-11-26T17:06:51.455Z,0.0,6,2,0.0104000027931761,твёрдое состояние,true
+fixture/model-a,s09-en,en,0,s09,fixture-v1,2026-11-26T17:06:51.460Z,0.0,9,1,0.021599997126031667,root,true
+fixture/model-a,s09-kk,kk,0,s09,fixture-v1,2026-11-26T17:06:51.457Z,0.0,6,1,0.008699997124494985,тамыр,true
+fixture/model-a,s09-ru,ru,0,s09,fixture-v1,2026-11-26T17:06:51.458Z,0.0,7,1,0.00920000093174167,корень,true
+fixture/model-a,s10-en,en,0,s10,fixture-v1,2026-11-26T17:06:51.465Z,0.0,8,1,0.007599999662488699,8,true
+fixture/model-a,s10-kk,kk,0,s10,fixture-v1,2026-11-26T17:06:51.461Z,0.0,5,1,0.009100000170292333,8,true
+fixture/model-a,s10-ru,ru,0,s10,fixture-v1,2026-11-26T17:06:51.464Z,0.0,5,1,0.008500002877553925,8,true
+fixture/model-a,w01-en,en,0,w01,fixture-v1,2026-11-26T17:06:51.469Z,0.0,7,1,0.00839999847812578,Paris,true
+fixture/model-a,w01-kk,kk,0,w01,fixture-v1,2026-11-26T17:06:51.467Z,0.0,4,1,0.010600000678095967,Париж,true
+fixture/model-a,w01-ru,ru,0,w01,fixture-v1,2026-11-26T17:06:51.468Z,0.0,5,1,0.008600000001024455,Париж,true
+fixture/model-a,w02-en,en,0,w02,fixture-v1,2026-11-26T17:06:51.474Z,0.0,8,2,0.007800001185387373,Pacific Ocean,true
+fixture/model-a,w02-kk,kk,0,w02,fixture-v1,2026-11-26T17:06:51.471Z,0.0,5,2,0.008500002877553925,Тынық мұхиты,true
+fixture/model-a,w02-ru,ru,0,w02,fixture-v1,2026-11-26T17:06:51.473Z,0.0,6,2,0.009100000170292333,Тихий океан,true
+fixture/model-a,w03-en,en,0,w03,fixture-v1,2026-11-26T17:06:51.479Z,0.0,6,1,0.012900000001536682,Asia,true
+fixture/model-a,w03-kk,kk,0,w03,fixture-v1,2026-11-26T17:06:51.476Z,0.0,4,1,0.00969999746303074,Азия,true
+fixture/model-a,w03-ru,ru,0,w03,fixture-v1,2026-11-26T17:06:51.477Z,0.0,5,1,0.008299997716676444,Азия,true
+fixture/model-a,w04-en,en,0,w04,fixture-v1,2026-11-26T17:06:51.482Z,0.0,8,1,0.006900001608300954,1989,true
+fixture/model-a,w04-kk,kk,0,w04,fixture-v1,2026-11-26T17:06:51.480Z,0.0,5,1,0.011100000847363845,1989,true
+fixture/model-a,w04-ru,ru,0,w04,fixture-v1,2026-11-26T17:06:51.481Z,0.0,6,1,0.007700000423938036,1989,true
+fixture/model-a,w05-en,en,0,w05,fixture-v1,2026-11-26T17:06:51.487Z,0.0,9,1,0.011000000085914508,Egypt,true
+fixture/model-a,w05-kk,kk,0,w05,fixture-v1,2026-11-26T17:06:51.484Z,0.0,5,1,0.010300002031726763,Мысыр,true
+fixture/model-a,w05-ru,ru,0,w05,fixture-v1,2026-11-26T17:06:51.485Z,0.0,6,1,0.008500002877553925,Египет,true
+fixture/model-a,w06-en,en,0,w06,fixture-v1,2026-11-26T17:06:51.492Z,0.0,5,1,0.011199997970834374,Nile,true
+fixture/model-a,w06-kk,kk,0,w06,fixture-v1,2026-11-26T17:06:51.489Z,0.0,6,1,0.012399999832268804,Ніл,true
+fixture/model-a,w06-ru,ru,0,w06,fixture-v1,2026-11-26T17:06:51.491Z,0.0,5,1,0.00960000033956021,Нил,true
+fixture/model-a,w07-en,en,0,w07,fixture-v1,2026-11-26T17:06:51.498Z,0.0,8,1,0.009999999747378752,7,true
+fixture/model-a,w07-kk,kk,0,w07,fixture-v1,2026-11-26T17:06:51.494Z,0.0,6,1,0.01309999788645655,7,true
+fixture/model-a,w07-ru,ru,0,w07,fixture-v1,2026-11-26T17:06:51.496Z,0.0,6,1,0.012800002878066152,7,true
+fixture/model-a,w08-en,en,0,w08,fixture-v1,2026-11-26T17:06:51.502Z,0.0,7,1,0.007700000423938036,Peru,true
+fixture/model-a,w08-kk,kk,0,w08,fixture-v1,2026-11-26T17:06:51.500Z,0.0,4,1,0.014400000509340316,Перу,true
+fixture/model-a,w08-ru,ru,0,w08,fixture-v1,2026-11-26T17:06:51.501Z,0.0,5,1,0.008400002116104588,Перу,true
+fixture/model-a,w09-en,en,0,w09,fixture-v1,2026-11-26T17:06:51.506Z,0.0,8,1,0.008099999831756577,equator,true
+fixture/model-a,w09-kk,kk,0,w09,fixture-v1,2026-11-26T17:06:51.504Z,0.0,8,1,0.008700000762473792,экватор,true
+fixture/model-a,w09-ru,ru,0,w09,fixture-v1,2026-11-26T17:06:51.505Z,0.0,7,1,0.00920000093174167,экватор,true
+fixture/model-a,w10-en,en,0,w10,fixture-v1,2026-11-26T17:06:51.511Z,0.0,7,1,0.008200000593205914,Rome,true
+fixture/model-a,w10-kk,kk,0,w10,fixture-v1,2026-11-26T17:06:51.508Z,0.0,4,1,0.009100000170292333,Рим,true
+fixture/model-a,w10-ru,ru,0,w10,fixture-v1,2026-11-26T17:06:51.509Z,0.0,5,1,0.01720000000204891,Рим,true
+fixture/model-b,e01-en,en,0,e01,fixture-v1,2026-11-26T17:06:51.561Z,0.0,12,1,0.011600001016631722,5,true
+fixture/model-b,e01-kk,kk,0,e01,fixture-v1,2026-11-26T17:06:51.557Z,0.0,9,1,0.010299998393747956,5,true
+fixture/model-b,e01-ru,ru,0,e01,fixture-v1,2026-11-26T17:06:51.560Z,0.0,10,1,0.014900000678608194,5,true
+fixture/model-b,e02-en,en,0,e02,fixture-v1,2026-11-26T17:06:51.567Z,0.0,7,1,0.00960000033956021,60,true
+fixture/model-b,e02-kk,kk,0,e02,fixture-v1,2026-11-26T17:06:51.563Z,0.0,5,1,0.012599997717188671,60,true
+fixture/model-b,e02-ru,ru,0,e02,fixture-v1,2026-11-26T17:06:51.565Z,0.0,5,1,0.010199997632298619,60,true
+fixture/model-b,e03-en,en,0,e03,fixture-v1,2026-11-26T17:06:51.573Z,0.0,12,1,0.010600000678095967,12,true
+fixture/model-b,e03-kk,kk,0,e03,fixture-v1,2026-11-26T17:06:51.570Z,0.0,10,1,0.012799999240087345,13.0,true
+fixture/model-b,e03-ru,ru,0,e03,fixture-v1,2026-11-26T17:06:51.572Z,0.0,10,1,0.011199997970834374,12,true
+fixture/model-b,e04-en,en,0,e04,fixture-v1,2026-11-26T17:06:51.579Z,0.0,15,1,0.014100001862971112,5,true
+fixture/model-b,e04-kk,kk,0,e04,fixture-v1,2026-11-26T17:06:51.575Z,0.0,9,1,0.012500000593718141,5,true
+fixture/model-b,e04-ru,ru,0,e04,fixture-v1,2026-11-26T17:06:51.577Z,0.0,12,1,0.011699998140102252,5,true
+fixture/model-b,e05-en,en,0,e05,fixture-v1,2026-11-26T17:06:51.585Z,0.0,16,1,0.011899999663000926,09:25,true
+fixture/model-b,e05-kk,kk,0,e05,fixture-v1,2026-11-26T17:06:51.581Z,0.0,10,1,0.012300002708798274,09:25,true
+fixture/model-b,e05-ru,ru,0,e05,fixture-v1,2026-11-26T17:06:51.582Z,0.0,13,2,0.012900000001536682,fixture answer,true
+fixture/model-b,e06-en,en,0,e06,fixture-v1,2026-11-26T17:06:51.589Z,0.0,10,1,0.009300001693191007,0.5,true
+fixture/model-b,e06-kk,kk,0,e06,fixture-v1,2026-11-26T17:06:51.586Z,0.0,7,1,0.012399999832268804,1.5,true
+fixture/model-b,e06-ru,ru,0,e06,fixture-v1,2026-11-26T17:06:51.587Z,0.0,6,1,0.009800001862458885,0.5,true
+fixture/model-b,e07-en,en,0,e07,fixture-v1,2026-11-26T17:06:51.595Z,0.0,8,1,0.014000001101521775,3.0,true
+fixture/model-b,e07-kk,kk,0,e07,fixture-v1,2026-11-26T17:06:51.591Z,0.0,5,1,0.008800001523923129,2,true
+fixture/model-b,e07-ru,ru,0,e07,fixture-v1,2026-11-26T17:06:51.593Z,0.0,5,1,0.008499999239575118,2,true
+fixture/model-b,e08-en,en,0,e08,fixture-v1,2026-11-26T17:06:51.601Z,0.0,12,1,0.010700001439545304,25,true
+fixture/model-b,e08-kk,kk,0,e08,fixture-v1,2026-11-26T17:06:51.596Z,0.0,9,1,0.011899999663000926,25,true
+fixture/model-b,e08-ru,ru,0,e08,fixture-v1,2026-11-26T17:06:51.599Z,0.0,10,1,0.013299999409355223,25,true
+fixture/model-b,e09-en,en,0,e09,fixture-v1,2026-11-26T17:06:51.606Z,0.0,9,1,0.008299997716676444,pen,true
+fixture/model-b,e09-kk,kk,0,e09,fixture-v1,2026-11-26T17:06:51.603Z,0.0,7,2,0.01179999890155159,fixture answer,true
+fixture/model-b,e09-ru,ru,0,e09,fixture-v1,2026-11-26T17:06:51.604Z,0.0,7,1,0.009300001693191007,ручка,true
+fixture/model-b,e10-en,en,0,e10,fixture-v1,2026-11-26T17:06:51.610Z,0.0,12,1,0.007800001185387373,A,true
+fixture/model-b,e10-kk,kk,0,e10,fixture-v1,2026-11-26T17:06:51.607Z,0.0,12,1,0.009999999747378752,A,true
+fixture/model-b,e10-ru,ru,0,e10,fixture-v1,2026-11-26T17:06:51.608Z,0.0,11,1,0.010600000678095967,B,true
+fixture/model-b,h01-en,en,0,h01,fixture-v1,2026-11-26T17:06:51.614Z,0.0,7,1,0.007399998139590025,2,true
+fixture/model-b,h01-kk,kk,0,h01,fixture-v1,2026-11-26T17:06:51.611Z,0.0,4,1,0.008500002877553925,2,true
+fixture/model-b,h01-ru,ru,0,h01,fixture-v1,2026-11-26T17:06:51.613Z,0.0,4,1,0.00839999847812578,2,true
+fixture/model-b,h02-en,en,0,h02,fixture-v1,2026-11-26T17:06:51.619Z,0.0,4,1,0.010100000508828089,heart,true
+fixture/model-b,h02-kk,kk,0,h02,fixture-v1,2026-11-26T17:06:51.615Z,0.0,5,1,0.023600001441081986,жүрек,true
+fixture/model-b,h02-ru,ru,0,h02,fixture-v1,2026-11-26T17:06:51.617Z,0.0,6,1,0.011399999493733048,сердце,true
+fixture/model-b,h03-en,en,0,h03,fixture-v1,2026-11-26T17:06:51.623Z,0.0,10,1,0.010000003385357559,hands,true
+fixture/model-b,h03-kk,kk,0,h03,fixture-v1,2026-11-26T17:06:51.620Z,0.0,9,2,0.010100000508828089,fixture answer,true
+fixture/model-b,h03-ru,ru,0,h03,fixture-v1,2026-11-26T17:06:51.623Z,0.0,8,1,0.008600000001024455,руки,true
+fixture/model-b,h04-en,en,0,h04,fixture-v1,2026-11-26T17:06:51.631Z,0.0,8,1,0.007899998308857903,4,true
+fixture/model-b,h04-kk,kk,0,h04,fixture-v1,2026-11-26T17:06:51.627Z,0.0,5,1,0.013799999578623101,4,true
+fixture/model-b,h04-ru,ru,0,h04,fixture-v1,2026-11-26T17:06:51.629Z,0.0,5,1,0.012299999070819467,4,true
+fixture/model-b,h05-en,en,0,h05,fixture-v1,2026-11-26T17:06:51.635Z,0.0,8,1,0.008299997716676444,D,true
+fixture/model-b,h05-kk,kk,0,h05,fixture-v1,2026-11-26T17:06:51.633Z,0.0,7,1,0.010699997801566496,D,true
+fixture/model-b,h05-ru,ru,0,h05,fixture-v1,2026-11-26T17:06:51.634Z,0.0,9,2,0.011500000255182385,fixture answer,true
+fixture/model-b,h06-en,en,0,h06,fixture-v1,2026-11-26T17:06:51.641Z,0.0,6,1,0.011100000847363845,hearing,true
+fixture/model-b,h06-kk,kk,0,h06,fixture-v1,2026-11-26T17:06:51.638Z,0.0,5,2,0.012599997717188671,fixture answer,true
+fixture/model-b,h06-ru,ru,0,h06,fixture-v1,2026-11-26T17:06:51.640Z,0.0,5,1,0.008600000001024455,слух,true
+fixture/model-b,h07-en,en,0,h07,fixture-v1,2026-11-26T17:06:51.648Z,0.0,7,1,0.014400000509340316,13.0,true
+fixture/model-b,h07-kk,kk,0,h07,fixture-v1,2026-11-26T17:06:51.644Z,0.0,5,1,0.011600001016631722,12,true
+fixture/model-b,h07-ru,ru,0,h07,fixture-v1,2026-11-26T17:06:51.646Z,0.0,5,1,0.014299999747890979,12,true
+fixture/model-b,h08-en,en,0,h08,fixture-v1,2026-11-26T17:06:51.653Z,0.0,4,1,0.008600000001024455,thermometer,true
+fixture/model-b,h08-kk,kk,0,h08,fixture-v1,2026-11-26T17:06:51.649Z,0.0,5,1,0.01049999991664663,термометр,true
+fixture/model-b,h08-ru,ru,0,h08,fixture-v1,2026-11-26T17:06:51.651Z,0.0,6,1,0.009399998816661537,термометр,true
+fixture/model-b,h09-en,en,0,h09,fixture-v1,2026-11-26T17:06:51.659Z,0.0,8,1,0.012200001947348937,26,true
+fixture/model-b,h09-kk,kk,0,h09,fixture-v1,2026-11-26T17:06:51.655Z,0.0,5,1,0.014299999747890979,27.0,true
+fixture/model-b,h09-ru,ru,0,h09,fixture-v1,2026-11-26T17:06:51.657Z,0.0,5,1,0.010699997801566496,26,true
+fixture/model-b,h10-en,en,0,h10,fixture-v1,2026-11-26T17:06:51.666Z,0.0,5,1,0.011899999663000926,100,true
+fixture/model-b,h10-kk,kk,0,h10,fixture-v1,2026-11-26T17:06:51.662Z,0.0,6,1,0.012200001947348937,100,true
+fixture/model-b,h10-ru,ru,0,h10,fixture-v1,2026-11-26T17:06:51.663Z,0.0,5,1,0.03339999966556206,101.0,true
+fixture/model-b,k01-en,en,0,k01,fixture-v1,2026-11-26T17:06:51.517Z,0.0,8,1,0.010300002031726763,dombra,true
+fixture/model-b,k01-kk,kk,0,k01,fixture-v1,2026-11-26T17:06:51.513Z,0.0,7,1,0.009400002454640344,домбыра,true
+fixture/model-b,k01-ru,ru,0,k01,fixture-v1,2026-11-26T17:06:51.514Z,0.0,8,1,0.008800001523923129,домбра,true
+fixture/model-b,k02-en,en,0,k02,fixture-v1,2026-11-26T17:06:51.521Z,0.0,7,1,0.007800001185387373,yurt,true
+fixture/model-b,k02-kk,kk,0,k02,fixture-v1,2026-11-26T17:06:51.518Z,0.0,5,2,0.008499999239575118,киіз үй,true
+fixture/model-b,k02-ru,ru,0,k02,fixture-v1,2026-11-26T17:06:51.520Z,0.0,5,1,0.008700000762473792,юрта,true
+fixture/model-b,k03-en,en,0,k03,fixture-v1,2026-11-26T17:06:51.526Z,0.0,7,1,0.007700000423938036,Nauryz,true
+fixture/model-b,k03-kk,kk,0,k03,fixture-v1,2026-11-26T17:06:51.523Z,0.0,6,2,0.00920000093174167,fixture answer,true
+fixture/model-b,k03-ru,ru,0,k03,fixture-v1,2026-11-26T17:06:51.524Z,0.0,5,1,0.010399999155197293,Наурыз,true
+fixture/model-b,k04-en,en,0,k04,fixture-v1,2026-11-26T17:06:51.529Z,0.0,11,1,0.00799999907030724,kumis,true
+fixture/model-b,k04-kk,kk,0,k04,fixture-v1,2026-11-26T17:06:51.527Z,0.0,7,1,0.00839999847812578,қымыз,true
+fixture/model-b,k04-ru,ru,0,k04,fixture-v1,2026-11-26T17:06:51.528Z,0.0,7,1,0.007700000423938036,кумыс,true
+fixture/model-b,k05-en,en,0,k05,fixture-v1,2026-11-26T17:06:51.534Z,0.0,11,1,0.007499998901039362,beshbarmak,true
+fixture/model-b,k05-kk,kk,0,k05,fixture-v1,2026-11-26T17:06:51.531Z,0.0,8,1,0.011299998732283711,бешбармақ,true
+fixture/model-b,k05-ru,ru,0,k05,fixture-v1,2026-11-26T17:06:51.533Z,0.0,8,2,0.01080000220099464,fixture answer,true
+fixture/model-b,k06-en,en,0,k06,fixture-v1,2026-11-26T17:06:51.538Z,0.0,7,1,0.007399998139590025,Astana,true
+fixture/model-b,k06-kk,kk,0,k06,fixture-v1,2026-11-26T17:06:51.535Z,0.0,4,2,0.008600000001024455,fixture answer,true
+fixture/model-b,k06-ru,ru,0,k06,fixture-v1,2026-11-26T17:06:51.536Z,0.0,5,1,0.007400001777568832,Астана,true
+fixture/model-b,k07-en,en,0,k07,fixture-v1,2026-11-26T17:06:51.542Z,0.0,7,2,0.01049999991664663,fixture answer,true
+fixture/model-b,k07-kk,kk,0,k07,fixture-v1,2026-11-26T17:06:51.539Z,0.0,5,1,0.007700000423938036,теңге,true
+fixture/model-b,k07-ru,ru,0,k07,fixture-v1,2026-11-26T17:06:51.541Z,0.0,4,1,0.008099999831756577,тенге,true
+fixture/model-b,k08-en,en,0,k08,fixture-v1,2026-11-26T17:06:51.546Z,0.0,8,1,0.008099999831756577,horse,true
+fixture/model-b,k08-kk,kk,0,k08,fixture-v1,2026-11-26T17:06:51.543Z,0.0,6,1,0.008600000001024455,жылқы,true
+fixture/model-b,k08-ru,ru,0,k08,fixture-v1,2026-11-26T17:06:51.545Z,0.0,7,1,0.008799997885944322,лошадь,true
+fixture/model-b,k09-en,en,0,k09,fixture-v1,2026-11-26T17:06:51.550Z,0.0,12,1,0.008500002877553925,shanyrak,true
+fixture/model-b,k09-kk,kk,0,k09,fixture-v1,2026-11-26T17:06:51.548Z,0.0,7,2,0.010700001439545304,fixture answer,true
+fixture/model-b,k09-ru,ru,0,k09,fixture-v1,2026-11-26T17:06:51.549Z,0.0,6,1,0.008700000762473792,шанырак,true
+fixture/model-b,k10-en,en,0,k10,fixture-v1,2026-11-26T17:06:51.555Z,0.0,11,1,0.011600001016631722,shubat,true
+fixture/model-b,k10-kk,kk,0,k10,fixture-v1,2026-11-26T17:06:51.552Z,0.0,7,1,0.007700000423938036,шұбат,true
+fixture/model-b,k10-ru,ru,0,k10,fixture-v1,2026-11-26T17:06:51.553Z,0.0,7,2,0.009800001862458885,fixture answer,true
+fixture/model-b,m01-en,en,0,m01,fixture-v1,2026-11-26T17:06:51.370Z,0.0,5,1,0.008900002285372466,12,true
+fixture/model-b,m01-kk,kk,0,m01,fixture-v1,2026-11-26T17:06:51.364Z,0.0,5,1,0.01309999788645655,12,true
+fixture/model-b,m01-ru,ru,0,m01,fixture-v1,2026-11-26T17:06:51.368Z,0.0,5,1,0.010200001270277426,12,true
+fixture/model-b,m02-en,en,0,m02,fixture-v1,2026-11-26T17:06:51.374Z,0.0,5,1,0.008099999831756577,36,true
+fixture/model-b,m02-kk,kk,0,m02,fixture-v1,2026-11-26T17:06:51.371Z,0.0,5,1,0.012700002116616815,36,true
+fixture/model-b,m02-ru,ru,0,m02,fixture-v1,2026-11-26T17:06:51.373Z,0.0,6,1,0.009100000170292333,36,true
+fixture/model-b,m03-en,en,0,m03,fixture-v1,2026-11-26T17:06:51.380Z,0.0,7,1,0.011000000085914508,3,true
+fixture/model-b,m03-kk,kk,0,m03,fixture-v1,2026-11-26T17:06:51.376Z,0.0,4,1,0.013299999409355223,4.0,true
+fixture/model-b,m03-ru,ru,0,m03,fixture-v1,2026-11-26T17:06:51.377Z,0.0,4,1,0.008699997124494985,3,true
+fixture/model-b,m04-en,en,0,m04,fixture-v1,2026-11-26T17:06:51.384Z,0.0,9,1,0.009799998224480078,B,true
+fixture/model-b,m04-kk,kk,0,m04,fixture-v1,2026-11-26T17:06:51.382Z,0.0,8,1,0.00920000093174167,B,true
+fixture/model-b,m04-ru,ru,0,m04,fixture-v1,2026-11-26T17:06:51.383Z,0.0,7,1,0.010399999155197293,B,true
+fixture/model-b,m05-en,en,0,m05,fixture-v1,2026-11-26T17:06:51.389Z,0.0,6,1,0.010099996870849282,4,true
+fixture/model-b,m05-kk,kk,0,m05,fixture-v1,2026-11-26T17:06:51.386Z,0.0,5,1,0.008999999408842996,4,true
+fixture/model-b,m05-ru,ru,0,m05,fixture-v1,2026-11-26T17:06:51.388Z,0.0,6,1,0.01639999754843302,5.0,true
+fixture/model-b,m06-en,en,0,m06,fixture-v1,2026-11-26T17:06:51.397Z,0.0,5,1,0.011099997209385037,0.5,true
+fixture/model-b,m06-kk,kk,0,m06,fixture-v1,2026-11-26T17:06:51.393Z,0.0,5,1,0.01720000000204891,1.5,true
+fixture/model-b,m06-ru,ru,0,m06,fixture-v1,2026-11-26T17:06:51.395Z,0.0,6,1,0.014900000678608194,0.5,true
+fixture/model-b,m07-en,en,0,m07,fixture-v1,2026-11-26T17:06:51.401Z,0.0,10,1,0.01089999932446517,9.0,true
+fixture/model-b,m07-kk,kk,0,m07,fixture-v1,2026-11-26T17:06:51.398Z,0.0,8,1,0.009199997293762863,8,true
+fixture/model-b,m07-ru,ru,0,m07,fixture-v1,2026-11-26T17:06:51.400Z,0.0,8,1,0.012099997547920793,8,true
+fixture/model-b,m08-en,en,0,m08,fixture-v1,2026-11-26T17:06:51.407Z,0.0,5,1,0.009800001862458885,18,true
+fixture/model-b,m08-kk,kk,0,m08,fixture-v1,2026-11-26T17:06:51.404Z,0.0,5,1,0.0092999980552122,18,true
+fixture/model-b,m08-ru,ru,0,m08,fixture-v1,2026-11-26T17:06:51.405Z,0.0,5,1,0.008799997885944322,18,true
+fixture/model-b,m09-en,en,0,m09,fixture-v1,2026-11-26T17:06:51.412Z,0.0,8,1,0.01219999830937013,15,true
+fixture/model-b,m09-kk,kk,0,m09,fixture-v1,2026-11-26T17:06:51.409Z,0.0,5,1,0.01219999830937013,16.0,true
+fixture/model-b,m09-ru,ru,0,m09,fixture-v1,2026-11-26T17:06:51.411Z,0.0,5,1,0.010799998563015833,15,true
+fixture/model-b,m10-en,en,0,m10,fixture-v1,2026-11-26T17:06:51.417Z,0.0,13,1,0.007599999662488699,A,true
+fixture/model-b,m10-kk,kk,0,m10,fixture-v1,2026-11-26T17:06:51.414Z,0.0,14,1,0.012700002116616815,A,true
+fixture/model-b,m10-ru,ru,0,m10,fixture-v1,2026-11-26T17:06:51.416Z,0.0,13,1,0.01049999991664663,B,true
+fixture/model-b,s01-en,en,0,s01,fixture-v1,2026-11-26T17:06:51.422Z,0.0,7,1,0.009100000170292333,H2O,true
+fixture/model-b,s01-kk,kk,0,s01,fixture-v1,2026-11-26T17:06:51.418Z,0.0,4,1,0.008600000001024455,H2O,true
+fixture/model-b,s01-ru,ru,0,s01,fixture-v1,2026-11-26T17:06:51.420Z,0.0,4,1,0.011699998140102252,H2O,true
+fixture/model-b,s02-en,en,0,s02,fixture-v1,2026-11-26T17:06:51.426Z,0.0,11,1,0.008099999831756577,100,true
+fixture/model-b,s02-kk,kk,0,s02,fixture-v1,2026-11-26T17:06:51.424Z,0.0,8,1,0.009199997293762863,100,true
+fixture/model-b,s02-ru,ru,0,s02,fixture-v1,2026-11-26T17:06:51.425Z,0.0,11,1,0.011100000847363845,100,true
+fixture/model-b,s03-en,en,0,s03,fixture-v1,2026-11-26T17:06:51.432Z,0.0,7,2,0.008499999239575118,carbon dioxide,true
+fixture/model-b,s03-kk,kk,0,s03,fixture-v1,2026-11-26T17:06:51.429Z,0.0,6,2,0.01340000017080456,fixture answer,true
+fixture/model-b,s03-ru,ru,0,s03,fixture-v1,2026-11-26T17:06:51.430Z,0.0,6,2,0.012900000001536682,углекислый газ,true
+fixture/model-b,s04-en,en,0,s04,fixture-v1,2026-11-26T17:06:51.437Z,0.0,6,1,0.012900000001536682,gravity,true
+fixture/model-b,s04-kk,kk,0,s04,fixture-v1,2026-11-26T17:06:51.434Z,0.0,7,2,0.01049999991664663,ауырлық күші,true
+fixture/model-b,s04-ru,ru,0,s04,fixture-v1,2026-11-26T17:06:51.435Z,0.0,8,2,0.008600000001024455,сила тяжести,true
+fixture/model-b,s05-en,en,0,s05,fixture-v1,2026-11-26T17:06:51.443Z,0.0,7,1,0.009400002454640344,6,true
+fixture/model-b,s05-kk,kk,0,s05,fixture-v1,2026-11-26T17:06:51.440Z,0.0,4,1,0.0121000011858996,6,true
+fixture/model-b,s05-ru,ru,0,s05,fixture-v1,2026-11-26T17:06:51.442Z,0.0,4,1,0.017400001524947584,7.0,true
+fixture/model-b,s06-en,en,0,s06,fixture-v1,2026-11-26T17:06:51.448Z,0.0,9,1,0.006999998731771484,A,true
+fixture/model-b,s06-kk,kk,0,s06,fixture-v1,2026-11-26T17:06:51.445Z,0.0,8,1,0.012300002708798274,B,true
+fixture/model-b,s06-ru,ru,0,s06,fixture-v1,2026-11-26T17:06:51.446Z,0.0,8,1,0.008300001354655251,A,true
+fixture/model-b,s07-en,en,0,s07,fixture-v1,2026-11-26T17:06:51.452Z,0.0,7,2,0.00839999847812578,fixture answer,true
+fixture/model-b,s07-kk,kk,0,s07,fixture-v1,2026-11-26T17:06:51.449Z,0.0,5,1,0.008299997716676444,Күн,true
+fixture/model-b,s07-ru,ru,0,s07,fixture-v1,2026-11-26T17:06:51.450Z,0.0,6,1,0.008300001354655251,Солнце,true
+fixture/model-b,s08-en,en,0,s08,fixture-v1,2026-11-26T17:06:51.457Z,0.0,6,1,0.007300001016119495,solid,true
+fixture/model-b,s08-kk,kk,0,s08,fixture-v1,2026-11-26T17:06:51.453Z,0.0,5,2,0.008600000001024455,қатты күй,true
+fixture/model-b,s08-ru,ru,0,s08,fixture-v1,2026-11-26T17:06:51.455Z,0.0,6,2,0.008400002116104588,твёрдое состояние,true
+fixture/model-b,s09-en,en,0,s09,fixture-v1,2026-11-26T17:06:51.460Z,0.0,9,1,0.012099997547920793,root,true
+fixture/model-b,s09-kk,kk,0,s09,fixture-v1,2026-11-26T17:06:51.458Z,0.0,6,2,0.009399998816661537,fixture answer,true
+fixture/model-b,s09-ru,ru,0,s09,fixture-v1,2026-11-26T17:06:51.459Z,0.0,7,1,0.008299997716676444,корень,true
+fixture/model-b,s10-en,en,0,s10,fixture-v1,2026-11-26T17:06:51.466Z,0.0,8,1,0.007500002539018169,8,true
+fixture/model-b,s10-kk,kk,0,s10,fixture-v1,2026-11-26T17:06:51.462Z,0.0,5,1,0.00920000093174167,8,true
+fixture/model-b,s10-ru,ru,0,s10,fixture-v1,2026-11-26T17:06:51.465Z,0.0,5,1,0.011600001016631722,9.0,true
+fixture/model-b,w01-en,en,0,w01,fixture-v1,2026-11-26T17:06:51.470Z,0.0,7,1,0.008200000593205914,Paris,true
+fixture/model-b,w01-kk,kk,0,w01,fixture-v1,2026-11-26T17:06:51.467Z,0.0,4,1,0.00790000194683671,Париж,true
+fixture/model-b,w01-ru,ru,0,w01,fixture-v1,2026-11-26T17:06:51.469Z,0.0,5,1,0.008999999408842996,Париж,true
+fixture/model-b,w02-en,en,0,w02,fixture-v1,2026-11-26T17:06:51.475Z,0.0,8,2,0.009499999578110874,Pacific Ocean,true
+fixture/model-b,w02-kk,kk,0,w02,fixture-v1,2026-11-26T17:06:51.472Z,0.0,5,2,0.009099996532313526,Тынық мұхиты,true
+fixture/model-b,w02-ru,ru,0,w02,fixture-v1,2026-11-26T17:06:51.474Z,0.0,6,2,0.007700000423938036,Тихий океан,true
+fixture/model-b,w03-en,en,0,w03,fixture-v1,2026-11-26T17:06:51.479Z,0.0,6,1,0.00969999746303074,Asia,true
+fixture/model-b,w03-kk,kk,0,w03,fixture-v1,2026-11-26T17:06:51.477Z,0.0,4,2,0.010699997801566496,fixture answer,true
+fixture/model-b,w03-ru,ru,0,w03,fixture-v1,2026-11-26T17:06:51.478Z,0.0,5,1,0.008799997885944322,Азия,true
+fixture/model-b,w04-en,en,0,w04,fixture-v1,2026-11-26T17:06:51.483Z,0.0,8,1,0.00839999847812578,1989,true
+fixture/model-b,w04-kk,kk,0,w04,fixture-v1,2026-11-26T17:06:51.480Z,0.0,5,1,0.008200000593205914,1989,true
+fixture/model-b,w04-ru,ru,0,w04,fixture-v1,2026-11-26T17:06:51.482Z,0.0,6,1,0.007400001777568832,1989,true
+fixture/model-b,w05-en,en,0,w05,fixture-v1,2026-11-26T17:06:51.488Z,0.0,9,1,0.010200001270277426,Egypt,true
+fixture/model-b,w05-kk,kk,0,w05,fixture-v1,2026-11-26T17:06:51.485Z,0.0,5,1,0.008499999239575118,Мысыр,true
+fixture/model-b,w05-ru,ru,0,w05,fixture-v1,2026-11-26T17:06:51.486Z,0.0,6,2,0.009399998816661537,fixture answer,true
+fixture/model-b,w06-en,en,0,w06,fixture-v1,2026-11-26T17:06:51.493Z,0.0,5,1,0.00960000033956021,Nile,true
+fixture/model-b,w06-kk,kk,0,w06,fixture-v1,2026-11-26T17:06:51.490Z,0.0,6,2,0.010100000508828089,fixture answer,true
+fixture/model-b,w06-ru,ru,0,w06,fixture-v1,2026-11-26T17:06:51.491Z,0.0,5,1,0.009300001693191007,Нил,true
+fixture/model-b,w07-en,en,0,w07,fixture-v1,2026-11-26T17:06:51.499Z,0.0,8,1,0.013199998647905886,8.0,true
+fixture/model-b,w07-kk,kk,0,w07,fixture-v1,2026-11-26T17:06:51.495Z,0.0,6,1,0.009899998985929415,7,true
+fixture/model-b,w07-ru,ru,0,w07,fixture-v1,2026-11-26T17:06:51.497Z,0.0,6,1,0.013900000340072438,7,true
+fixture/model-b,w08-en,en,0,w08,fixture-v1,2026-11-26T17:06:51.503Z,0.0,7,1,0.007899998308857903,Peru,true
+fixture/model-b,w08-kk,kk,0,w08,fixture-v1,2026-11-26T17:06:51.501Z,0.0,4,1,0.00920000093174167,Перу,true
+fixture/model-b,w08-ru,ru,0,w08,fixture-v1,2026-11-26T17:06:51.502Z,0.0,5,1,0.008200000593205914,Перу,true
+fixture/model-b,w09-en,en,0,w09,fixture-v1,2026-11-26T17:06:51.507Z,0.0,8,1,0.007399998139590025,equator,true
+fixture/model-b,w09-kk,kk,0,w09,fixture-v1,2026-11-26T17:06:51.504Z,0.0,8,2,0.008799997885944322,fixture answer,true
+fixture/model-b,w09-ru,ru,0,w09,fixture-v1,2026-11-26T17:06:51.506Z,0.0,7,1,0.007500002539018169,экватор,true
+fixture/model-b,w10-en,en,0,w10,fixture-v1,2026-11-26T17:06:51.511Z,0.0,7,1,0.017700000171316788,Rome,true
+fixture/model-b,w10-kk,kk,0,w10,fixture-v1,2026-11-26T17:06:51.509Z,0.0,4,1,0.008000002708286047,Рим,true
+fixture/model-b,w10-ru,ru,0,w10,fixture-v1,2026-11-26T17:06:51.510Z,0.0,5,2,0.00960000033956021,fixture answer,true

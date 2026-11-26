@@ -1,0 +1,62 @@
+# DRAFT EXAMPLES: verified_by_native is 0 until native speakers review Kazakh text and answers.
+q_id,category,answer_type,prompt_kk,prompt_ru,prompt_en,gold_kk,gold_ru,gold_en,verified_by_native
+m01,math_logic,number,7-ге 5-ті қосқанда неше болады?,Сколько будет 7 плюс 5?,What is 7 plus 5?,12,12,12,0
+m02,math_logic,number,9-ды 4-ке көбейтсе неше болады?,Сколько будет 9 умножить на 4?,What is 9 times 4?,36,36,36,0
+m03,math_logic,number,Үшбұрыштың неше қабырғасы бар?,Сколько сторон у треугольника?,How many sides does a triangle have?,3,3,3,0
+m04,math_logic,mcq,15 жұп сан ба? A) Иә B) Жоқ,Число 15 чётное? A) Да B) Нет,Is 15 an even number? A) Yes B) No,B,B,B,0
+m05,math_logic,number,24-ті 6-ға бөлгенде неше шығады?,Сколько будет 24 разделить на 6?,What is 24 divided by 6?,4,4,4,0
+m06,math_logic,number,Жартыға тең ондық бөлшек қандай?,Какая десятичная дробь равна одной второй?,What decimal equals one half?,0.5,0.5,0.5,0
+m07,math_logic,number,2 4 6 қатарынан кейін қандай сан келеді?,Какое число следует за последовательностью 2 4 6?,What number comes next in the sequence 2 4 6?,8,8,8,0
+m08,math_logic,number,30-дан 12-ні азайтқанда неше болады?,Сколько будет 30 минус 12?,What is 30 minus 12?,18,18,18,0
+m09,math_logic,number,Ширек сағатта неше минут бар?,Сколько минут в четверти часа?,How many minutes are in a quarter hour?,15,15,15,0
+m10,math_logic,mcq,3 + 4 саны 4 + 3 санына тең бе? A) Иә B) Жоқ,Равно ли 3 + 4 числу 4 + 3? A) Да B) Нет,Is 3 plus 4 equal to 4 plus 3? A) Yes B) No,A,A,A,0
+s01,science,short,Судың химиялық формуласы қандай?,Какова химическая формула воды?,What is the chemical formula for water?,H2O,H2O,H2O,0
+s02,science,number,Теңіз деңгейінде су шамамен неше градус Цельсийде қайнайды?,При какой температуре по Цельсию примерно кипит вода на уровне моря?,About how many degrees Celsius does water boil at sea level?,100,100,100,0
+s03,science,short,Өсімдіктер фотосинтез үшін қандай газды сіңіреді?,Какой газ поглощают растения для фотосинтеза?,Which gas do plants absorb for photosynthesis?,көмірқышқыл газы,углекислый газ,carbon dioxide,0
+s04,science,short,Заттарды Жерге қарай тартатын күш қалай аталады?,Как называется сила которая притягивает предметы к Земле?,What force pulls objects toward Earth?,ауырлық күші,сила тяжести,gravity,0
+s05,science,number,Жәндіктің неше аяғы бар?,Сколько ног у насекомого?,How many legs does an insect have?,6,6,6,0
+s06,science,mcq,Жер Күнді айнала ма? A) Иә B) Жоқ,Земля обращается вокруг Солнца? A) Да B) Нет,Does Earth orbit the Sun? A) Yes B) No,A,A,A,0
+s07,science,short,Жерге ең жақын жұлдыз қайсы?,Какая звезда ближе всего к Земле?,What is the closest star to Earth?,Күн,Солнце,Sun,0
+s08,science,short,Мұз заттың қай күйіне жатады?,К какому состоянию вещества относится лёд?,What state of matter is ice?,қатты күй,твёрдое состояние,solid,0
+s09,science,short,Өсімдіктің қай бөлігі топырақтан су сіңіреді?,Какая часть растения поглощает воду из почвы?,What part of a plant absorbs water from soil?,тамыр,корень,root,0
+s10,science,number,Күн жүйесінде неше ғаламшар бар?,Сколько планет в Солнечной системе?,How many planets are in the Solar System?,8,8,8,0
+w01,world_geography_history,short,Францияның астанасы қай қала?,Какой город является столицей Франции?,What city is the capital of France?,Париж,Париж,Paris,0
+w02,world_geography_history,short,Әлемдегі ең үлкен мұхит қайсы?,Какой океан самый большой в мире?,What is the largest ocean in the world?,Тынық мұхиты,Тихий океан,Pacific Ocean,0
+w03,world_geography_history,short,Жапония қай құрлықта орналасқан?,На каком континенте находится Япония?,On which continent is Japan located?,Азия,Азия,Asia,0
+w04,world_geography_history,number,Берлин қабырғасы қай жылы құлады?,В каком году пала Берлинская стена?,In what year did the Berlin Wall fall?,1989,1989,1989,0
+w05,world_geography_history,short,Гиза пирамидалары қай елде орналасқан?,В какой стране находятся пирамиды Гизы?,Which country is home to the pyramids of Giza?,Мысыр,Египет,Egypt,0
+w06,world_geography_history,short,Мысыр арқылы ағатын өзен қалай аталады?,Какая река протекает через Египет?,Which river flows through Egypt?,Ніл,Нил,Nile,0
+w07,world_geography_history,number,Жеті құрлық үлгісінде неше құрлық бар?,Сколько континентов в модели семи континентов?,How many continents are in the seven-continent model?,7,7,7,0
+w08,world_geography_history,short,Мачу-Пикчу қай елде орналасқан?,В какой стране находится Мачу-Пикчу?,Which country is home to Machu Picchu?,Перу,Перу,Peru,0
+w09,world_geography_history,short,Солтүстік пен оңтүстік жарты шарды қандай сызық бөледі?,Какая линия разделяет Северное и Южное полушария?,What line divides the Northern and Southern Hemispheres?,экватор,экватор,equator,0
+w10,world_geography_history,short,Италияның астанасы қай қала?,Какой город является столицей Италии?,What city is the capital of Italy?,Рим,Рим,Rome,0
+k01,kazakhstan_history_culture,short,Екі ішекті дәстүрлі қазақ аспабы қалай аталады?,Как называется традиционный казахский инструмент с двумя струнами?,What is the traditional Kazakh two-string instrument called?,домбыра,домбра,dombra,0
+k02,kazakhstan_history_culture,short,Дәстүрлі көшпелі баспана қалай аталады?,Как называется традиционное переносное жилище?,What is the traditional portable dwelling called?,киіз үй,юрта,yurt,0
+k03,kazakhstan_history_culture,short,Көктемде тойланатын дәстүрлі мереке қалай аталады?,Как называется традиционный весенний праздник?,What is the traditional spring holiday called?,Наурыз,Наурыз,Nauryz,0
+k04,kazakhstan_history_culture,short,Бие сүтінен ашытылатын дәстүрлі сусын қалай аталады?,Как называется традиционный напиток из кобыльего молока?,What is the traditional drink made from fermented mare's milk called?,қымыз,кумыс,kumis,0
+k05,kazakhstan_history_culture,short,Ет пен қамырдан жасалатын дәстүрлі тағам қалай аталады?,Как называется традиционное блюдо из мяса и теста?,What is the traditional dish made with meat and dough called?,бешбармақ,бешбармак,beshbarmak,0
+k06,kazakhstan_history_culture,short,Қазақстанның астанасы қай қала?,Какой город является столицей Казахстана?,What city is the capital of Kazakhstan?,Астана,Астана,Astana,0
+k07,kazakhstan_history_culture,short,Қазақстанның ұлттық валютасы қалай аталады?,Как называется валюта Казахстана?,What is the currency of Kazakhstan called?,теңге,тенге,tenge,0
+k08,kazakhstan_history_culture,short,Далада дәстүрлі түрде мінетін жануар қандай?,На каком животном традиционно ездили по степи?,Which animal was traditionally ridden across the steppe?,жылқы,лошадь,horse,0
+k09,kazakhstan_history_culture,short,Киіз үйдің төбесіндегі дөңгелек бөлік қалай аталады?,Как называется круглая верхняя часть юрты?,What is the circular crown at the top of a yurt called?,шаңырақ,шанырак,shanyrak,0
+k10,kazakhstan_history_culture,short,Түйе сүтінен ашытылатын дәстүрлі сусын қалай аталады?,Как называется традиционный напиток из верблюжьего молока?,What is the traditional drink made from fermented camel's milk called?,шұбат,шубат,shubat,0
+e01,everyday_situations,number,3 алмаға тағы 2 алма қоссақ неше алма болады?,Сколько яблок будет если к 3 яблокам добавить ещё 2?,How many apples are there if you add 2 to 3 apples?,5,5,5,0
+e02,everyday_situations,number,Бір сағатта неше минут бар?,Сколько минут в одном часе?,How many minutes are in one hour?,60,60,60,0
+e03,everyday_situations,number,Әр бумада 4 қарындаш болса 3 бумада неше қарындаш бар?,Сколько карандашей в 3 пачках если в каждой по 4?,How many pencils are in 3 packs with 4 pencils in each?,12,12,12,0
+e04,everyday_situations,number,10 печеньені 2 адамға тең бөлсе әрқайсысына нешеу тиеді?,Сколько печений получит каждый если 10 печений разделить поровну между 2 людьми?,How many cookies does each person get when 10 are shared equally by 2 people?,5,5,5,0
+e05,everyday_situations,short,Автобус 09:15-те шығып жолға 10 минут жұмсаса қай уақытта келеді?,Если автобус отправился в 09:15 и ехал 10 минут во сколько он прибудет?,If a bus leaves at 09:15 and travels for 10 minutes what time does it arrive?,09:25,09:25,09:25,0
+e06,everyday_situations,number,Бір литр судың жартысы неше литр болады?,Сколько литров составляет половина литра воды?,How many liters is half of one liter of water?,0.5,0.5,0.5,0
+e07,everyday_situations,number,Кәдімгі велосипедте неше дөңгелек бар?,Сколько колёс у обычного велосипеда?,How many wheels does a standard bicycle have?,2,2,2,0
+e08,everyday_situations,number,Температура 20 градустан 5 градусқа көтерілсе неше градус болады?,Если температура вырастет с 20 на 5 градусов сколько будет?,If the temperature rises by 5 degrees from 20 what is it?,25,25,25,0
+e09,everyday_situations,short,Хат жазу үшін қандай құрал қолдануға болады?,Какой предмет можно использовать чтобы написать письмо?,What tool can you use to write a letter?,қалам,ручка,pen,0
+e10,everyday_situations,mcq,Жаңбыр жауады деген болжам болса қолшатыр пайдалы ма? A) Иә B) Жоқ,Полезен ли зонт если прогноз обещает дождь? A) Да B) Нет,Is an umbrella useful when rain is forecast? A) Yes B) No,A,A,A,0
+h01,health_education_basics,number,Адамда неше өкпе бар?,Сколько лёгких у человека?,How many lungs does a person have?,2,2,2,0
+h02,health_education_basics,short,Қанды айдайтын мүше қалай аталады?,Как называется орган который перекачивает кровь?,What organ pumps blood?,жүрек,сердце,heart,0
+h03,health_education_basics,short,Қолды сабындап жуу үшін дененің қай бөлігін жуу керек?,Какую часть тела нужно мыть водой с мылом?,Which body part should you wash with soap and water?,қол,руки,hands,0
+h04,health_education_basics,number,Адам жүрегінде неше камера бар?,Сколько камер в человеческом сердце?,How many chambers does the human heart have?,4,4,4,0
+h05,health_education_basics,short,Күн сәулесі теріде түзілуіне көмектесетін дәрумен қайсы?,Какой витамин помогает образовываться в коже под действием солнца?,Which vitamin can the skin make with sunlight?,D,D,D,0
+h06,health_education_basics,short,Дыбысты естуге қай сезім көмектеседі?,Какое чувство помогает воспринимать звук?,Which sense lets people hear sound?,есту,слух,hearing,0
+h07,health_education_basics,number,Бір жылда неше ай бар?,Сколько месяцев в одном году?,How many months are in one year?,12,12,12,0
+h08,health_education_basics,short,Температураны өлшейтін құрал қалай аталады?,Как называется прибор для измерения температуры?,What tool measures temperature?,термометр,термометр,thermometer,0
+h09,health_education_basics,number,Ағылшын әліпбиінде неше әріп бар?,Сколько букв в английском алфавите?,How many letters are in the English alphabet?,26,26,26,0
+h10,health_education_basics,number,99 санынан кейін қандай сан келеді?,Какое число идёт после 99?,What number comes after 99?,100,100,100,0

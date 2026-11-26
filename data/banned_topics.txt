@@ -1,0 +1,29 @@
+president
+election
+parliament
+political party
+religion
+church
+mosque
+prayer
+hate speech
+offensive language
+insult
+президент
+выборы
+парламент
+политическая партия
+религия
+церковь
+мечеть
+молитва
+оскорбление
+нецензурная лексика
+сайлау
+саяси партия
+дін
+шіркеу
+мешіт
+дұға
+қорлау
+балағат сөз
