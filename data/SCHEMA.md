@@ -1,4 +1,4 @@
-# CSV contract v2
+# CSV contract v2.1
 
 Use UTF-8 CSV with a header in the order shown, comma delimiters and standard CSV quoting. All fields are required. Store identifiers and answers as text, including leading zeros. Integers are decimal, floats are finite, and booleans are lowercase `true` or `false`. Empty cells are allowed only where documented below. Native verification uses integer flags. Only Astra may change this contract and must increment its version.
 
@@ -71,11 +71,11 @@ Exactly one grade per observation in responses.csv. Join on (`model`, `prompt_id
 
 ## metrics.csv
 
-One accuracy row per model and language, plus a paired comparison row per model and language pair. Conditional fields are empty outside the specified row type.
+One row per accuracy metric, model and language, plus a paired comparison row per model and language pair. Conditional fields are empty outside the specified row type.
 
 | Column | Type | Meaning |
 | --- | --- | --- |
-| metric | enum | accuracy or mcnemar_exact. |
+| metric | enum | accuracy, accuracy_strict, accuracy_parsed or mcnemar_exact. accuracy_strict scores unparsed answers false. accuracy_parsed covers graded answers only, and its n counts them. accuracy is kept for fixture and earlier outputs. |
 | model | string | Model identifier. |
 | lang | nullable enum | Accuracy language. |
 | lang_a | nullable enum | First comparison language. |
