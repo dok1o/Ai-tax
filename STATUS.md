@@ -6,7 +6,7 @@
 | T-001 | Token counts and fertility | codex | codex/T-001-tokens | doing |
 | T-002 | Trilingual prompts and validator | codex | codex/T-002-prompts | done |
 | T-003 | Cached model collection | codex | codex/T-003-collect | doing |
-| T-004 | Grading and paired statistics | codex | fix/T-004-stats | done |
+| T-004 | Real Ollama grades and paired statistics | codex | codex/T-004-real-run | blocked |
 | T-005 | Token-cost prediction | arena | arena/ad3092b4-ai-tax | done |
 | T-006 | Offline dashboard skeleton | arena | arena/ad3092b4-ai-tax | done |
 | T-007 | Error-risk prediction | arena | arena/ad3092b4-ai-tax | done |
@@ -18,7 +18,9 @@
 | T-013 | Consolidate local branches and CSV v2 | codex | codex/T-013-consolidation | done |
 | T-014 | Import final v2 prompt dataset | codex | codex/T-014-dataset | done |
 | T-015 | Ollama and Gemini model clients | codex | codex/T-015-clients | done |
+| T-016 | Offline tokenizers and dashboard redesign | arena | arena/ad3092b4-ai-tax | blocked |
+| T-017 | Prompt text corrections and token regeneration | codex | codex/T-017-text-fixes | review |
 
 ## Requests for Astra
 
-No open review requests. The human approved review of ARENA commit `8548911` without a separate task row. RELEASE.md records the round 3 checks and remaining release work.
+Round 4 follows T-016, T-017, then T-004. ARENA must close the offline cache failure in T-016. Codex must restore the v2 metrics contract for T-004. T-017 awaits its turn. RELEASE.md records the evidence and resubmission checks.

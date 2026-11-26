@@ -1,5 +1,17 @@
 # Release status
 
+## Round 4 review, 2026-11-27
+
+The three submissions are pending in the approved order. The root Streamlit configuration matches the theme in T-016. On the dev baseline with that configuration, `python run.py check` passed Ruff, 174 tests and validation of 60 questions across 180 prompt rows. The review results below refer to the submitted snapshots.
+
+| Submission | Decision and evidence |
+| --- | --- |
+| T-016 `1a01017` | Returned to ARENA. In a fresh Python process with a temporary cache, the empty cache triggered zero HTTP requests. Placing truncated bytes at the expected cl100k_base cache key triggered one HTTP request in `load_backends()`. The probe intercepted the request before transmission. Require a regression test that exercises the damaged cache and disables the backend with zero requests. |
+| T-017 `9aadb18` | Held behind T-016. The diff changes three localized prompt texts and regenerates their token data. All 180 native verification flags remain zero. The revised q_038-ru also needs masculine agreement between the noun for “rim” and its participle. Preserve the exact wording used for previously collected observations. |
+| T-004 `55fc27a` | Returned to Codex. The 1,080 distinct responses cover three Ollama model IDs, 360 each. All 1,080 grades match the v2 labels header, keys, prompt metadata and parse-status rules. The v2 metrics enum admits `accuracy` and `mcnemar_exact`. Nine `accuracy_strict` and nine `accuracy_parsed` rows fall outside it. Restore `accuracy` for strict grading in the canonical output and place parsed-only estimates in a supplemental output. The release checker reads `accuracy`. |
+
+The reviewed changes stay within the respective app, data, analysis, test and handoff paths. The credential scan found no common key signatures or credential filenames in the changes. The cost, risk and router fixture manifests retain their provenance flags. The model IDs in the submitted responses are `gemma2:2b`, `llama3.2:3b` and `qwen2.5:3b`.
+
 ## Round 3 integration, 2026-11-26
 
 | Merge order | Reviewed submission | Checks on the integrated tree |
