@@ -38,8 +38,9 @@ four tabs rendered):
 
 Budget 10 s: met with a factor of about seven. The wall column includes importing
 the Streamlit test harness itself, which a real `streamlit run` pays once at server
-start. `app.tokenizers.load_backends()` costs 0.0014 s when the caches are missing
-(it only stats two directories) and is cached by `cached_backends` in any case.
+start. `app.tokenizers.load_backends()` costs 0.0017 s when the caches are missing (it stats two
+locations and parses the tiktoken registry source for the expected hash, without calling it)
+and is cached by `cached_backends` in any case.
 
 Reproduce:
 
